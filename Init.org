@@ -1115,7 +1115,7 @@ the Config used in the Videos: https://github.com/daviwil/emacs-from-scratch
    
 * Custom
 
-  #+begin_src emacs-lisp :tangle no
+  #+begin_src emacs-lisp 
 
     (setq tramp-default-method "ssh")
 

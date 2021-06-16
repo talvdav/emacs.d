@@ -55,7 +55,7 @@ the Config used in the Videos: https://github.com/daviwil/emacs-from-scratch
 
    #+end_src
 
-** More Emacs realestate by removing scrollbars and toolbars
+** More realestate by removing scrollbars and toolbars
 
    #+begin_src emacs-lisp
 
@@ -123,7 +123,6 @@ the Config used in the Videos: https://github.com/daviwil/emacs-from-scratch
 ** Automatic Package Updates
 
    The auto-package-update package helps us keep our Emacs packages up to date!  It will prompt you after a certain number of days either at startup or at a specific time of day to remind you to update your packages.
-
    You can also use =M-x auto-package-update-now= to update right now!
 
    #+begin_src emacs-lisp
@@ -246,7 +245,8 @@ the Config used in the Videos: https://github.com/daviwil/emacs-from-scratch
   #+begin_src emacs-lisp
 
     (use-package org
-      :pin org)
+      :pin org
+      :config (setq org-hide-emphasis-markers t))
 
   #+end_src
 
@@ -292,15 +292,22 @@ the Config used in the Videos: https://github.com/daviwil/emacs-from-scratch
 
    #+begin_src emacs-lisp
 
-     (defun my/toggle-org-hide-emphasis-markers ()
-       (interactive)
-       (progn
-         (if org-hide-emphasis-markers
-             (setq org-hide-emphasis-markers nil)
-           (setq org-hide-emphasis-markers t))
-         (org-mode-restart)))
+	  (defun my/org-emphasis-markers-status ()
+	    (interactive)
+	    (if org-hide-emphasis-markers
+		(message "org-hide-emphasis-markers ON")
+	      (message "org-hide-emphasis-markers OFF")))
 
-     (global-set-key [f9] 'my/toggle-org-hide-emphasis-markers)
+	  (defun my/toggle-org-hide-emphasis-markers ()
+	    (interactive)
+	    (progn
+	      (if org-hide-emphasis-markers
+		  (setq org-hide-emphasis-markers nil)
+		(setq org-hide-emphasis-markers t))
+	      (org-mode-restart)
+	      (my/org-emphasis-markers-status)))
+
+	  (global-set-key [f9] 'my/toggle-org-hide-emphasis-markers)
 
    #+end_src
 
@@ -1030,7 +1037,6 @@ the Config used in the Videos: https://github.com/daviwil/emacs-from-scratch
          (setq eshell-visual-commands '("htop" "zsh" "vim" "nvim" "vi")))
 
        (eshell-git-prompt-use-theme 'powerline))
-
    #+end_src
 
 * Eye Candy
@@ -1038,9 +1044,9 @@ the Config used in the Videos: https://github.com/daviwil/emacs-from-scratch
 
    #+begin_src emacs-lisp
 
-	  (use-package doom-modeline
-	    :ensure t
-	    :config (doom-modeline-mode))
+     (use-package doom-modeline
+       :ensure t
+       :config (doom-modeline-mode))
 
    #+end_src
 
@@ -1048,11 +1054,14 @@ the Config used in the Videos: https://github.com/daviwil/emacs-from-scratch
 
    #+begin_src emacs-lisp
 
-     (use-package doom-themes
-       :ensure t)
+                                             ;(use-package doom-themes
+                                             ;  :init (load-theme 'doom-gruvbox t))
 
-     (setq custom-enabled-themes '(doom-gruvbox))
-     (load-theme 'doom-gruvbox)
+                                             ;(setq custom-enabled-themes 'doom-gruvbox)
+                                             ;(load-theme 'doom-gruvbox)
+
+     (use-package gruvbox-theme
+       :init (load-theme 'gruvbox-dark-medium t))
 
    #+end_src
 
@@ -1112,10 +1121,10 @@ the Config used in the Videos: https://github.com/daviwil/emacs-from-scratch
      (display-time-mode 1)
 
    #+end_src
-   
+
 * Custom
 
-  #+begin_src emacs-lisp 
+  #+begin_src emacs-lisp
 
     (setq tramp-default-method "ssh")
 

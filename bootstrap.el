@@ -5,6 +5,11 @@
                              (setq gc-cons-threshold 800000)))
 
 
+;;(setq custom-file "~/.emacs.d/custom.el") 
+;;
+;;(if (file-exists-p custom-file)
+;;    (load-file "~/.emacs.d/custom.el"))
+
 ;; Initialize package sources
 (require 'package)
 
@@ -62,4 +67,9 @@
       `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
 
 (org-babel-tangle-file "~/.emacs.d/Init.org")
+
+(if (file-exists-p "~/.emacs")
+	   (delete-file "~/.emacs"))
+
 (load-file "~/.emacs.d/init.el")
+

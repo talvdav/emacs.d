@@ -1,0 +1,35 @@
+# Compiled
+*.elc
+
+# Packaging
+.cask
+
+# Backup files
+*~
+backup**
+
+# Undo-tree save-files
+*.~undo-tree
+
+elpa**
+projectile*
+recent*
+eshell/**
+network-security.data
+tramp
+transient/
+custom.el
+server/
+bookmarks
+games
+.cache/**
+cache/**
+.lsp-session*
+url/**
+session.*
+.var/**
+var/
+*.tex
+init.el
+.last-package-update-day
+\#*\#

@@ -467,6 +467,11 @@ the Config used in the Videos: https://github.com/daviwil/emacs-from-scratch
 
     #+end_src
 
+* Buffer
+  #+begin_src emacs-lisp
+	(use-package window-numbering
+	  :config 'window-numbering-mode)
+  #+end_src
 * Ivy and Counsel
 
   [[https://oremacs.com/swiper/][Ivy]] is an excellent completion framework for Emacs.  It provides a minimal yet powerful selection menu that appears when you open files, switch buffers, and for many other tasks in Emacs.  Counsel is a customized set of commands to replace `find-file` with `counsel-find-file`, etc which provide useful commands for each of the default completion commands.

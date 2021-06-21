@@ -292,22 +292,22 @@ the Config used in the Videos: https://github.com/daviwil/emacs-from-scratch
 
    #+begin_src emacs-lisp
 
-	  (defun my/org-emphasis-markers-status ()
-	    (interactive)
-	    (if org-hide-emphasis-markers
-		(message "org-hide-emphasis-markers ON")
-	      (message "org-hide-emphasis-markers OFF")))
+     (defun my/org-emphasis-markers-status ()
+       (interactive)
+       (if org-hide-emphasis-markers
+           (message "org-hide-emphasis-markers ON")
+         (message "org-hide-emphasis-markers OFF")))
 
-	  (defun my/toggle-org-hide-emphasis-markers ()
-	    (interactive)
-	    (progn
-	      (if org-hide-emphasis-markers
-		  (setq org-hide-emphasis-markers nil)
-		(setq org-hide-emphasis-markers t))
-	      (org-mode-restart)
-	      (my/org-emphasis-markers-status)))
+     (defun my/toggle-org-hide-emphasis-markers ()
+       (interactive)
+       (progn
+         (if org-hide-emphasis-markers
+             (setq org-hide-emphasis-markers nil)
+           (setq org-hide-emphasis-markers t))
+         (org-mode-restart)
+         (my/org-emphasis-markers-status)))
 
-	  (global-set-key [f9] 'my/toggle-org-hide-emphasis-markers)
+     (global-set-key [f9] 'my/toggle-org-hide-emphasis-markers)
 
    #+end_src
 
@@ -674,6 +674,11 @@ the Config used in the Videos: https://github.com/daviwil/emacs-from-scratch
         :config
         (pyvenv-mode 1))
 
+    #+end_src
+
+    #+begin_src emacs-lisp
+      (use-package pipenv
+        :after python-mode)
     #+end_src
 
 *** Dotnet Languages

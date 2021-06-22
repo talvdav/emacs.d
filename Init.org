@@ -293,7 +293,7 @@ the Config used in the Videos: https://github.com/daviwil/emacs-from-scratch
 
      (defun my/org-emphasis-markers-status ()
        (interactive)
-       (concat "org-hide-emphasis-markers "
+       (message "org-hide-emphasis-markers %s"
                (if org-hide-emphasis-markers "ON" "OFF")))
 
      (defun my/toggle-org-hide-emphasis-markers ()

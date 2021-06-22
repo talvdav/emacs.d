@@ -46,12 +46,18 @@ the Config used in the Videos: https://github.com/daviwil/emacs-from-scratch
   #+end_src
 
 * Initial Configuration
-
 ** Basic UI
    Default blinking cursors should be banned!!!
    #+begin_src emacs-lisp
 
      (blink-cursor-mode 0)       ; kill it with fire!
+
+   #+end_src
+
+** blink instead of beep
+   #+begin_src emacs-lisp
+
+     (setq visible-bell t) ;; kill it with fire also!!!
 
    #+end_src
 
@@ -66,7 +72,20 @@ the Config used in the Videos: https://github.com/daviwil/emacs-from-scratch
      (tooltip-mode -1)           ; Disable tooltips
      (set-fringe-mode 10)        ; Give some breathing room
      (menu-bar-mode -1)          ; Disable the menu bar
+     (show-paren-mode 1)
 
+   #+end_src
+
+** yes-or-no-p
+   use =y= and =n= instead ot tiping out =yes= or =no=
+   #+begin_src emacs-lisp
+
+     (fset 'yes-or-no-p 'y-or-n-p)
+
+   #+end_src
+
+   #+begin_src emacs-lisp
+     (setq confirm-kill-emacs 'yes-or-no-p)
    #+end_src
 
 * Some usefull functions
@@ -197,6 +216,8 @@ the Config used in the Videos: https://github.com/daviwil/emacs-from-scratch
 
    In order to easly go pack to normal mode we use "jk".
 
+   *NOTE:* pressing "jk" is equivalent to pressing <ESC>
+
    #+begin_src emacs-lisp
 
      (use-package evil-escape
@@ -250,11 +271,47 @@ the Config used in the Videos: https://github.com/daviwil/emacs-from-scratch
 
   #+end_src
 
-** Tangle Emacs Configuration
+** Emphasis Marker
+
+   In Org you can surround text with special characters to make them *bold*, /italic/ and so on.
+   The characters are
+
+   | Character | Example | Meaning        |
+   |-----------+---------+----------------|
+   | "*"       | *Foobar*  | bold           |
+   | "/"       | /Foobar/  | italic         |
+   | "="       | =Foobar=  | verbatim       |
+   | "~"       | ~Foobar~  | code           |
+   | "_"       | _Foobar_  | underlined     |
+   | "+"       | +Foobar+  | strike-through |
+
+   To make Org files look prettier i do not show those characters by default, this however
+   can make editing text a bit difficult, so here we define functions to toggle this feature
+   on an of.
+
    #+begin_src emacs-lisp
-     (buffer-file-name)
-     user-emacs-directory
+
+     (defun my/org-emphasis-markers-status ()
+       (interactive)
+       (if org-hide-emphasis-markers
+           (message "org-hide-emphasis-markers ON")
+         (message "org-hide-emphasis-markers OFF")))
+
+     (defun my/toggle-org-hide-emphasis-markers ()
+       (interactive)
+       (progn
+         (if org-hide-emphasis-markers
+             (setq org-hide-emphasis-markers nil)
+           (setq org-hide-emphasis-markers t))
+         (org-mode-restart)
+         (my/org-emphasis-markers-status)))
+
+     (global-set-key [f9] 'my/toggle-org-hide-emphasis-markers)
+
    #+end_src
+
+** Tangle Emacs Configuration
+
    #+begin_src emacs-lisp
 
      (defun efs/org-babel-tangle-config ()
@@ -285,29 +342,6 @@ the Config used in the Videos: https://github.com/daviwil/emacs-from-scratch
 
        (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
        (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp")))
-
-   #+end_src
-
-** Emphasis Marker
-
-   #+begin_src emacs-lisp
-
-     (defun my/org-emphasis-markers-status ()
-       (interactive)
-       (if org-hide-emphasis-markers
-           (message "org-hide-emphasis-markers ON")
-         (message "org-hide-emphasis-markers OFF")))
-
-     (defun my/toggle-org-hide-emphasis-markers ()
-       (interactive)
-       (progn
-         (if org-hide-emphasis-markers
-             (setq org-hide-emphasis-markers nil)
-           (setq org-hide-emphasis-markers t))
-         (org-mode-restart)
-         (my/org-emphasis-markers-status)))
-
-     (global-set-key [f9] 'my/toggle-org-hide-emphasis-markers)
 
    #+end_src
 
@@ -469,8 +503,8 @@ the Config used in the Videos: https://github.com/daviwil/emacs-from-scratch
 
 * Buffer
   #+begin_src emacs-lisp
-	(use-package window-numbering
-	  :config 'window-numbering-mode)
+    (use-package window-numbering
+      :config (window-numbering-mode))
   #+end_src
 * Ivy and Counsel
 
@@ -726,7 +760,6 @@ the Config used in the Videos: https://github.com/daviwil/emacs-from-scratch
 
      #+end_src
 
-
 ** Company Mode
 
    [[http://company-mode.github.io/][Company Mode]] provides a nicer in-buffer completion interface than =completion-at-point= which is more reminiscent of what you would expect from an IDE.  We add a simple configuration to make the keybindings a little more useful (=TAB= now completes the selection and initiates completion at the current location if needed).
@@ -815,7 +848,7 @@ the Config used in the Videos: https://github.com/daviwil/emacs-from-scratch
        :hook (prog-mode . rainbow-delimiters-mode))
 
    #+end_src
-
+   
 * File Management
 
 ** Dired
@@ -1078,6 +1111,7 @@ the Config used in the Videos: https://github.com/daviwil/emacs-from-scratch
 ** All The Icons
 
    *NOTE* If you install all-the-icons for the first time run all-the-incons-install-fonts
+   *NOTE* if you used ~bootstrap.el~, this should allready been done.
 
    #+begin_src emacs-lisp
 

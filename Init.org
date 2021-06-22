@@ -293,16 +293,14 @@ the Config used in the Videos: https://github.com/daviwil/emacs-from-scratch
 
      (defun my/org-emphasis-markers-status ()
        (interactive)
-       (if org-hide-emphasis-markers
-           (message "org-hide-emphasis-markers ON")
-         (message "org-hide-emphasis-markers OFF")))
+       (concat "org-hide-emphasis-markers "
+               (if org-hide-emphasis-markers "ON" "OFF")))
 
      (defun my/toggle-org-hide-emphasis-markers ()
        (interactive)
        (progn
-         (if org-hide-emphasis-markers
-             (setq org-hide-emphasis-markers nil)
-           (setq org-hide-emphasis-markers t))
+         (setq org-hide-emphasis-markers
+               (not org-hide-emphasis-markers))
          (org-mode-restart)
          (my/org-emphasis-markers-status)))
 
@@ -848,7 +846,7 @@ the Config used in the Videos: https://github.com/daviwil/emacs-from-scratch
        :hook (prog-mode . rainbow-delimiters-mode))
 
    #+end_src
-   
+
 * File Management
 
 ** Dired

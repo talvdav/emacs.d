@@ -298,11 +298,10 @@ the Config used in the Videos: https://github.com/daviwil/emacs-from-scratch
 
      (defun my/toggle-org-hide-emphasis-markers ()
        (interactive)
-       (progn
          (setq org-hide-emphasis-markers
                (not org-hide-emphasis-markers))
          (org-mode-restart)
-         (my/org-emphasis-markers-status)))
+         (my/org-emphasis-markers-status))
 
      (global-set-key [f9] 'my/toggle-org-hide-emphasis-markers)
 

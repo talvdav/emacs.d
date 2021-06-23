@@ -294,14 +294,14 @@ the Config used in the Videos: https://github.com/daviwil/emacs-from-scratch
      (defun my/org-emphasis-markers-status ()
        (interactive)
        (message "org-hide-emphasis-markers %s"
-               (if org-hide-emphasis-markers "ON" "OFF")))
+                (if org-hide-emphasis-markers "ON" "OFF")))
 
      (defun my/toggle-org-hide-emphasis-markers ()
        (interactive)
-         (setq org-hide-emphasis-markers
-               (not org-hide-emphasis-markers))
-         (org-mode-restart)
-         (my/org-emphasis-markers-status))
+       (setq org-hide-emphasis-markers
+             (not org-hide-emphasis-markers))
+       (org-mode-restart)
+       (my/org-emphasis-markers-status))
 
      (global-set-key [f9] 'my/toggle-org-hide-emphasis-markers)
 
@@ -397,7 +397,7 @@ the Config used in the Videos: https://github.com/daviwil/emacs-from-scratch
      (define-key org-mode-map (kbd "M-p") 'org-shiftleft)
 
    #+end_src
-* Emacs Documentation
+* Emacs Documentation and Help
 
 ** Helpful Help Commands
 
@@ -415,6 +415,15 @@ the Config used in the Videos: https://github.com/daviwil/emacs-from-scratch
        ([remap describe-command] . helpful-command)
        ([remap describe-variable] . counsel-describe-variable)
        ([remap describe-key] . helpful-key))
+
+   #+end_src
+
+
+** Which-key
+
+   #+begin_src emacs-lisp
+
+	  (use-package which-key)
 
    #+end_src
 
@@ -845,7 +854,7 @@ the Config used in the Videos: https://github.com/daviwil/emacs-from-scratch
        :hook (prog-mode . rainbow-delimiters-mode))
 
    #+end_src
-
+   
 * File Management
 
 ** Dired

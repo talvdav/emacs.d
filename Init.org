@@ -1,11 +1,9 @@
 #+PROPERTY: header-args:emacs-lisp :tangle ./init.el :mkdirp yes
 
-This Configuration is heaviely inspired by the Emacs from Scratch series by David Wilson from the Youtube Channel System Crafters.
+This Configuration is heaviely inspired by the Emacs from Scratch series by David Wilson from the
+Youtube Channel =System Crafters=. [[https://www.youtube.com/playlist?list=PLEoMzSkcN8oPH1au7H6B7bBJ4ZO7BXjS][Playlist]]
 
-Playlist
-https://www.youtube.com/playlist?list=PLEoMzSkcN8oPH1au7H6B7bBJ4ZO7BXjSZ
-
-the Config used in the Videos: https://github.com/daviwil/emacs-from-scratch
+the Config used in the Videos: [[https://github.com/daviwil/emacs-from-scratch][emacs-from-scratch]]
 
 * Emacs Startup
 
@@ -42,6 +40,8 @@ the Config used in the Videos: https://github.com/daviwil/emacs-from-scratch
 
     ;; Make frame transparency overridable
     (defvar efs/frame-transparency '(95 . 95))
+
+    (defvar *config-directory* user-emacs-directory)
 
   #+end_src
 
@@ -85,7 +85,9 @@ the Config used in the Videos: https://github.com/daviwil/emacs-from-scratch
    #+end_src
 
    #+begin_src emacs-lisp
+
      (setq confirm-kill-emacs 'yes-or-no-p)
+
    #+end_src
 
 * Some usefull functions
@@ -166,7 +168,6 @@ the Config used in the Videos: https://github.com/daviwil/emacs-from-scratch
     ;; NOTE: If you want to move everything out of the ~/.emacs.d folder
     ;; reliably, set `user-emacs-directory` before loading no-littering!
 
-    (setq *config-directory* user-emacs-directory)
     (setq user-emacs-directory  "~/.emacs.d/cache/")
 
     (use-package no-littering)
@@ -423,7 +424,7 @@ the Config used in the Videos: https://github.com/daviwil/emacs-from-scratch
 
    #+begin_src emacs-lisp
 
-	  (use-package which-key)
+     (use-package which-key)
 
    #+end_src
 
@@ -854,7 +855,7 @@ the Config used in the Videos: https://github.com/daviwil/emacs-from-scratch
        :hook (prog-mode . rainbow-delimiters-mode))
 
    #+end_src
-   
+
 * File Management
 
 ** Dired

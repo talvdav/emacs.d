@@ -16,6 +16,12 @@ the Config used in the Videos: [[https://github.com/daviwil/emacs-from-scratch][
                                  (setq gc-cons-threshold 800000)))
   #+end_src
 
+  #+begin_src emacs-lisp
+
+    (setq evil-want-keybinding nil)
+
+  #+end_src
+
   Show some benchmark at startup
 
   #+begin_src emacs-lisp
@@ -90,6 +96,18 @@ the Config used in the Videos: [[https://github.com/daviwil/emacs-from-scratch][
 
    #+end_src
 
+** Backup and Auto save
+   #+begin_src emacs-lisp
+
+     (setq backup-directory-alist '(("." . "~/.emacs-backups"))
+	   backup-by-copying      t  ; Don't de-link hard links
+	   version-control        t  ; Use version numbers on backups
+	   delete-old-versions    t  ; Automatically delete excess backups:
+	   kept-new-versions      5  ; how many of the newest versions to keep
+	   kept-old-versions      5) ; and how many of the old
+     (setq auto-save-default nil)
+
+   #+end_src
 * Some usefull functions
 
 ** Reindent-buffer
@@ -189,10 +207,11 @@ the Config used in the Videos: [[https://github.com/daviwil/emacs-from-scratch][
 
      (use-package evil
        :init
-       (setq evil-want-integration t)
        (setq evil-want-keybinding nil)
+       (setq evil-want-integration t)
        (setq evil-want-C-u-scroll t)
        (setq evil-want-C-i-jump nil)
+       :after evil-leader
        :config
        (evil-mode 1)
        (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
@@ -208,6 +227,7 @@ the Config used in the Videos: [[https://github.com/daviwil/emacs-from-scratch][
 
      (use-package evil-collection
        :after evil
+       :init (setq evil-want-keybinding nil)
        :config
        (evil-collection-init))
 
@@ -236,16 +256,16 @@ the Config used in the Videos: [[https://github.com/daviwil/emacs-from-scratch][
      (use-package evil-leader ;; After editing the key bindings reload evil-leader and evil after that!
        :ensure t
        :init (global-evil-leader-mode)
-       :config (progn
-                 (define-key evil-normal-state-map (kbd "SPC") nil)
-                 (evil-leader/set-leader "<SPC>")
-                 (evil-leader/set-key
-                   "b" 'switch-to-buffer
-                   "n" 'evil-buffer-new
-                   "r" 'reindent-buffer
-                   "e" 'my/toggle-org-hide-emphasis-markers
-                   "t" 'toggle-truncate-lines
-                   "d" 'display-fill-column-indicator-mode)))
+       :config (define-key evil-normal-state-map (kbd "SPC") nil)
+       (evil-leader/set-leader "<SPC>")
+       (evil-leader/set-key
+         "b" 'switch-to-buffer
+         "n" 'evil-buffer-new
+         "r" 'reindent-buffer
+         "d" 'display-fill-column-indicator-mode
+         "e" 'my/toggle-org-hide-emphasis-markers
+         "t" 'toggle-truncate-lines
+         "p" 'python-shell-send-buffer))
 
    #+end_src
 
@@ -339,7 +359,9 @@ the Config used in the Videos: [[https://github.com/daviwil/emacs-from-scratch][
        (require 'org-tempo)
 
        (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
-       (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp")))
+       (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+       (add-to-list 'org-structure-template-alist '("py" . "src python"))
+       (add-to-list 'org-structure-template-alist '("dt" . "src dot")))
 
    #+end_src
 

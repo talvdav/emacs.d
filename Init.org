@@ -587,6 +587,10 @@ the Config used in the Videos: [[https://github.com/daviwil/emacs-from-scratch][
      We use the excellent [[https://emacs-lsp.github.io/lsp-mode/][lsp-mode]] to enable IDE-like functionality for many different programming languages via "language servers" that speak the [[https://microsoft.github.io/language-server-protocol/][Language Server Protocol]].  Before trying to set up =lsp-mode= for a particular language, check out the [[https://emacs-lsp.github.io/lsp-mode/page/languages/][documentation for your language]] so that you can learn which language servers are available and how to install them.
      The =lsp-keymap-prefix= setting enables you to define a prefix for where =lsp-mode='s default keybindings will be added.  I *highly recommend* using the prefix to find out what you can do with =lsp-mode= in a buffer.
      The =which-key= integration adds helpful descriptions of the various keys so you should be able to learn a lot just by pressing =C-c l= in a =lsp-mode= buffer and trying different things that you find there.
+[remote]
+[remote]
+	pushDefault = nyxt
+	pushDefault = nyxt
 
      #+begin_src emacs-lisp
 
@@ -658,23 +662,24 @@ the Config used in the Videos: [[https://github.com/daviwil/emacs-from-scratch][
 
     #+begin_src emacs-lisp
 
-      (use-package dap-mode
-        ;; Uncomment the config below if you want all UI panes to be hidden by default!
-        ;; :custom
-        ;; (lsp-enable-dap-auto-configure nil)
-        ;; :config
-        ;; (dap-ui-mode 1)
-        :commands dap-debug
-        :config
-        ;; Set up Node debugging
-        (require 'dap-node)
-        (dap-node-setup) ;; Automatically installs Node debug adapter if needed
+	    (use-package dap-mode
+	      ;; Uncomment the config below if you want all UI panes to be hidden by default!
+	      ;; :custom
+	      ;; (lsp-enable-dap-auto-configure nil)
+	      ;; :config
+	      ;; (dap-ui-mode 1)
+	      :commands dap-debug
+	      :config
+	      ;; Set up Node debugging
+	      (require 'dap-node)
+	      (dap-node-setup) ;; Automatically installs Node debug adapter if needed
 
-        ;; Bind `C-c l d` to `dap-hydra` for easy access
-        (general-define-key
-         :keymaps 'lsp-mode-map
-         :prefix lsp-keymap-prefix
-         "d" '(dap-hydra t :wk "debugger")))
+	      ;; Bind `C-c l d` to `dap-hydra` for easy access
+	      ;(general-define-key
+	      ; :keymaps 'lsp-mode-map
+	      ; :prefix lsp-keymap-prefix
+	      ; "d" '(dap-hydra t :wk "debugger"))
+      )
 
     #+end_src
 
@@ -784,8 +789,8 @@ the Config used in the Videos: [[https://github.com/daviwil/emacs-from-scratch][
      #+begin_src emacs-lisp
 
        (use-package dotnet
-         :hook (fsharp-mode)
-         :hook (csharp-mode))
+         :hook (fsharp-mode . dotnet-mode)
+         :hook (csharp-mode . dotnet-mode))
 
      #+end_src
 

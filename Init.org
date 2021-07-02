@@ -740,9 +740,10 @@ the Config used in the Videos: https://github.com/daviwil/emacs-from-scratch
 
      #+begin_src emacs-lisp
 
-       (use-package csharp-mode
-         :after dotnet
-         :hook (csharp-mode . lsp-deferred))
+	      (use-package csharp-mode
+		:after dotnet
+		:hook (csharp-mode . lsp-deferred)
+		:bind (:map csharp-mode-map ("<f5>" . dotnet-run)))
 
      #+end_src
 
@@ -750,9 +751,10 @@ the Config used in the Videos: https://github.com/daviwil/emacs-from-scratch
 
      #+begin_src emacs-lisp
 
-       (use-package fsharp-mode
-         :after dotnet
-         :hook (fsharp-mode . lsp-deferred))
+	      (use-package fsharp-mode
+		:after dotnet
+		:hook (fsharp-mode . lsp-deferred)
+		:bind (:map fsharp-mode-map ("<f5>" . dotnet-run)))
 
      #+end_src
 

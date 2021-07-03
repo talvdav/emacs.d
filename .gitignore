@@ -33,3 +33,4 @@ var/
 init.el
 .last-package-update-day
 \#*\#
+straight/**

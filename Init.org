@@ -150,16 +150,38 @@ the Config used in the Videos: [[https://github.com/daviwil/emacs-from-scratch][
     (unless package-archive-contents
       (package-refresh-contents))
 
-    ;; Initialize use-package on non-Linux platforms
-    (unless (package-installed-p 'use-package)
-      (package-install 'use-package))
+ ;;   ;; Initialize use-package on non-Linux platforms
+ ;;   (unless (package-installed-p 'use-package)
+ ;;     (package-install 'use-package))
 
-    (require 'use-package)
-    (setq use-package-always-ensure t)
+ ;;   (require 'use-package)
+ ;;   (setq use-package-always-ensure t)
 
   #+end_src
+  
+** Straight.el
 
-** Automatic Package Updates
+   #+begin_src emacs-lisp
+
+     (defvar bootstrap-version)
+     (let ((bootstrap-file
+	   (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+	   (bootstrap-version 5))
+       (unless (file-exists-p bootstrap-file)
+	 (with-current-buffer
+	     (url-retrieve-synchronously
+	     "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+	     'silent 'inhibit-cookies)
+	   (goto-char (point-max))
+	   (eval-print-last-sexp)))
+       (load bootstrap-file nil 'nomessage))
+
+     (straight-use-package 'use-package)
+
+     (setq straight-use-package-by-default t)
+   #+end_src
+
+** automatic Package Updates
 
    The auto-package-update package helps us keep our Emacs packages up to date!  It will prompt you after a certain number of days either at startup or at a specific time of day to remind you to update your packages.
    You can also use =M-x auto-package-update-now= to update right now!
@@ -242,7 +264,7 @@ the Config used in the Videos: [[https://github.com/daviwil/emacs-from-scratch][
    #+begin_src emacs-lisp
 
      (use-package evil-escape
-       :ensure t
+       :straight t
        :diminish
        :init (setq-default evil-escape-key-sequence "jk")
        :config (evil-escape-mode 1))
@@ -254,7 +276,7 @@ the Config used in the Videos: [[https://github.com/daviwil/emacs-from-scratch][
    #+begin_src emacs-lisp
 
      (use-package evil-leader ;; After editing the key bindings reload evil-leader and evil after that!
-       :ensure t
+       :straight t
        :init (global-evil-leader-mode)
        :config (define-key evil-normal-state-map (kbd "SPC") nil)
        (evil-leader/set-leader "<SPC>")
@@ -287,7 +309,7 @@ the Config used in the Videos: [[https://github.com/daviwil/emacs-from-scratch][
   #+begin_src emacs-lisp
 
     (use-package org
-      :pin org
+      ;:pin org
       :config (setq org-hide-emphasis-markers t))
 
   #+end_src
@@ -464,7 +486,7 @@ the Config used in the Videos: [[https://github.com/daviwil/emacs-from-scratch][
 
      (use-package linum-relative
        :if (> emacs-major-version 25)
-       :ensure t
+       :straight t
        :diminish
        :init (setq linum-relative-backend 'display-line-numbers-mode))
      ;;:config (linum-relative-global-mode))
@@ -516,7 +538,7 @@ the Config used in the Videos: [[https://github.com/daviwil/emacs-from-scratch][
     #+begin_src emacs-lisp
 
       (use-package diminish
-        :ensure t
+        :straight t
         :init (progn
                 (diminish 'undo-tree-mode)
                 (diminish 'eldoc-mode)
@@ -724,7 +746,7 @@ the Config used in the Videos: [[https://github.com/daviwil/emacs-from-scratch][
     #+begin_src emacs-lisp
 
       (use-package python-mode
-        :ensure t
+        :straight t
         :hook (python-mode . lsp-deferred)
         ;; :hook (python-mode) ;; i mostly use python togeher with a nix-shell and pipenv
         :custom
@@ -954,7 +976,7 @@ the Config used in the Videos: [[https://github.com/daviwil/emacs-from-scratch][
     #+begin_src emacs-lisp
 
       (use-package dired
-        :ensure nil
+        :straight nil
         :commands (dired dired-jump)
         :bind (("C-x C-j" . dired-jump))
         :custom ((dired-listing-switches "-agho --group-directories-first"))
@@ -1124,7 +1146,7 @@ the Config used in the Videos: [[https://github.com/daviwil/emacs-from-scratch][
    #+begin_src emacs-lisp
 
      (use-package doom-modeline
-       :ensure t
+       :straight t
        :config (doom-modeline-mode))
 
    #+end_src

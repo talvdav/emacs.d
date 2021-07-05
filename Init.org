@@ -137,6 +137,7 @@ In Vim you have $MYINITRC set to your config file for easy access, lets to somet
 
 * Initialize package management
 
+<<<<<<< HEAD
 #+begin_src emacs-lisp
   
   ;; Initialize package sources
@@ -200,6 +201,69 @@ You can also use =M-x auto-package-update-now= to update right now!
     (auto-package-update-at-time "09:00"))
   
 #+end_src
+=======
+  #+begin_src emacs-lisp
+
+    ;; Initialize package sources
+    (require 'package)
+
+    (setq package-archives '(("melpa" . "https://melpa.org/packages/")
+                             ("org" . "https://orgmode.org/elpa/")
+                             ("elpa" . "https://elpa.gnu.org/packages/")))
+
+    (package-initialize)
+    (unless package-archive-contents
+      (package-refresh-contents))
+
+ ;;   ;; Initialize use-package on non-Linux platforms
+ ;;   (unless (package-installed-p 'use-package)
+ ;;     (package-install 'use-package))
+
+ ;;   (require 'use-package)
+ ;;   (setq use-package-always-ensure t)
+
+  #+end_src
+  
+** Straight.el
+
+   #+begin_src emacs-lisp
+
+     (defvar bootstrap-version)
+     (let ((bootstrap-file
+	   (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+	   (bootstrap-version 5))
+       (unless (file-exists-p bootstrap-file)
+	 (with-current-buffer
+	     (url-retrieve-synchronously
+	     "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+	     'silent 'inhibit-cookies)
+	   (goto-char (point-max))
+	   (eval-print-last-sexp)))
+       (load bootstrap-file nil 'nomessage))
+
+     (straight-use-package 'use-package)
+
+     (setq straight-use-package-by-default t)
+   #+end_src
+
+** automatic Package Updates
+
+   The auto-package-update package helps us keep our Emacs packages up to date!  It will prompt you after a certain number of days either at startup or at a specific time of day to remind you to update your packages.
+   You can also use =M-x auto-package-update-now= to update right now!
+
+   #+begin_src emacs-lisp
+
+     (use-package auto-package-update
+       :custom
+       (auto-package-update-interval 7)
+       (auto-package-update-prompt-before-update t)
+       (auto-package-update-hide-results t)
+       :config
+       (auto-package-update-maybe)
+       (auto-package-update-at-time "09:00"))
+
+   #+end_src
+>>>>>>> origin/main
 
 * Keep Folders Clean
 
@@ -263,6 +327,7 @@ In order to easly go pack to normal mode we use "jk".
 
 *NOTE:* pressing "jk" is equivalent to pressing <ESC>
 
+<<<<<<< HEAD
 #+begin_src emacs-lisp
   
   (use-package evil-escape
@@ -292,6 +357,35 @@ In order to easly go pack to normal mode we use "jk".
       "p" 'python-shell-send-buffer))
   
 #+end_src
+=======
+     (use-package evil-escape
+       :straight t
+       :diminish
+       :init (setq-default evil-escape-key-sequence "jk")
+       :config (evil-escape-mode 1))
+
+   #+end_src
+
+** Evil Leader
+
+   #+begin_src emacs-lisp
+
+     (use-package evil-leader ;; After editing the key bindings reload evil-leader and evil after that!
+       :straight t
+       :init (global-evil-leader-mode)
+       :config (define-key evil-normal-state-map (kbd "SPC") nil)
+       (evil-leader/set-leader "<SPC>")
+       (evil-leader/set-key
+         "b" 'switch-to-buffer
+         "n" 'evil-buffer-new
+         "r" 'reindent-buffer
+         "d" 'display-fill-column-indicator-mode
+         "e" 'my/toggle-org-hide-emphasis-markers
+         "t" 'toggle-truncate-lines
+         "p" 'python-shell-send-buffer))
+
+   #+end_src
+>>>>>>> origin/main
 
 ** Evil Collection
 
@@ -308,12 +402,22 @@ In order to easly go pack to normal mode we use "jk".
 
 One if not the Emacs "App"
 
+<<<<<<< HEAD
 #+begin_src emacs-lisp
   
   (use-package org
     :config (setq org-hide-emphasis-markers t))
   
 #+end_src
+=======
+  #+begin_src emacs-lisp
+
+    (use-package org
+      ;:pin org
+      :config (setq org-hide-emphasis-markers t))
+
+  #+end_src
+>>>>>>> origin/main
 
 ** Emphasis Marker
 
@@ -483,6 +587,7 @@ We use [[https://github.com/joostkremers/visual-fill-column][visual-fill-column]
 #+end_src
 ** Line Numbers
 
+<<<<<<< HEAD
 #+begin_src emacs-lisp
   
   (use-package linum-relative
@@ -502,6 +607,27 @@ We use [[https://github.com/joostkremers/visual-fill-column][visual-fill-column]
     (add-hook mode (lambda () (display-line-numbers-mode 0))))
   
 #+end_src
+=======
+   #+begin_src emacs-lisp
+
+     (use-package linum-relative
+       :if (> emacs-major-version 25)
+       :straight t
+       :diminish
+       :init (setq linum-relative-backend 'display-line-numbers-mode))
+     ;;:config (linum-relative-global-mode))
+
+     ;; Disable line numbers for some modes
+     (dolist (mode '(org-mode-hook
+                     term-mode-hook
+                     shell-mode-hook
+                     treemacs-mode-hook
+                     markdown-mode-hook
+                     eshell-mode-hook))
+       (add-hook mode (lambda () (display-line-numbers-mode 0))))
+
+   #+end_src
+>>>>>>> origin/main
 
 ** Font Configuration
 
@@ -536,6 +662,7 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
 
 *** Diminish
 
+<<<<<<< HEAD
 #+begin_src emacs-lisp
   
   (use-package diminish
@@ -552,6 +679,24 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
             (diminish 'list-interaction-mode)))
   
 #+end_src
+=======
+    #+begin_src emacs-lisp
+
+      (use-package diminish
+        :straight t
+        :init (progn
+                (diminish 'undo-tree-mode)
+                (diminish 'eldoc-mode)
+                (diminish 'auto-revert-mode)
+                (diminish 'flycheck-mode)
+                (diminish 'company-mode)
+                (diminish 'dotnet-mode)
+                (diminish 'counsel-mode)
+                (diminish 'ivy-mode)
+                (diminish 'list-interaction-mode)))
+
+    #+end_src
+>>>>>>> origin/main
 
 * Buffer
 #+begin_src emacs-lisp
@@ -732,6 +877,7 @@ This will install the [[https://github.com/theia-ide/typescript-language-server]
 
 *** Python
 
+<<<<<<< HEAD
 We use =lsp-mode= and =dap-mode= to provide a more complete development environment for Python in Emacs.  Check out [[https://emacs-lsp.github.io/lsp-mode/page/lsp-pyls/][the =pyls= configuration]] in the =lsp-mode= documentation for more details.
 
 Make sure you have the =pyls= language server installed before trying =lsp-mode=!
@@ -776,6 +922,52 @@ You can use the pyvenv package to use =virtualenv= environments in Emacs.  The =
   (use-package pipenv
     :after python-mode)
 #+end_src
+=======
+    We use =lsp-mode= and =dap-mode= to provide a more complete development environment for Python in Emacs.  Check out [[https://emacs-lsp.github.io/lsp-mode/page/lsp-pyls/][the =pyls= configuration]] in the =lsp-mode= documentation for more details.
+
+    Make sure you have the =pyls= language server installed before trying =lsp-mode=!
+
+    #+begin_src sh :tangle no
+
+      pip install --user "python-language-server[all]"
+
+    #+end_src
+
+    There are a number of other language servers for Python so if you find that =pyls= doesn't work for you, consult the =lsp-mode= [[https://emacs-lsp.github.io/lsp-mode/page/languages/][language configuration documentation]] to try the others!
+
+    #+begin_src emacs-lisp
+
+      (use-package python-mode
+        :straight t
+        :hook (python-mode . lsp-deferred)
+        ;; :hook (python-mode) ;; i mostly use python togeher with a nix-shell and pipenv
+        :custom
+        ;; NOTE: Set these if Python 3 is called "python3" on your system!
+        ;; (python-shell-interpreter "python3")
+        ;; (dap-python-executable "python3")
+        (dap-python-debugger 'debugpy)
+        :config
+        (require 'dap-python))
+
+
+    #+end_src
+
+    You can use the pyvenv package to use =virtualenv= environments in Emacs.  The =pyvenv-activate= command should configure Emacs to cause =lsp-mode= and =dap-mode= to use the virtual environment when they are loaded, just select the path to your virtual environment before loading your project.
+
+    #+begin_src emacs-lisp
+
+      (use-package pyvenv
+        :after python-mode
+        :config
+        (pyvenv-mode 1))
+
+    #+end_src
+
+    #+begin_src emacs-lisp
+      (use-package pipenv
+        :after python-mode)
+    #+end_src
+>>>>>>> origin/main
 
 *** Dotnet Languages
 #+begin_src emacs-lisp
@@ -974,6 +1166,7 @@ Dired is a built-in file manager for Emacs that does some pretty amazing things!
 
 *** Configuration
 
+<<<<<<< HEAD
 #+begin_src emacs-lisp
   
   (use-package dired
@@ -1007,6 +1200,41 @@ Dired is a built-in file manager for Emacs that does some pretty amazing things!
       "H" 'dired-hide-dotfiles-mode))
   
 #+end_src
+=======
+    #+begin_src emacs-lisp
+
+      (use-package dired
+        :straight nil
+        :commands (dired dired-jump)
+        :bind (("C-x C-j" . dired-jump))
+        :custom ((dired-listing-switches "-agho --group-directories-first"))
+        :config
+        (evil-collection-define-key 'normal 'dired-mode-map
+          "h" 'dired-single-up-directory
+          "l" 'dired-single-buffer))
+
+      (use-package dired-single
+        :commands (dired dired-jump))
+
+      (use-package all-the-icons-dired
+        :hook (dired-mode . all-the-icons-dired-mode))
+
+      (use-package dired-open
+        :commands (dired dired-jump)
+        :config
+        ;; Doesn't work as expected!
+        ;;(add-to-list 'dired-open-functions #'dired-open-xdg t)
+        (setq dired-open-extensions '(("png" . "feh")
+                                      ("mkv" . "mpv"))))
+
+      (use-package dired-hide-dotfiles
+        :hook (dired-mode . dired-hide-dotfiles-mode)
+        :config
+        (evil-collection-define-key 'normal 'dired-mode-map
+          "H" 'dired-hide-dotfiles-mode))
+
+    #+end_src
+>>>>>>> origin/main
 
 * Terminals
 
@@ -1144,6 +1372,7 @@ The downsides to Eshell are that it can be harder to configure than other packag
 * Eye Candy
 ** Modeline
 
+<<<<<<< HEAD
 #+begin_src emacs-lisp
   
   (use-package doom-modeline
@@ -1151,6 +1380,15 @@ The downsides to Eshell are that it can be harder to configure than other packag
     :config (doom-modeline-mode))
   
 #+end_src
+=======
+   #+begin_src emacs-lisp
+
+     (use-package doom-modeline
+       :straight t
+       :config (doom-modeline-mode))
+
+   #+end_src
+>>>>>>> origin/main
 
 ** Color Theme
 

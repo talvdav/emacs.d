@@ -52,6 +52,7 @@ Show some benchmark at startup
 #+end_src
 
 * Initial Configuration
+
 ** Basic UI
 Default blinking cursors should be banned!!!
 #+begin_src emacs-lisp
@@ -84,6 +85,7 @@ Default blinking cursors should be banned!!!
 
 ** yes-or-no-p
 use =y= and =n= instead ot tiping out =yes= or =no=
+
 #+begin_src emacs-lisp
   
   (fset 'yes-or-no-p 'y-or-n-p)
@@ -137,7 +139,6 @@ In Vim you have $MYINITRC set to your config file for easy access, lets to somet
 
 * Initialize package management
 
-<<<<<<< HEAD
 #+begin_src emacs-lisp
   
   ;; Initialize package sources
@@ -202,69 +203,6 @@ You can also use =M-x auto-package-update-now= to update right now!
   ;;  (auto-package-update-at-time "09:00"))
   
 #+end_src
-=======
-  #+begin_src emacs-lisp
-
-    ;; Initialize package sources
-    (require 'package)
-
-    (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                             ("org" . "https://orgmode.org/elpa/")
-                             ("elpa" . "https://elpa.gnu.org/packages/")))
-
-    (package-initialize)
-    (unless package-archive-contents
-      (package-refresh-contents))
-
- ;;   ;; Initialize use-package on non-Linux platforms
- ;;   (unless (package-installed-p 'use-package)
- ;;     (package-install 'use-package))
-
- ;;   (require 'use-package)
- ;;   (setq use-package-always-ensure t)
-
-  #+end_src
-  
-** Straight.el
-
-   #+begin_src emacs-lisp
-
-     (defvar bootstrap-version)
-     (let ((bootstrap-file
-	   (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-	   (bootstrap-version 5))
-       (unless (file-exists-p bootstrap-file)
-	 (with-current-buffer
-	     (url-retrieve-synchronously
-	     "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-	     'silent 'inhibit-cookies)
-	   (goto-char (point-max))
-	   (eval-print-last-sexp)))
-       (load bootstrap-file nil 'nomessage))
-
-     (straight-use-package 'use-package)
-
-     (setq straight-use-package-by-default t)
-   #+end_src
-
-** automatic Package Updates
-
-   The auto-package-update package helps us keep our Emacs packages up to date!  It will prompt you after a certain number of days either at startup or at a specific time of day to remind you to update your packages.
-   You can also use =M-x auto-package-update-now= to update right now!
-
-   #+begin_src emacs-lisp
-
-     (use-package auto-package-update
-       :custom
-       (auto-package-update-interval 7)
-       (auto-package-update-prompt-before-update t)
-       (auto-package-update-hide-results t)
-       :config
-       (auto-package-update-maybe)
-       (auto-package-update-at-time "09:00"))
-
-   #+end_src
->>>>>>> origin/main
 
 * Keep Folders Clean
 
@@ -328,7 +266,6 @@ In order to easly go pack to normal mode we use "jk".
 
 *NOTE:* pressing "jk" is equivalent to pressing <ESC>
 
-<<<<<<< HEAD
 #+begin_src emacs-lisp
   
   (use-package evil-escape
@@ -358,7 +295,8 @@ In order to easly go pack to normal mode we use "jk".
       "p" 'python-shell-send-buffer))
   
 #+end_src
-=======
+
+#+begin_src emacs-lisp
      (use-package evil-escape
        :straight t
        :diminish
@@ -366,27 +304,6 @@ In order to easly go pack to normal mode we use "jk".
        :config (evil-escape-mode 1))
 
    #+end_src
-
-** Evil Leader
-
-   #+begin_src emacs-lisp
-
-     (use-package evil-leader ;; After editing the key bindings reload evil-leader and evil after that!
-       :straight t
-       :init (global-evil-leader-mode)
-       :config (define-key evil-normal-state-map (kbd "SPC") nil)
-       (evil-leader/set-leader "<SPC>")
-       (evil-leader/set-key
-         "b" 'switch-to-buffer
-         "n" 'evil-buffer-new
-         "r" 'reindent-buffer
-         "d" 'display-fill-column-indicator-mode
-         "e" 'my/toggle-org-hide-emphasis-markers
-         "t" 'toggle-truncate-lines
-         "p" 'python-shell-send-buffer))
-
-   #+end_src
->>>>>>> origin/main
 
 ** Evil Collection
 
@@ -403,7 +320,6 @@ In order to easly go pack to normal mode we use "jk".
 
 One if not the Emacs "App"
 
-<<<<<<< HEAD
 #+begin_src emacs-lisp
   
   (use-package org
@@ -568,7 +484,6 @@ We use [[https://github.com/joostkremers/visual-fill-column][visual-fill-column]
     ([remap describe-key] . helpful-key))
   
 #+end_src
-
 
 ** Which-key
 

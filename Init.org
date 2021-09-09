@@ -99,6 +99,7 @@ use =y= and =n= instead ot tiping out =yes= or =no=
 #+end_src
 
 ** Backup and Auto save
+
 #+begin_src emacs-lisp
   
   (setq backup-directory-alist '(("." . "~/.emacs-backups"))
@@ -110,6 +111,7 @@ use =y= and =n= instead ot tiping out =yes= or =no=
   (setq auto-save-default nil)
   
 #+end_src
+
 * Some usefull functions
 
 ** Reindent-buffer
@@ -180,8 +182,8 @@ In Vim you have $MYINITRC set to your config file for easy access, lets to somet
     (load bootstrap-file nil 'nomessage))
   
   (straight-use-package 'use-package)
-  
   (setq straight-use-package-by-default t)
+  (setq use-package-always-ensure t)
   
 #+end_src
 
@@ -204,7 +206,8 @@ You can also use =M-x auto-package-update-now= to update right now!
   
 #+end_src
 
-* Keep Folders Clean
+* Packages
+** Keep Folders Clean
 
 We use the [[https://github.com/emacscollective/no-littering/blob/master/no-littering.el][no-littering]] package to keep folders where we edit files and the Emacs configuration folder clean!  It knows about a wide variety of variables for built in Emacs features as well as those from community packages so it can be much easier than finding and setting these variables yourself.
 
@@ -224,9 +227,8 @@ We use the [[https://github.com/emacscollective/no-littering/blob/master/no-litt
   
 #+end_src
 
-* Essentials
-
-** Evil
+** Essentials
+*** Evil
 
 Vim keybindings are the next best thing to thinking your text into existens.
 
@@ -249,7 +251,8 @@ Vim keybindings are the next best thing to thinking your text into existens.
     (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
   
     (evil-set-initial-state 'messages-buffer-mode 'normal)
-    (evil-set-initial-state 'dashboard-mode 'normal))
+    (evil-set-initial-state 'dashboard-mode 'normal)
+    (evil-define-key '(normal insert) org-mode-map (kbd "<tab>") 'org-cycle))
   
   
   (use-package evil-collection
@@ -260,7 +263,7 @@ Vim keybindings are the next best thing to thinking your text into existens.
   
 #+end_src
 
-** Evil Escape
+*** Evil Escape
 
 In order to easly go pack to normal mode we use "jk".
 
@@ -276,7 +279,7 @@ In order to easly go pack to normal mode we use "jk".
   
 #+end_src
 
-** Evil Leader
+*** Evil Leader
 
 #+begin_src emacs-lisp
   
@@ -305,7 +308,7 @@ In order to easly go pack to normal mode we use "jk".
   
 #+end_src
 
-** Evil Collection
+*** Evil Collection
 
 #+begin_src emacs-lisp
   
@@ -316,7 +319,7 @@ In order to easly go pack to normal mode we use "jk".
   
 #+end_src
 
-* Org
+*** Org
 
 One if not the Emacs "App"
 
@@ -326,53 +329,8 @@ One if not the Emacs "App"
     :config (setq org-hide-emphasis-markers t))
   
 #+end_src
-=======
-#+begin_src emacs-lisp
-  
-  (use-package org
-                                          ;:pin org
-    :config (setq org-hide-emphasis-markers t))
-  
-#+end_src
->>>>>>> origin/main
 
-** Emphasis Marker
-
-In Org you can surround text with special characters to make them *bold*, /italic/ and so on.
-The characters are
-
-| Character | Example | Meaning        |
-|-----------+---------+----------------|
-| "*"       | *Foobar*  | bold           |
-| "/"       | /Foobar/  | italic         |
-| "="       | =Foobar=  | verbatim       |
-| "~"       | ~Foobar~  | code           |
-| "_"       | _Foobar_  | underlined     |
-| "+"       | +Foobar+  | strike-through |
-
-To make Org files look prettier i do not show those characters by default, this however
-can make editing text a bit difficult, so here we define functions to toggle this feature
-on an of.
-
-#+begin_src emacs-lisp
-  
-  (defun my/org-emphasis-markers-status ()
-    (interactive)
-    (message "org-hide-emphasis-markers %s"
-             (if org-hide-emphasis-markers "ON" "OFF")))
-  
-  (defun my/toggle-org-hide-emphasis-markers ()
-    (interactive)
-    (setq org-hide-emphasis-markers
-          (not org-hide-emphasis-markers))
-    (org-mode-restart)
-    (my/org-emphasis-markers-status))
-  
-  (global-set-key [f9] 'my/toggle-org-hide-emphasis-markers)
-  
-#+end_src
-
-** Tangle Emacs Configuration
+**** Tangle Emacs Configuration
 
 #+begin_src emacs-lisp
   
@@ -394,7 +352,43 @@ on an of.
   
 #+end_src
 
-** Org Structure Templates
+**** Emphasis Marker
+
+In Org you can surround text with special characters to make them *bold*, /italic/ and so on.
+The characters are
+
+| Character | Example | Meaning        |
+|-----------+---------+----------------|
+| "*"       | *Foobar*  | bold           |
+| "/"       | /Foobar/  | italic         |
+| "="       | =Foobar=  | verbatim       |
+| "~"       | ~Foobar~  | code           |
+| "_"       | _Foobar_  | underlined     |
+| "+"       | +Foobar+  | strike-through |
+
+To make Org files look prettier i do not show those characters by default, this however
+can make editing text a bit difficult, so here i define some functions to toggle this feature
+on an of.
+
+#+begin_src emacs-lisp
+  
+  (defun my/org-emphasis-markers-status ()
+    (interactive)
+    (message "org-hide-emphasis-markers %s"
+             (if org-hide-emphasis-markers "ON" "OFF")))
+  
+  (defun my/toggle-org-hide-emphasis-markers ()
+    (interactive)
+    (setq org-hide-emphasis-markers
+          (not org-hide-emphasis-markers))
+    (org-mode-restart)
+    (my/org-emphasis-markers-status))
+  
+  (global-set-key [f9] 'my/toggle-org-hide-emphasis-markers)
+  
+#+end_src
+
+**** Org Structure Templates
 
 #+begin_src emacs-lisp
   
@@ -409,7 +403,7 @@ on an of.
   
 #+end_src
 
-** Org Bullets
+**** Org Bullets
 
 [[https://github.com/sabof/org-bullets][org-bullets]] replaces the heading stars in =org-mode= buffers with nicer looking characters that you can control.  Another option for this is [[https://github.com/integral-dw/org-superstar-mode][org-superstar-mode]] which we may cover in a later video.
 
@@ -422,7 +416,7 @@ on an of.
   
 #+end_src
 
-** Center Org Buffers
+**** Center Org Buffers
 
 We use [[https://github.com/joostkremers/visual-fill-column][visual-fill-column]] to center =org-mode= buffers for a more pleasing writing experience as it centers the contents of the buffer horizontally to seem more like you are editing a document.  This is really a matter of personal preference so you can remove the block below if you don't like the behavior.
 
@@ -443,7 +437,8 @@ We use [[https://github.com/joostkremers/visual-fill-column][visual-fill-column]
     :hook (markdown-mode . my/markdown-mode-visual-fill))
   
 #+end_src
-** Org Export
+
+**** Org Export
 
 #+begin_src emacs-lisp
   
@@ -455,130 +450,27 @@ We use [[https://github.com/joostkremers/visual-fill-column][visual-fill-column]
   
 #+end_src
 
-** Key-Bindings
+**** Key-Bindings
 
 #+begin_src emacs-lisp
   
-  
-  (define-key org-mode-map (kbd "M-n") 'org-shiftright)
-  (define-key org-mode-map (kbd "M-p") 'org-shiftleft)
+  (with-eval-after-load 'evil
+    (evil-define-key '(normal insert visual) org-mode-map (kbd "M-h") 'org-promote-subtree)
+    (evil-define-key '(normal insert visual) org-mode-map (kbd "M-l") 'org-demote-subtree)
+
+    (evil-define-key '(normal insert visual) org-mode-map (kbd "M-j") 'org-shiftright)
+    (evil-define-key '(normal insert visual) org-mode-map (kbd "M-k") 'org-shiftleft))
   
 #+end_src
-* Emacs Documentation and Help
 
-** Helpful Help Commands
-
-[[https://github.com/Wilfred/helpful][Helpful]] adds a lot of very helpful (get it?) information to Emacs' =describe-= command buffers.  For example, if you use =describe-function=, you will not only get the documentation about the function, you will also see the source code of the function and where it gets used in other places in the Emacs configuration.  It is very useful for figuring out how things work in Emacs.
+**** Kanban
 
 #+begin_src emacs-lisp
-  
-  (use-package helpful
-    :commands (helpful-callable helpful-variable helpful-command helpful-key)
-    :custom
-    (counsel-describe-function-function #'helpful-callable)
-    (counsel-describe-variable-function #'helpful-variable)
-    :bind
-    ([remap describe-function] . counsel-describe-function)
-    ([remap describe-command] . helpful-command)
-    ([remap describe-variable] . counsel-describe-variable)
-    ([remap describe-key] . helpful-key))
-  
+  (use-package kanban
+    :ensure t)
 #+end_src
 
-** Which-key
-
-#+begin_src emacs-lisp
-  
-  (use-package which-key)
-  
-#+end_src
-
-* Editing
-** Hydra
-#+begin_src emacs-lisp
-  
-  (use-package hydra
-    :defer t)
-  
-#+end_src
-** Line Numbers
-
-#+begin_src emacs-lisp
-  
-  (use-package linum-relative
-    :if (> emacs-major-version 25)
-    :straight t
-    :diminish
-    :init (setq linum-relative-backend 'display-line-numbers-mode))
-  ;;:config (linum-relative-global-mode))
-  
-  ;; Disable line numbers for some modes
-  (dolist (mode '(org-mode-hook
-                  term-mode-hook
-                  shell-mode-hook
-                  treemacs-mode-hook
-                  markdown-mode-hook
-                  eshell-mode-hook))
-    (add-hook mode (lambda () (display-line-numbers-mode 0))))
-  
-#+end_src
-
-** Font Configuration
-
-I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://fonts.google.com/specimen/Cantarell][Cantarell]] fonts for this configuration which will more than likely need to be installed on your machine.  Both can usually be found in the various Linux distro package managers or downloaded from the links above.
-
-#+begin_src emacs-lisp
-  
-  (set-face-attribute 'default nil :font "Fira Code" :height efs/default-font-size)
-  
-  ;; Set the fixed pitch face
-  (set-face-attribute 'fixed-pitch nil :font "Fira Code" :height efs/default-font-size)
-  
-  ;; Set the variable pitch face
-  (set-face-attribute 'variable-pitch nil :font "Cantarell" :height efs/default-variable-font-size :weight 'regular)
-  
-#+end_src
-
-** Text Scaling
-
-This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to design a transient key binding for quickly adjusting the scale of the text on screen.  We define a hydra that is bound to =C-s t s= and, once activated, =j= and =k= increase and decrease the text scale.  You can press any other key (or =f= specifically) to exit the transient key map.
-
-#+begin_src emacs-lisp
-  
-  (defhydra hydra-text-scale (:timeout 4)
-    "scale text"
-    ("j" text-scale-increase "in")
-    ("k" text-scale-decrease "out")
-    ("f" nil "finished" :exit t))
-  
-#+end_src
-** Mode Line
-
-*** Diminish
-
-#+begin_src emacs-lisp
-  
-  (use-package diminish
-    :straight t
-    :init (progn
-            (diminish 'undo-tree-mode)
-            (diminish 'eldoc-mode)
-            (diminish 'auto-revert-mode)
-            (diminish 'flycheck-mode)
-            (diminish 'company-mode)
-            (diminish 'dotnet-mode)
-            (diminish 'counsel-mode)
-            (diminish 'ivy-mode)
-            (diminish 'list-interaction-mode)))
-  
-#+end_src
-
-* Buffer
-#+begin_src emacs-lisp
-  (use-package window-numbering
-    :config (window-numbering-mode))
-#+end_src
-* Ivy and Counsel
+*** Ivy and Counsel
 
 [[https://oremacs.com/swiper/][Ivy]] is an excellent completion framework for Emacs.  It provides a minimal yet powerful selection menu that appears when you open files, switch buffers, and for many other tasks in Emacs.  Counsel is a customized set of commands to replace `find-file` with `counsel-find-file`, etc which provide useful commands for each of the default completion commands.
 
@@ -620,12 +512,125 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
   
 #+end_src
 
-* Development
-** Languages
+** Emacs Documentation and Help
+*** Helpful Help Commands
 
-*** IDE Features with lsp-mode
+[[https://github.com/Wilfred/helpful][Helpful]] adds a lot of very helpful (get it?) information to Emacs' =describe-= command buffers.  For example, if you use =describe-function=, you will not only get the documentation about the function, you will also see the source code of the function and where it gets used in other places in the Emacs configuration.  It is very useful for figuring out how things work in Emacs.
 
-**** lsp-mode
+#+begin_src emacs-lisp
+  
+  (use-package helpful
+    :commands (helpful-callable helpful-variable helpful-command helpful-key)
+    :custom
+    (counsel-describe-function-function #'helpful-callable)
+    (counsel-describe-variable-function #'helpful-variable)
+    :bind
+    ([remap describe-function] . counsel-describe-function)
+    ([remap describe-command] . helpful-command)
+    ([remap describe-variable] . counsel-describe-variable)
+    ([remap describe-key] . helpful-key))
+  
+#+end_src
+
+*** Which-key
+
+#+begin_src emacs-lisp
+  
+  (use-package which-key)
+  
+#+end_src
+
+** Editing
+*** Hydra
+#+begin_src emacs-lisp
+  
+  (use-package hydra
+    :defer t)
+  
+#+end_src
+*** Line Numbers
+
+#+begin_src emacs-lisp
+  
+  (use-package linum-relative
+    :if (> emacs-major-version 25)
+    :straight t
+    :diminish
+    :init (setq linum-relative-backend 'display-line-numbers-mode))
+  ;;:config (linum-relative-global-mode))
+  
+  ;; Disable line numbers for some modes
+  (dolist (mode '(org-mode-hook
+                  term-mode-hook
+                  shell-mode-hook
+                  treemacs-mode-hook
+                  markdown-mode-hook
+                  eshell-mode-hook))
+    (add-hook mode (lambda () (display-line-numbers-mode 0))))
+  
+#+end_src
+
+*** Font Configuration
+
+I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://fonts.google.com/specimen/Cantarell][Cantarell]] fonts for this configuration which will more than likely need to be installed on your machine.  Both can usually be found in the various Linux distro package managers or downloaded from the links above.
+
+#+begin_src emacs-lisp
+  
+  (set-face-attribute 'default nil :font "Fira Code" :height efs/default-font-size)
+  
+  ;; Set the fixed pitch face
+  (set-face-attribute 'fixed-pitch nil :font "Fira Code" :height efs/default-font-size)
+  
+  ;; Set the variable pitch face
+  (set-face-attribute 'variable-pitch nil :font "Cantarell" :height efs/default-variable-font-size :weight 'regular)
+  
+#+end_src
+
+*** Text Scaling
+
+This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to design a transient key binding for quickly adjusting the scale of the text on screen.  We define a hydra that is bound to =C-s t s= and, once activated, =j= and =k= increase and decrease the text scale.  You can press any other key (or =f= specifically) to exit the transient key map.
+
+#+begin_src emacs-lisp
+  
+  (defhydra hydra-text-scale (:timeout 4)
+    "scale text"
+    ("j" text-scale-increase "in")
+    ("k" text-scale-decrease "out")
+    ("f" nil "finished" :exit t))
+  
+#+end_src
+*** Mode Line
+
+**** Diminish
+
+#+begin_src emacs-lisp
+  
+  (use-package diminish
+    :straight t
+    :init (progn
+            (diminish 'undo-tree-mode)
+            (diminish 'eldoc-mode)
+            (diminish 'auto-revert-mode)
+            (diminish 'flycheck-mode)
+            (diminish 'company-mode)
+            (diminish 'dotnet-mode)
+            (diminish 'counsel-mode)
+            (diminish 'ivy-mode)
+            (diminish 'list-interaction-mode)))
+  
+#+end_src
+
+** Buffer
+#+begin_src emacs-lisp
+  (use-package window-numbering
+    :config (window-numbering-mode))
+#+end_src
+** Development
+*** Languages
+
+**** IDE Features with lsp-mode
+
+***** lsp-mode
 
 We use the excellent [[https://emacs-lsp.github.io/lsp-mode/][lsp-mode]] to enable IDE-like functionality for many different programming languages via "language servers" that speak the [[https://microsoft.github.io/language-server-protocol/][Language Server Protocol]].  Before trying to set up =lsp-mode= for a particular language, check out the [[https://emacs-lsp.github.io/lsp-mode/page/languages/][documentation for your language]] so that you can learn which language servers are available and how to install them.
 The =lsp-keymap-prefix= setting enables you to define a prefix for where =lsp-mode='s default keybindings will be added.  I *highly recommend* using the prefix to find out what you can do with =lsp-mode= in a buffer.
@@ -647,7 +652,7 @@ The =which-key= integration adds helpful descriptions of the various keys so you
   
 #+end_src
 
-**** lsp-ui
+***** lsp-ui
 
 [[https://emacs-lsp.github.io/lsp-ui/][lsp-ui]] is a set of UI enhancements built on top of =lsp-mode= which make Emacs feel even more like an IDE.  Check out the screenshots on the =lsp-ui= homepage (linked at the beginning of this paragraph) to see examples of what it can do.
 
@@ -660,7 +665,7 @@ The =which-key= integration adds helpful descriptions of the various keys so you
   
 #+end_src
 
-**** lsp-treemacs
+***** lsp-treemacs
 
 [[https://github.com/emacs-lsp/lsp-treemacs][lsp-treemacs]] provides nice tree views for different aspects of your code like symbols in a file, references of a symbol, or diagnostic messages (errors and warnings) that are found in your code.
 
@@ -679,7 +684,7 @@ Try these commands with =M-x=:
     
   #+end_src
 
-**** lsp-ivy
+***** lsp-ivy
 
 [[https://github.com/emacs-lsp/lsp-ivy][lsp-ivy]] integrates Ivy with =lsp-mode= to make it easy to search for things by name in your code.  When you run these commands, a prompt will appear in the minibuffer allowing you to type part of the name of a symbol in your code.  Results will be populated in the minibuffer so that you can find what you're looking for and jump to that location in the code upon selecting the result.
 
@@ -695,7 +700,7 @@ Try these commands with =M-x=:
     
   #+end_src
 
-*** Debugging with dap-mode
+**** Debugging with dap-mode
 
 [[https://emacs-lsp.github.io/dap-mode/][dap-mode]] is an excellent package for bringing rich debugging capabilities to Emacs via the [[https://microsoft.github.io/debug-adapter-protocol/][Debug Adapter Protocol]].  You should check out the [[https://emacs-lsp.github.io/dap-mode/page/configuration/][configuration docs]] to learn how to configure the debugger for your language.  Also make sure to check out the documentation for the debug adapter to see what configuration parameters are available to use for your debug templates!
 
@@ -722,7 +727,7 @@ Try these commands with =M-x=:
   
 #+end_src
 
-*** TypeScript
+**** TypeScript
 
 This is a basic configuration for the TypeScript language so that =.ts= files activate =typescript-mode= when opened.  We're also adding a hook to =typescript-mode-hook= to call =lsp-deferred= so that we activate =lsp-mode= to get LSP features every time we edit TypeScript code.
 
@@ -746,7 +751,7 @@ This is a basic configuration for the TypeScript language so that =.ts= files ac
 
 This will install the [[https://github.com/theia-ide/typescript-language-server][typescript-language-server]] and the TypeScript compiler package.
 
-*** Python
+**** Python
 
 We use =lsp-mode= and =dap-mode= to provide a more complete development environment for Python in Emacs.  Check out [[https://emacs-lsp.github.io/lsp-mode/page/lsp-pyls/][the =pyls= configuration]] in the =lsp-mode= documentation for more details.
 
@@ -838,7 +843,7 @@ You can use the pyvenv package to use =virtualenv= environments in Emacs.  The =
     :after python-mode)
 #+end_src
 
-*** Dotnet Languages
+**** Dotnet Languages
 #+begin_src emacs-lisp
   
   (add-to-list 'auto-mode-alist '("\\.fsproj\\'" . xml-mode))
@@ -848,7 +853,7 @@ You can use the pyvenv package to use =virtualenv= environments in Emacs.  The =
   
 #+end_src
 
-**** C#
+***** C#
 
 #+begin_src emacs-lisp
   
@@ -859,7 +864,7 @@ You can use the pyvenv package to use =virtualenv= environments in Emacs.  The =
   
 #+end_src
 
-**** F#
+***** F#
 
 #+begin_src emacs-lisp
   
@@ -870,7 +875,7 @@ You can use the pyvenv package to use =virtualenv= environments in Emacs.  The =
   
 #+end_src
 
-**** Dotnet
+***** Dotnet
 
 #+begin_src emacs-lisp
   
@@ -880,7 +885,7 @@ You can use the pyvenv package to use =virtualenv= environments in Emacs.  The =
   
 #+end_src
 
-*** Yaml
+**** Yaml
 #+begin_src emacs-lisp
   
   (use-package yaml-mode)
@@ -889,7 +894,7 @@ You can use the pyvenv package to use =virtualenv= environments in Emacs.  The =
   
 #+end_src
 
-*** Rust
+**** Rust
 
 #+begin_src emacs-lisp
   
@@ -904,7 +909,7 @@ You can use the pyvenv package to use =virtualenv= environments in Emacs.  The =
   
 #+end_src
 
-** Company Mode
+*** Company Mode
 
 [[http://company-mode.github.io/][Company Mode]] provides a nicer in-buffer completion interface than =completion-at-point= which is more reminiscent of what you would expect from an IDE.  We add a simple configuration to make the keybindings a little more useful (=TAB= now completes the selection and initiates completion at the current location if needed).
 
@@ -928,7 +933,7 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
   
 #+end_src
 
-** Projectile
+*** Projectile
 
 [[https://projectile.mx/][Projectile]] is a project management library for Emacs which makes it a lot easier to navigate around code projects for various languages.  Many packages integrate with Projectile so it's a good idea to have it installed even if you don't use its commands directly.
 
@@ -952,7 +957,7 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
   
 #+end_src
 
-** Magit
+*** Magit
 
 [[https://magit.vc/][Magit]] is the best Git interface I've ever used.  Common Git operations are easy to execute quickly using Magit's command panel system.
 
@@ -971,7 +976,7 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
   
 #+end_src
 
-** Commenting
+*** Commenting
 
 Emacs' built in commenting functionality =comment-dwim= (usually bound to =M-;=) doesn't always comment things in the way you might expect so we use [[https://github.com/redguardtoo/evil-nerd-commenter][evil-nerd-commenter]] to provide a more familiar behavior.  I've bound it to =M-/= since other editors sometimes use this binding but you could also replace Emacs' =M-;= binding with this command.
 
@@ -982,7 +987,7 @@ Emacs' built in commenting functionality =comment-dwim= (usually bound to =M-;=)
   
 #+end_src
 
-** Rainbow Delimiters
+*** Rainbow Delimiters
 
 [[https://github.com/Fanael/rainbow-delimiters][rainbow-delimiters]] is useful in programming modes because it colorizes nested parentheses and brackets according to their nesting depth.  This makes it a lot easier to visually match parentheses in Emacs Lisp code without having to count them yourself.
 
@@ -993,23 +998,23 @@ Emacs' built in commenting functionality =comment-dwim= (usually bound to =M-;=)
   
 #+end_src
 
-** Weblorg
+*** Weblorg
 
 #+begin_src emacs-lisp
   
- (use-package weblorg) 
+  (use-package weblorg)
   
 #+end_src
 
-* File Management
+** File Management
 
-** Dired
+*** Dired
 
 Dired is a built-in file manager for Emacs that does some pretty amazing things!  Here are some key bindings you should try out:
 
-*** Key Bindings
+**** Key Bindings
 
-**** Navigation
+***** Navigation
 
 *Emacs* / *Evil*
 - =n= / =j= - next line
@@ -1022,7 +1027,7 @@ Dired is a built-in file manager for Emacs that does some pretty amazing things!
 - =g o= (=dired-view-file=) - Open file but in a "preview" mode, close with =q=
 - =g= / =g r= Refresh the buffer with =revert-buffer= after changing configuration (and after filesystem changes!)
 
-**** Marking files
+***** Marking files
 
 - =m= - Marks a file
 - =u= - Unmarks a file
@@ -1033,7 +1038,7 @@ Dired is a built-in file manager for Emacs that does some pretty amazing things!
 - =k= / =K= - "Kill" marked items (refresh buffer with =g= / =g r= to get them back)
 - Many operations can be done on a single file if there are no active marks!
 
-**** Copying and Renaming files
+***** Copying and Renaming files
 
 - =C= - Copy marked files (or if no files are marked, the current file)
 - Copying single and multiple files
@@ -1043,20 +1048,20 @@ Dired is a built-in file manager for Emacs that does some pretty amazing things!
 
   *Power command*: =C-x C-q= (=dired-toggle-read-only=) - Makes all file names in the buffer editable directly to rename them!  Press =Z Z= to confirm renaming or =Z Q= to abort.
 
-**** Deleting files
+***** Deleting files
 
 - =D= - Delete marked file
 - =d= - Mark file for deletion
 - =x= - Execute deletion for marks
 - =delete-by-moving-to-trash= - Move to trash instead of deleting permanently
 
-**** Creating and extracting archives
+***** Creating and extracting archives
 
 - =Z= - Compress or uncompress a file or folder to (=.tar.gz=)
 - =c= - Compress selection to a specific file
 - =dired-compress-files-alist= - Bind compression commands to file extension
 
-**** Other common operations
+***** Other common operations
 
 - =T= - Touch (change timestamp)
 - =M= - Change file mode
@@ -1065,7 +1070,7 @@ Dired is a built-in file manager for Emacs that does some pretty amazing things!
 - =S= - Create a symbolic link to this file
 - =L= - Load an Emacs Lisp file into Emacs
 
-*** Configuration
+**** Configuration
 
 #+begin_src emacs-lisp
   
@@ -1101,9 +1106,8 @@ Dired is a built-in file manager for Emacs that does some pretty amazing things!
   
 #+end_src
 
-* Terminals
-
-** term-mode
+** Terminals
+*** term-mode
 
 =term-mode= is a built-in terminal emulator in Emacs.  Because it is written in Emacs Lisp, you can start using it immediately with very little configuration.  If you are on Linux or macOS, =term-mode= is a great choice to get started because it supports fairly complex terminal applications (=htop=, =vim=, etc) and works pretty reliably.  However, because it is written in Emacs Lisp, it can be slower than other options like =vterm=.  The speed will only be an issue if you regularly run console apps with a lot of output.
 
@@ -1133,7 +1137,7 @@ Run a terminal with =M-x term!=
     
   #+end_src
 
-*** Better term-mode colors
+**** Better term-mode colors
 
 The =eterm-256color= package enhances the output of =term-mode= to enable handling of a wider range of color codes so that many popular terminal applications look as you would expect them to.  Keep in mind that this package requires =ncurses= to be installed on your machine so that it has access to the =tic= program.  Most Linux distributions come with this program installed already so you may not have to do anything extra to use it.
 
@@ -1144,7 +1148,7 @@ The =eterm-256color= package enhances the output of =term-mode= to enable handli
   
 #+end_src
 
-** vterm
+*** vterm
 
 [[https://github.com/akermu/emacs-libvterm/][vterm]] is an improved terminal emulator package which uses a compiled native module to interact with the underlying terminal applications.  This enables it to be much faster than =term-mode= and to also provide a more complete terminal emulation experience.
 
@@ -1161,7 +1165,7 @@ Make sure that you have the [[https://github.com/akermu/emacs-libvterm/#requirem
   
 #+end_src
 
-** shell-mode
+*** shell-mode
 
 [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Interactive-Shell.html#Interactive-Shell][shell-mode]] is a middle ground between =term-mode= and Eshell.  It is *not* a terminal emulator so more complex terminal programs will not run inside of it.  It does have much better integration with Emacs because all command input in this mode is handled by Emacs and then sent to the underlying shell once you press Enter.  This means that you can use =evil-mode='s editing motions on the command line, unlike in the terminal emulator modes above.
 
@@ -1182,7 +1186,7 @@ Make sure that you have the [[https://github.com/akermu/emacs-libvterm/#requirem
     
   #+end_src
 
-** Eshell
+*** Eshell
 
 [[https://www.gnu.org/software/emacs/manual/html_mono/eshell.html#Contributors-to-Eshell][Eshell]] is Emacs' own shell implementation written in Emacs Lisp.  It provides you with a cross-platform implementation (even on Windows!) of the common GNU utilities you would find on Linux and macOS (=ls=, =rm=, =mv=, =grep=, etc).  It also allows you to call Emacs Lisp functions directly from the shell and you can even set up aliases (like aliasing =vim= to =find-file=).  Eshell is also an Emacs Lisp REPL which allows you to evaluate full expressions at the shell.
 
@@ -1234,8 +1238,8 @@ The downsides to Eshell are that it can be harder to configure than other packag
         (eshell-git-prompt-use-theme 'powerline))
     #+end_src
 
-* Eye Candy
-** Modeline
+** Eye Candy
+*** Modeline
 
 #+begin_src emacs-lisp
   
@@ -1245,7 +1249,7 @@ The downsides to Eshell are that it can be harder to configure than other packag
   
 #+end_src
 
-** Color Theme
+*** Color Theme
 
 #+begin_src emacs-lisp
   
@@ -1260,7 +1264,7 @@ The downsides to Eshell are that it can be harder to configure than other packag
   
 #+end_src
 
-** All The Icons
+*** All The Icons
 
 *NOTE* If you install all-the-icons for the first time run all-the-incons-install-fonts
 *NOTE* if you used ~bootstrap.el~, this should allready been done.
@@ -1271,7 +1275,7 @@ The downsides to Eshell are that it can be harder to configure than other packag
   
 #+end_src
 
-** Misc
+* Misc
 
 #+begin_src emacs-lisp
   

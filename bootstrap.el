@@ -68,4 +68,3 @@
 	   (delete-file "~/.emacs"))
 
 (load-file "~/.emacs.d/init.el")
-

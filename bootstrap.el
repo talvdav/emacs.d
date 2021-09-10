@@ -19,10 +19,17 @@
      (setq straight-use-package-by-default t)
 
 (use-package org)
+(use-package evil
+  :config
+  (evil-mode 1))
 
-(use-package all-the-icons)
-(all-the-icons-install-fonts t)
-
+(blink-cursor-mode 0)
+(use-package evil-escape
+   :straight t
+   :diminish
+   :init (setq-default evil-escape-key-sequence "jk")
+   :config (evil-escape-mode 1))
+ 
 (defun efs/org-babel-tangle-config ()
   (when (string-equal (file-name-directory (buffer-file-name))
                       (expand-file-name *config-directory*))

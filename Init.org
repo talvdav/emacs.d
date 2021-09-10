@@ -251,8 +251,7 @@ Vim keybindings are the next best thing to thinking your text into existens.
     (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
   
     (evil-set-initial-state 'messages-buffer-mode 'normal)
-    (evil-set-initial-state 'dashboard-mode 'normal)
-    (evil-define-key '(normal insert) org-mode-map (kbd "<tab>") 'org-cycle))
+    (evil-set-initial-state 'dashboard-mode 'normal))
   
   
   (use-package evil-collection
@@ -265,7 +264,7 @@ Vim keybindings are the next best thing to thinking your text into existens.
 
 *** Evil Escape
 
-In order to easly go pack to normal mode we use "jk".
+In order to easly go back to normal mode we use "jk".
 
 *NOTE:* pressing "jk" is equivalent to pressing <ESC>
 
@@ -290,11 +289,11 @@ In order to easly go pack to normal mode we use "jk".
     (evil-leader/set-leader "<SPC>")
     (evil-leader/set-key
       "b" 'switch-to-buffer
+      "B" 'switch-to-buffer
       "n" 'evil-buffer-new
       "r" 'reindent-buffer
-      "d" 'display-fill-column-indicator-mode
-      "e" 'my/toggle-org-hide-emphasis-markers
-      "t" 'toggle-truncate-lines
+      "t" 'hydra-toggle/body
+      "s" 'hydra-text-scale/body
       "p" 'python-shell-send-buffer))
   
 #+end_src
@@ -375,12 +374,12 @@ on an of.
   (defun my/org-emphasis-markers-status ()
     (interactive)
     (message "org-hide-emphasis-markers %s"
-             (if org-hide-emphasis-markers "ON" "OFF")))
+	     (if org-hide-emphasis-markers "ON" "OFF")))
   
   (defun my/toggle-org-hide-emphasis-markers ()
     (interactive)
     (setq org-hide-emphasis-markers
-          (not org-hide-emphasis-markers))
+	  (not org-hide-emphasis-markers))
     (org-mode-restart)
     (my/org-emphasis-markers-status))
   
@@ -450,27 +449,7 @@ We use [[https://github.com/joostkremers/visual-fill-column][visual-fill-column]
   
 #+end_src
 
-**** Key-Bindings
-
-#+begin_src emacs-lisp
-  
-  (with-eval-after-load 'evil
-    (evil-define-key '(normal insert visual) org-mode-map (kbd "M-h") 'org-promote-subtree)
-    (evil-define-key '(normal insert visual) org-mode-map (kbd "M-l") 'org-demote-subtree)
-
-    (evil-define-key '(normal insert visual) org-mode-map (kbd "M-j") 'org-shiftright)
-    (evil-define-key '(normal insert visual) org-mode-map (kbd "M-k") 'org-shiftleft))
-  
-#+end_src
-
-**** Kanban
-
-#+begin_src emacs-lisp
-  (use-package kanban
-    :ensure t)
-#+end_src
-
-*** Ivy and Counsel
+**** Ivy and Counsel
 
 [[https://oremacs.com/swiper/][Ivy]] is an excellent completion framework for Emacs.  It provides a minimal yet powerful selection menu that appears when you open files, switch buffers, and for many other tasks in Emacs.  Counsel is a customized set of commands to replace `find-file` with `counsel-find-file`, etc which provide useful commands for each of the default completion commands.
 
@@ -512,6 +491,38 @@ We use [[https://github.com/joostkremers/visual-fill-column][visual-fill-column]
   
 #+end_src
 
+**** Kanban
+
+#+begin_src emacs-lisp
+  (use-package kanban
+    :ensure t)
+#+end_src
+
+**** Key-Bindings
+
+#+begin_src emacs-lisp
+  
+  (with-eval-after-load 'evil
+  
+    (evil-define-key '(normal insert visual) org-mode-map (kbd "M-h") 'org-promote-subtree)
+    (evil-define-key '(normal insert visual) org-mode-map (kbd "M-l") 'org-demote-subtree)
+  
+    ;; Move header up and down
+    (evil-define-key '(normal insert visual) org-mode-map (kbd "M-j") 'org-metadown)
+    (evil-define-key '(normal insert visual) org-mode-map (kbd "M-k") 'org-metaup)
+  
+    ;; Changes priority
+    (evil-define-key '(normal insert visual) org-mode-map (kbd "C-h") 'org-shiftup)
+    (evil-define-key '(normal insert visual) org-mode-map (kbd "C-l") 'org-shiftdown)
+  
+    ;; Cycles through Todo Done etc.
+    (evil-define-key '(normal insert visual) org-mode-map (kbd "M-n") 'org-shiftright)
+    (evil-define-key '(normal insert visual) org-mode-map (kbd "M-m") 'org-shiftleft)
+  
+    (evil-define-key '(normal insert) org-mode-map (kbd "<tab>") 'org-cycle))
+  
+#+end_src
+
 ** Emacs Documentation and Help
 *** Helpful Help Commands
 
@@ -548,6 +559,36 @@ We use [[https://github.com/joostkremers/visual-fill-column][visual-fill-column]
     :defer t)
   
 #+end_src
+
+**** Hydras
+
+***** Toggle stuff
+
+#+begin_src emacs-lisp
+  
+  (defhydra hydra-toggle (:timeout 5)
+    "toggle"
+    ("t" toggle-truncate-lines "truncate lines" :exit t)
+    ("l" linenum-relative-mode "line numbers" :exit t)
+    ("d" display-fill-column-indicator-mode "column indicator" :exit t)
+    ("e" my/toggle-org-hide-emphasis-markers "emphasis-markers" :exit t))
+  
+#+end_src
+
+***** Text Scaling
+
+This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to design a transient key binding for quickly adjusting the scale of the text on screen.  We define a hydra that is bound to =C-s t s= and, once activated, =j= and =k= increase and decrease the text scale.  You can press any other key (or =f= specifically) to exit the transient key map.
+
+#+begin_src emacs-lisp
+  
+  (defhydra hydra-text-scale (:timeout 5)
+    "scale text"
+    ("j" text-scale-increase "in")
+    ("k" text-scale-decrease "out")
+    ("f" nil "finished" :exit t))
+  
+#+end_src
+
 *** Line Numbers
 
 #+begin_src emacs-lisp
@@ -556,8 +597,8 @@ We use [[https://github.com/joostkremers/visual-fill-column][visual-fill-column]
     :if (> emacs-major-version 25)
     :straight t
     :diminish
-    :init (setq linum-relative-backend 'display-line-numbers-mode))
-  ;;:config (linum-relative-global-mode))
+    :init (setq linum-relative-backend 'display-line-numbers-mode)
+    :config (linum-relative-mode))
   
   ;; Disable line numbers for some modes
   (dolist (mode '(org-mode-hook
@@ -586,40 +627,26 @@ I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://f
   
 #+end_src
 
-*** Text Scaling
-
-This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to design a transient key binding for quickly adjusting the scale of the text on screen.  We define a hydra that is bound to =C-s t s= and, once activated, =j= and =k= increase and decrease the text scale.  You can press any other key (or =f= specifically) to exit the transient key map.
-
-#+begin_src emacs-lisp
-  
-  (defhydra hydra-text-scale (:timeout 4)
-    "scale text"
-    ("j" text-scale-increase "in")
-    ("k" text-scale-decrease "out")
-    ("f" nil "finished" :exit t))
-  
-#+end_src
 *** Mode Line
 
 **** Diminish
 
 #+begin_src emacs-lisp
-  
-  (use-package diminish
-    :straight t
-    :init (progn
-            (diminish 'undo-tree-mode)
-            (diminish 'eldoc-mode)
-            (diminish 'auto-revert-mode)
-            (diminish 'flycheck-mode)
-            (diminish 'company-mode)
-            (diminish 'dotnet-mode)
-            (diminish 'counsel-mode)
-            (diminish 'ivy-mode)
-            (diminish 'list-interaction-mode)))
-  
-#+end_src
 
+(use-package diminish
+:straight t
+:init (progn
+(diminish 'undo-tree-mode)
+(diminish 'eldoc-mode)
+(diminish 'auto-revert-mode)
+(diminish 'flycheck-mode)
+(diminish 'company-mode)
+(diminish 'dotnet-mode)
+(diminish 'counsel-mode)
+(diminish 'ivy-mode)
+(diminish 'list-interaction-mode)))
+
+#+end_
 ** Buffer
 #+begin_src emacs-lisp
   (use-package window-numbering
@@ -1007,7 +1034,6 @@ Emacs' built in commenting functionality =comment-dwim= (usually bound to =M-;=)
 #+end_src
 
 ** File Management
-
 *** Dired
 
 Dired is a built-in file manager for Emacs that does some pretty amazing things!  Here are some key bindings you should try out:
@@ -1105,6 +1131,7 @@ Dired is a built-in file manager for Emacs that does some pretty amazing things!
       "H" 'dired-hide-dotfiles-mode))
   
 #+end_src
+
 
 ** Terminals
 *** term-mode
@@ -1285,14 +1312,6 @@ The downsides to Eshell are that it can be harder to configure than other packag
   (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
   (add-to-list 'default-frame-alist '(fullscreen . maximized))
   
-  ;; Disable line numbers for some modes
-  (dolist (mode '(org-mode-hook
-                  term-mode-hook
-                  shell-mode-hook
-                  treemacs-mode-hook
-                  markdown-mode-hook
-                  eshell-mode-hook))
-    (add-hook mode (lambda () (display-line-numbers-mode 0))))
   
   ;; Make Emacs FUCKING USE SANE ENCODINGS:
   (setq locale-coding-system 'utf-8-unix)

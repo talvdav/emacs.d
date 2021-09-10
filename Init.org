@@ -646,8 +646,10 @@ I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://f
 (diminish 'ivy-mode)
 (diminish 'list-interaction-mode)))
 
-#+end_
+#+end_src
+
 ** Buffer
+
 #+begin_src emacs-lisp
   (use-package window-numbering
     :config (window-numbering-mode))

@@ -144,7 +144,7 @@ In Vim you have $MYINITRC set to your config file for easy access, lets to somet
 #+begin_src emacs-lisp
   
 (defun now ()
-  "Insert string for the current time formatted like '2:34 PM'."
+  "Insert string for the current time formatted"
   (interactive)                 ; permit invocation in minibuffer
   (insert (format-time-string "[%Y-%m-%d %a %H:%M]")))
 
@@ -311,9 +311,12 @@ In order to easly go back to normal mode we use "jk".
       "r" 'reindent-buffer
       "t" 'hydra-toggle/body
       "s" 'hydra-text-scale/body
+      "i" 'hydra-insert-date-and-time-at-point/body
       "p" 'python-shell-send-buffer))
   
 #+end_src
+
+*** Evil Escape
 
 #+begin_src emacs-lisp
   (use-package evil-escape
@@ -603,6 +606,17 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
     ("j" text-scale-increase "in")
     ("k" text-scale-decrease "out")
     ("f" nil "finished" :exit t))
+  
+#+end_src
+
+***** Insert date time at point
+
+#+begin_src emacs-lisp
+  
+  (defhydra hydra-insert-date-and-time-at-point ()
+  "insert date and time at point"
+  ("n" now "insert date and time" :exit t)
+  ("t" today "insert date time long" :exit t))
   
 #+end_src
 

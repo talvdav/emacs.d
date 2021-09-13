@@ -139,6 +139,23 @@ In Vim you have $MYINITRC set to your config file for easy access, lets to somet
   
 #+end_src
 
+** Insert date and time at point
+
+#+begin_src emacs-lisp
+  
+(defun now ()
+  "Insert string for the current time formatted like '2:34 PM'."
+  (interactive)                 ; permit invocation in minibuffer
+  (insert (format-time-string "[%Y-%m-%d %a %H:%M]")))
+
+(defun today ()
+  "Insert string for today's date nicely formatted in American style,
+e.g. Sunday, September 17, 2000."
+  (interactive)                 ; permit invocation in minibuffer
+  (insert (format-time-string "%A, %B %e, %Y")))
+  
+#+end_src
+
 * Initialize package management
 
 #+begin_src emacs-lisp

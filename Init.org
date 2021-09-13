@@ -515,8 +515,10 @@ We use [[https://github.com/joostkremers/visual-fill-column][visual-fill-column]
 **** Kanban
 
 #+begin_src emacs-lisp
+  
   (use-package kanban
     :ensure t)
+
 #+end_src
 
 **** Key-Bindings

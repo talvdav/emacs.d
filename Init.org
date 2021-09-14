@@ -14,6 +14,7 @@ the Config used in the Videos: [[https://github.com/daviwil/emacs-from-scratch][
   (add-hook 'after-init-hook (lambda ()
                                ;; restore after startup
                                (setq gc-cons-threshold 800000)))
+  
 #+end_src
 
 #+begin_src emacs-lisp
@@ -48,7 +49,8 @@ Show some benchmark at startup
   (defvar efs/frame-transparency '(95 . 95))
   
   (defvar *config-directory* user-emacs-directory)
-  
+  (setq user-emacs-directory  "~/.emacs.d/cache/")
+
 #+end_src
 
 * Initial Configuration
@@ -143,16 +145,16 @@ In Vim you have $MYINITRC set to your config file for easy access, lets to somet
 
 #+begin_src emacs-lisp
   
-(defun now ()
-  "Insert string for the current time formatted"
-  (interactive)                 ; permit invocation in minibuffer
-  (insert (format-time-string "[%Y-%m-%d %a %H:%M]")))
-
-(defun today ()
-  "Insert string for today's date nicely formatted in American style,
-e.g. Sunday, September 17, 2000."
-  (interactive)                 ; permit invocation in minibuffer
-  (insert (format-time-string "%A, %B %e, %Y")))
+  (defun now ()
+    "Insert string for the current time formatted"
+    (interactive)                 ; permit invocation in minibuffer
+    (insert (format-time-string "[%Y-%m-%d %a %H:%M]")))
+  
+  (defun today ()
+    "Insert string for today's date nicely formatted in American style,
+  e.g. Sunday, September 17, 2000."
+    (interactive)                 ; permit invocation in minibuffer
+    (insert (format-time-string "%A, %B %e, %Y")))
   
 #+end_src
 
@@ -394,12 +396,12 @@ on an of.
   (defun my/org-emphasis-markers-status ()
     (interactive)
     (message "org-hide-emphasis-markers %s"
-	     (if org-hide-emphasis-markers "ON" "OFF")))
+             (if org-hide-emphasis-markers "ON" "OFF")))
   
   (defun my/toggle-org-hide-emphasis-markers ()
     (interactive)
     (setq org-hide-emphasis-markers
-	  (not org-hide-emphasis-markers))
+          (not org-hide-emphasis-markers))
     (org-mode-restart)
     (my/org-emphasis-markers-status))
   
@@ -518,7 +520,7 @@ We use [[https://github.com/joostkremers/visual-fill-column][visual-fill-column]
   
   (use-package kanban
     :ensure t)
-
+  
 #+end_src
 
 **** Key-Bindings
@@ -617,9 +619,9 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
 #+begin_src emacs-lisp
   
   (defhydra hydra-insert-date-and-time-at-point ()
-  "insert date and time at point"
-  ("n" now "insert date and time" :exit t)
-  ("t" today "insert date time long" :exit t))
+    "insert date and time at point"
+    ("n" now "insert date and time" :exit t)
+    ("t" today "insert date time long" :exit t))
   
 #+end_src
 
@@ -666,20 +668,20 @@ I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://f
 **** Diminish
 
 #+begin_src emacs-lisp
-
-(use-package diminish
-:straight t
-:init (progn
-(diminish 'undo-tree-mode)
-(diminish 'eldoc-mode)
-(diminish 'auto-revert-mode)
-(diminish 'flycheck-mode)
-(diminish 'company-mode)
-(diminish 'dotnet-mode)
-(diminish 'counsel-mode)
-(diminish 'ivy-mode)
-(diminish 'list-interaction-mode)))
-
+  
+  (use-package diminish
+    :straight t
+    :init (progn
+            (diminish 'undo-tree-mode)
+            (diminish 'eldoc-mode)
+            (diminish 'auto-revert-mode)
+            (diminish 'flycheck-mode)
+            (diminish 'company-mode)
+            (diminish 'dotnet-mode)
+            (diminish 'counsel-mode)
+            (diminish 'ivy-mode)
+            (diminish 'list-interaction-mode)))
+  
 #+end_src
 
 ** Buffer

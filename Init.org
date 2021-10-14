@@ -50,7 +50,7 @@ Show some benchmark at startup
   
   (defvar *config-directory* user-emacs-directory)
   (setq user-emacs-directory  "~/.emacs.d/cache/")
-
+  
 #+end_src
 
 * Initial Configuration
@@ -963,7 +963,9 @@ You can use the pyvenv package to use =virtualenv= environments in Emacs.  The =
 
 #+begin_src emacs-lisp
   
-  (use-package rust-mode)
+  (use-package rust-mode
+    :hook (rust-mode . lsp-deferred)
+    )
   
 #+end_src
 

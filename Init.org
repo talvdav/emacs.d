@@ -10,7 +10,6 @@ the Config used in the Videos: [[https://github.com/daviwil/emacs-from-scratch][
 #+begin_src emacs-lisp
   
   (setq gc-cons-threshold 64000000)
-  
   (add-hook 'after-init-hook (lambda ()
                                ;; restore after startup
                                (setq gc-cons-threshold 800000)))
@@ -264,14 +263,16 @@ Vim keybindings are the next best thing to thinking your text into existens.
     (evil-mode 1)
     (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
     (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
+
+    (define-key evil-motion-state-map (kbd "g h") 'evil-window-top)
+    (define-key evil-motion-state-map (kbd "g l") 'evil-window-bottom)
   
     ;; Use visual line motions even outside of visual-line-mode buffers
     (evil-global-set-key 'motion "j" 'evil-next-visual-line)
     (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
   
     (evil-set-initial-state 'messages-buffer-mode 'normal)
-    (evil-set-initial-state 'dashboard-mode 'normal))
-  
+    (evil-set-initial-state 'dashboard-mode 'normal)) 
   
   (use-package evil-collection
     :after evil
@@ -529,20 +530,23 @@ We use [[https://github.com/joostkremers/visual-fill-column][visual-fill-column]
   
   (with-eval-after-load 'evil
   
-    (evil-define-key '(normal insert visual) org-mode-map (kbd "M-h") 'org-promote-subtree)
-    (evil-define-key '(normal insert visual) org-mode-map (kbd "M-l") 'org-demote-subtree)
+    (evil-define-key '(normal insert visual) org-mode-map (kbd "M-h") 'org-metaleft)
+    (evil-define-key '(normal insert visual) org-mode-map (kbd "M-l") 'org-metaright)
+  
+    (evil-define-key '(normal insert visual) org-mode-map (kbd "M-H") 'org-promote-subtree)
+    (evil-define-key '(normal insert visual) org-mode-map (kbd "M-L") 'org-demote-subtree)
   
     ;; Move header up and down
     (evil-define-key '(normal insert visual) org-mode-map (kbd "M-j") 'org-metadown)
     (evil-define-key '(normal insert visual) org-mode-map (kbd "M-k") 'org-metaup)
   
     ;; Changes priority
-    (evil-define-key '(normal insert visual) org-mode-map (kbd "C-h") 'org-shiftup)
-    (evil-define-key '(normal insert visual) org-mode-map (kbd "C-l") 'org-shiftdown)
+    (evil-define-key '(normal insert visual) org-mode-map (kbd "K") 'org-shiftup)
+    (evil-define-key '(normal insert visual) org-mode-map (kbd "J") 'org-shiftdown)
   
     ;; Cycles through Todo Done etc.
-    (evil-define-key '(normal insert visual) org-mode-map (kbd "M-n") 'org-shiftright)
-    (evil-define-key '(normal insert visual) org-mode-map (kbd "M-m") 'org-shiftleft)
+    (evil-define-key '(normal insert visual) org-mode-map (kbd "L") 'org-shiftright)
+    (evil-define-key '(normal insert visual) org-mode-map (kbd "H") 'org-shiftleft)
   
     (evil-define-key '(normal insert) org-mode-map (kbd "<tab>") 'org-cycle))
   
@@ -595,6 +599,7 @@ We use [[https://github.com/joostkremers/visual-fill-column][visual-fill-column]
     "toggle"
     ("t" toggle-truncate-lines "truncate lines" :exit t)
     ("l" linenum-relative-mode "line numbers" :exit t)
+    ("c" visual-fill-column-mode "center text in buffers" :exit t)
     ("d" display-fill-column-indicator-mode "column indicator" :exit t)
     ("e" my/toggle-org-hide-emphasis-markers "emphasis-markers" :exit t))
   
@@ -1273,6 +1278,7 @@ The downsides to Eshell are that it can be harder to configure than other packag
   - https://ambrevar.xyz/emacs-eshell-versus-shell/index.html
 
     #+begin_src emacs-lisp
+      (setq exec-path (append exec-path '("/home/thomas/.cargo/bin")))
       
       (defun efs/configure-eshell ()
         ;; Save command history when commands are entered

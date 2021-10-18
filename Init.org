@@ -44,8 +44,6 @@ Show some benchmark at startup
   (defvar efs/default-font-size 120)
   (defvar efs/default-variable-font-size 120)
   
-  ;; Make frame transparency overridable
-  (defvar efs/frame-transparency '(95 . 95))
   
   (defvar *config-directory* user-emacs-directory)
   (setq user-emacs-directory  "~/.emacs.d/cache/")
@@ -309,7 +307,6 @@ In order to easly go back to normal mode we use "jk".
     (evil-leader/set-leader "<SPC>")
     (evil-leader/set-key
       "b" 'switch-to-buffer
-      "B" 'switch-to-buffer
       "n" 'evil-buffer-new
       "r" 'reindent-buffer
       "t" 'hydra-toggle/body
@@ -1324,15 +1321,15 @@ The downsides to Eshell are that it can be harder to configure than other packag
 
 #+begin_src emacs-lisp
   
-                                          ;(use-package doom-themes
-                                          ;  :init (load-theme 'doom-gruvbox t))
+					  ;(use-package doom-themes
+					  ;  :init (load-theme 'doom-gruvbox t))
   
-                                          ;(setq custom-enabled-themes 'doom-gruvbox)
-                                          ;(load-theme 'doom-gruvbox)
+					  ;(setq custom-enabled-themes 'doom-gruvbox)
+					  ;(load-theme 'doom-gruvbox)
   
   (use-package gruvbox-theme
     :init (load-theme 'gruvbox-dark-medium t))
-  
+
 #+end_src
 
 *** All The Icons
@@ -1350,12 +1347,16 @@ The downsides to Eshell are that it can be harder to configure than other packag
 
 #+begin_src emacs-lisp
   
+  ;; (active-frame . inactive-frame)
+  (defvar efs/frame-transparency '(100 . 98))
+  
   ;; Set frame transparency
+  ;; Make frame transparency overridable
+  
   (set-frame-parameter (selected-frame) 'alpha efs/frame-transparency)
-  (add-to-list 'default-frame-alist `(alpha . ,efs/frame-transparency))
+  (add-to-list 'default-frame-alist `(alpha . ,efs/frame-transparency)) ; do not remove the comma!
   (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
   (add-to-list 'default-frame-alist '(fullscreen . maximized))
-  
   
   ;; Make Emacs FUCKING USE SANE ENCODINGS:
   (setq locale-coding-system 'utf-8-unix)
@@ -1365,9 +1366,9 @@ The downsides to Eshell are that it can be harder to configure than other packag
   
     ;; better scrolling experience
     (setq scroll-margin 0
-          scroll-conservatively 10000
-          scroll-preserve-screen-position t
-          auto-window-vscroll nil)
+	  scroll-conservatively 10000
+	  scroll-preserve-screen-position t
+	  auto-window-vscroll nil)
   
     ;; on Win32, cooperation between Emacs and other Unicode applications is weird.
     ;; let's avoid that.

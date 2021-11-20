@@ -263,7 +263,7 @@ Vim keybindings are the next best thing to thinking your text into existens.
     (evil-mode 1)
     (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
     (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
-
+  
     (define-key evil-motion-state-map (kbd "g h") 'evil-window-top)
     (define-key evil-motion-state-map (kbd "g l") 'evil-window-bottom)
   
@@ -272,7 +272,7 @@ Vim keybindings are the next best thing to thinking your text into existens.
     (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
   
     (evil-set-initial-state 'messages-buffer-mode 'normal)
-    (evil-set-initial-state 'dashboard-mode 'normal)) 
+    (evil-set-initial-state 'dashboard-mode 'normal))
   
   (use-package evil-collection
     :after evil
@@ -696,6 +696,17 @@ I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://f
     :config (window-numbering-mode))
 #+end_src
 ** Development
+*** Tree-Sitter
+
+#+begin_src emacs-lisp
+  (use-package tree-sitter
+    :config (progn
+              (add-hook 'csharp-mode-hook #'tree-sitter-mode)
+	      (add-hook 'rust-mode-hook #'tree-sitter-mode)))
+  (use-package tree-sitter-langs
+    :after tree-sitter)
+#+end_src
+
 *** Languages
 
 **** IDE Features with lsp-mode
@@ -1147,6 +1158,7 @@ Dired is a built-in file manager for Emacs that does some pretty amazing things!
   
   (use-package dired
     :straight nil
+    :ensure nil
     :commands (dired dired-jump)
     :bind (("C-x C-j" . dired-jump))
     :custom ((dired-listing-switches "-agho --group-directories-first"))

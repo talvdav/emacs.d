@@ -531,6 +531,7 @@ We use [[https://github.com/joostkremers/visual-fill-column][visual-fill-column]
     :init
     (vertico-mode))
 
+
   (use-package savehist
     :init
     (savehist-mode))
@@ -562,7 +563,7 @@ We use [[https://github.com/joostkremers/visual-fill-column][visual-fill-column]
 
     (evil-define-key '(normal) org-mode-map (kbd "M-h") 'org-metaleft)
     (evil-define-key '(normal) org-mode-map (kbd "M-l") 'org-metaright)
-			     
+
     (evil-define-key '(normal) org-mode-map (kbd "M-H") 'org-promote-subtree)
     (evil-define-key '(normal) org-mode-map (kbd "M-L") 'org-demote-subtree)
 
@@ -1066,7 +1067,7 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
   (use-package projectile
     :diminish projectile-mode
     :config (projectile-mode)
-    :custom ((projectile-completion-system 'ivy))
+    ;:custom ((projectile-completion-system 'vertico))
     :bind-keymap
     ("C-c p" . projectile-command-map)
     :init
@@ -1075,9 +1076,9 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
       (setq projectile-project-search-path '("~/Projects")))
     (setq projectile-switch-project-action #'projectile-dired))
 
-  (use-package counsel-projectile
-    :after projectile
-    :config (counsel-projectile-mode))
+  ;(use-package counsel-projectile
+  ;  :after projectile
+  ;  :config (counsel-projectile-mode))
 
 #+end_src
 

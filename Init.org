@@ -225,6 +225,7 @@ You can also use =M-x auto-package-update-now= to update right now!
 #+end_src
 
 ** Packages
+
 *** Keep Folders Clean
 
 We use the [[https://github.com/emacscollective/no-littering/blob/master/no-littering.el][no-littering]] package to keep folders where we edit files and the Emacs configuration folder clean!  It knows about a wide variety of variables for built in Emacs features as well as those from community packages so it can be much easier than finding and setting these variables yourself.
@@ -519,7 +520,7 @@ We use [[https://github.com/joostkremers/visual-fill-column][visual-fill-column]
 #+begin_src emacs-lisp
 
   (use-package vertico
-    :ensure t
+    :straight t
     :bind (:map vertico-map
                 ("C-j" . vertico-next)
                 ("C-k" . vertico-previous)
@@ -538,7 +539,7 @@ We use [[https://github.com/joostkremers/visual-fill-column][visual-fill-column]
 
   (use-package marginalia
     :after vertico
-    :ensure t
+    :straight t
     :custom
     (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
     :init
@@ -551,7 +552,7 @@ We use [[https://github.com/joostkremers/visual-fill-column][visual-fill-column]
 #+begin_src emacs-lisp
 
   (use-package kanban
-    :ensure t)
+    :straight t)
 
 #+end_src
 
@@ -590,16 +591,18 @@ We use [[https://github.com/joostkremers/visual-fill-column][visual-fill-column]
 
 #+begin_src emacs-lisp
 
-  (use-package helpful
-    :commands (helpful-callable helpful-variable helpful-command helpful-key)
-    :custom
-    (counsel-describe-function-function #'helpful-callable)
-    (counsel-describe-variable-function #'helpful-variable)
-    :bind
-    ([remap describe-function] . counsel-describe-function)
-    ([remap describe-command] . helpful-command)
-    ([remap describe-variable] . counsel-describe-variable)
-    ([remap describe-key] . helpful-key))
+  ;(use-package helpful
+  ;  :commands (helpful-callable helpful-variable helpful-command helpful-key)
+  ;  :custom
+  ;  (counsel-describe-function-function #'helpful-callable)
+  ;  (counsel-describe-variable-function #'helpful-variable)
+  ;  :bind
+  ;  ([remap describe-function] . counsel-describe-function)
+  ;  ([remap describe-command] . helpful-command)
+  ;  ([remap describe-variable] . counsel-describe-variable)
+  ;  ([remap describe-key] . helpful-key))
+
+  (use-package helpful)
 
 #+end_src
 
@@ -615,8 +618,10 @@ We use [[https://github.com/joostkremers/visual-fill-column][visual-fill-column]
 
 **** NixOs
 #+begin_src emacs-lisp
+
   (use-package nix-mode)
   (use-package nix-buffer)
+
 #+end_src
 
 **** Hydra
@@ -728,26 +733,31 @@ I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://f
 #+end_src
 
 *** Buffer
+
 #+begin_src emacs-lisp
+
   (use-package window-numbering
     :config (window-numbering-mode))
+
 #+end_src
 
 *** Development
 **** Tree-Sitter
 
 #+begin_src emacs-lisp
+
   (use-package tree-sitter
     :config (progn
-              (add-hook 'csharp-mode-hook #'tree-sitter-mode)
-              (add-hook 'rust-mode-hook #'tree-sitter-mode)))
+	      (add-hook 'csharp-mode-hook #'tree-sitter-mode)
+	      (add-hook 'rust-mode-hook #'tree-sitter-mode)))
+
   (use-package tree-sitter-langs
     :after tree-sitter)
+
 #+end_src
 
 **** Languages
 ***** IDE Features with lsp-mode
-
 ****** lsp-mode
 
 We use the excellent [[https://emacs-lsp.github.io/lsp-mode/][lsp-mode]] to enable IDE-like functionality for many different programming languages via "language servers" that speak the [[https://microsoft.github.io/language-server-protocol/][Language Server Protocol]].  Before trying to set up =lsp-mode= for a particular language, check out the [[https://emacs-lsp.github.io/lsp-mode/page/languages/][documentation for your language]] so that you can learn which language servers are available and how to install them.
@@ -1067,7 +1077,7 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
   (use-package projectile
     :diminish projectile-mode
     :config (projectile-mode)
-    ;:custom ((projectile-completion-system 'vertico))
+                                          ;:custom ((projectile-completion-system 'vertico))
     :bind-keymap
     ("C-c p" . projectile-command-map)
     :init
@@ -1076,9 +1086,9 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
       (setq projectile-project-search-path '("~/Projects")))
     (setq projectile-switch-project-action #'projectile-dired))
 
-  ;(use-package counsel-projectile
-  ;  :after projectile
-  ;  :config (counsel-projectile-mode))
+                                          ;(use-package counsel-projectile
+                                          ;  :after projectile
+                                          ;  :config (counsel-projectile-mode))
 
 #+end_src
 
@@ -1199,7 +1209,7 @@ Dired is a built-in file manager for Emacs that does some pretty amazing things!
 
   (use-package dired+
     :straight nil
-    :ensure nil
+    :straight nil
     :commands (dired dired-jump)
     :bind (("C-x C-j" . dired-jump))
     :custom ((dired-listing-switches "-agho --group-directories-first"))
@@ -1340,7 +1350,7 @@ The downsides to Eshell are that it can be harder to configure than other packag
         (add-to-list 'eshell-output-filter-functions 'eshell-truncate-buffer)
 
         ;; Bind some useful keys for evil-mode
-        (evil-define-key '(normal insert visual) eshell-mode-map (kbd "C-r") 'counsel-esh-history)
+        ;;(evil-define-key '(normal insert visual) eshell-mode-map (kbd "C-r") 'counsel-esh-history)
         (evil-define-key '(normal insert visual) eshell-mode-map (kbd "<home>") 'eshell-bol)
         (evil-normalize-keymaps)
 
@@ -1378,14 +1388,19 @@ The downsides to Eshell are that it can be harder to configure than other packag
 
 #+begin_src emacs-lisp
 
-                                          ;(use-package doom-themes
-                                          ;  :init (load-theme 'doom-gruvbox t))
+					  ;(use-package doom-themes
+					  ;  :init (load-theme 'doom-gruvbox t))
 
-                                          ;(setq custom-enabled-themes 'doom-gruvbox)
-                                          ;(load-theme 'doom-gruvbox)
-
+					  ;(setq custom-enabled-themes 'doom-gruvbox)
+					  ;(load-theme 'doom-gruvbox)
   (use-package gruvbox-theme
-    :init (load-theme 'gruvbox-dark-medium t))
+    :straight t)
+  (use-package moe-theme
+    :straight t)
+
+  (if (daemonp)
+      (load-theme 'gruvbox-dark-medium t)
+      (load-theme 'moe-dark t))
 
 #+end_src
 

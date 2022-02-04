@@ -1,0 +1,21 @@
+#+PROPERTY: header-args:emacs-lisp :tangle ./conf/java.el :mkdirp yes
+
+* Java
+
+** Javap Mode
+
+#+begin_src emacs-lisp
+
+  (use-package javap-mode)
+
+#+end_src
+
+** Java LSP
+
+#+begin_src emacs-lisp
+
+  (use-package lsp-java
+    :hook (java-mode . lsp))
+
+#+end_src
+

@@ -1,0 +1,18 @@
+#+PROPERTY: header-args:emacs-lisp :tangle ./conf/rust.el :mkdirp yes
+
+* Rust
+
+#+begin_src emacs-lisp
+
+  (use-package rust-mode
+    :hook (rust-mode . lsp-deferred))
+
+#+end_src
+
+#+begin_src emacs-lisp
+
+  (use-package toml-mode)
+  (add-to-list 'auto-mode-alist '("\\.toml\\'" . toml-mode))
+
+#+end_src
+

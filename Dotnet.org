@@ -1,0 +1,44 @@
+#+PROPERTY: header-args:emacs-lisp :tangle ./conf/dotnet.el :mkdirp yes
+
+* Dotnet Languages
+
+#+begin_src emacs-lisp
+
+  (add-to-list 'auto-mode-alist '("\\.fsproj\\'" . xml-mode))
+  (add-to-list 'auto-mode-alist '("\\.axaml\\'" . xml-mode))
+  (add-to-list 'auto-mode-alist '("\\.xaml\\'" . xml-mode))
+  (add-to-list 'auto-mode-alist '("\\.csproj\\'" . xml-mode))
+
+#+end_src
+
+****** C#
+
+#+begin_src emacs-lisp
+
+  (use-package csharp-mode
+    :after dotnet
+    :hook (csharp-mode . lsp-deferred)
+    :bind (:map csharp-mode-map ("<f5>" . dotnet-run)))
+
+#+end_src
+
+****** F#
+
+#+begin_src emacs-lisp
+
+  (use-package fsharp-mode
+    :after dotnet
+    :hook (fsharp-mode . lsp-deferred)
+    :bind (:map fsharp-mode-map ("<f5>" . dotnet-run)))
+
+#+end_src
+
+****** Dotnet
+
+#+begin_src emacs-lisp
+
+  (use-package dotnet
+    :hook (fsharp-mode . dotnet-mode)
+    :hook (csharp-mode . dotnet-mode))
+
+#+end_src

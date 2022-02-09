@@ -225,7 +225,6 @@ You can also use =M-x auto-package-update-now= to update right now!
 #+end_src
 
 ** Packages
-
 *** Keep Folders Clean
 
 We use the [[https://github.com/emacscollective/no-littering/blob/master/no-littering.el][no-littering]] package to keep folders where we edit files and the Emacs configuration folder clean!  It knows about a wide variety of variables for built in Emacs features as well as those from community packages so it can be much easier than finding and setting these variables yourself.
@@ -247,100 +246,6 @@ We use the [[https://github.com/emacscollective/no-littering/blob/master/no-litt
 #+end_src
 
 *** Essentials
-**** Evil
-
-Vim keybindings are the next best thing to thinking your text into existens.
-
-#+begin_src emacs-lisp
-
-  (use-package evil
-    :init
-    (setq evil-want-keybinding nil)
-    (setq evil-want-integration t)
-    (setq evil-want-C-u-scroll t)
-    (setq evil-want-C-i-jump nil)
-    :after evil-leader
-    :config
-    (evil-mode 1)
-    (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
-    (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
-
-    (define-key evil-motion-state-map (kbd "g h") 'evil-window-top)
-    (define-key evil-motion-state-map (kbd "g l") 'evil-window-bottom)
-
-    ;; Use visual line motions even outside of visual-line-mode buffers
-    (evil-global-set-key 'motion "j" 'evil-next-visual-line)
-    (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
-
-    (evil-set-initial-state 'messages-buffer-mode 'normal)
-    (evil-set-initial-state 'dashboard-mode 'normal))
-
-  (use-package evil-collection
-    :after evil
-    :init (setq evil-want-keybinding nil)
-    :config
-    (evil-collection-init))
-
-#+end_src
-
-**** Evil Escape
-
-In order to easly go back to normal mode we use "jk".
-
-*NOTE:* pressing "jk" is equivalent to pressing <ESC>
-
-#+begin_src emacs-lisp
-
-  (use-package evil-escape
-    :straight t
-    :diminish
-    :init (setq-default evil-escape-key-sequence "jk")
-    :config (evil-escape-mode 1))
-
-#+end_src
-
-**** Evil Leader
-
-#+begin_src emacs-lisp
-
-  (use-package evil-leader ;; After editing the key bindings reload evil-leader and evil after that!
-    :straight t
-    :init (global-evil-leader-mode)
-    :config (define-key evil-normal-state-map (kbd "SPC") nil)
-    (evil-leader/set-leader "<SPC>")
-    (evil-leader/set-key
-      "b" 'switch-to-buffer
-      "n" 'evil-buffer-new
-      "r" 'reindent-buffer
-      "t" 'hydra-toggle/body
-      "s" 'hydra-text-scale/body
-      "i" 'hydra-insert-date-and-time-at-point/body
-      "p" 'python-shell-send-buffer))
-
-#+end_src
-
-**** Evil Escape
-
-#+begin_src emacs-lisp
-  (use-package evil-escape
-    :straight t
-    :diminish
-    :init (setq-default evil-escape-key-sequence "jk")
-    :config (evil-escape-mode 1))
-
-#+end_src
-
-**** Evil Collection
-
-#+begin_src emacs-lisp
-
-  (use-package evil-collection
-    :after evil
-    :config
-    (evil-collection-init))
-
-#+end_src
-
 **** Org
 
 One if not the Emacs "App"
@@ -585,8 +490,237 @@ We use [[https://github.com/joostkremers/visual-fill-column][visual-fill-column]
 
 #+end_src
 
-*** Emacs Documentation and Help
-**** Helpful Help Commands
+**** Evil
+
+Vim keybindings are the next best thing to thinking your text into existens.
+
+#+begin_src emacs-lisp
+
+  (use-package evil
+    :init
+    (setq evil-want-keybinding nil)
+    (setq evil-want-integration t)
+    (setq evil-want-C-u-scroll t)
+    (setq evil-want-C-i-jump nil)
+    :after evil-leader
+    :config
+    (evil-mode 1)
+    (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
+    (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
+
+    (define-key evil-motion-state-map (kbd "g h") 'evil-window-top)
+    (define-key evil-motion-state-map (kbd "g l") 'evil-window-bottom)
+
+    ;; Use visual line motions even outside of visual-line-mode buffers
+    (evil-global-set-key 'motion "j" 'evil-next-visual-line)
+    (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+
+    (evil-set-initial-state 'messages-buffer-mode 'normal)
+    (evil-set-initial-state 'dashboard-mode 'normal))
+
+  (use-package evil-collection
+    :after evil
+    :init (setq evil-want-keybinding nil)
+    :config
+    (evil-collection-init))
+
+#+end_src
+
+***** Evil Escape
+
+In order to easly go back to normal mode we use "jk".
+
+*NOTE:* pressing "jk" is equivalent to pressing <ESC>
+
+#+begin_src emacs-lisp
+
+  (use-package evil-escape
+    :straight t
+    :diminish
+    :init (setq-default evil-escape-key-sequence "jk")
+    :config (evil-escape-mode 1))
+
+#+end_src
+
+***** Evil Leader
+
+#+begin_src emacs-lisp
+
+  (use-package evil-leader ;; After editing the key bindings reload evil-leader and evil after that!
+    :straight t
+    :init (global-evil-leader-mode)
+    :config (define-key evil-normal-state-map (kbd "SPC") nil)
+    (evil-leader/set-leader "<SPC>")
+    (evil-leader/set-key
+      "b" 'switch-to-buffer
+      "n" 'evil-buffer-new
+      "r" 'reindent-buffer
+      "t" 'hydra-toggle/body
+      "s" 'hydra-text-scale/body
+      "i" 'hydra-insert-date-and-time-at-point/body
+      "p" 'python-shell-send-buffer))
+
+#+end_src
+
+***** Evil Escape
+
+#+begin_src emacs-lisp
+  (use-package evil-escape
+    :straight t
+    :diminish
+    :init (setq-default evil-escape-key-sequence "jk")
+    :config (evil-escape-mode 1))
+
+#+end_src
+
+***** Evil Collection
+
+#+begin_src emacs-lisp
+
+  (use-package evil-collection
+    :after evil
+    :config
+    (evil-collection-init))
+
+#+end_src
+
+**** Completion
+***** Vertico
+
+#+begin_src emacs-lisp
+
+  (use-package vertico
+    :straight t
+    :bind (:map vertico-map
+		("C-j" . vertico-next)
+		("C-k" . vertico-previous)
+		("C-f" . vertico-exit)
+		:map minibuffer-local-map
+		("M-h" . backward-kill-word))
+    :custom
+    (vertico-cycle t)
+    :init
+    (vertico-mode))
+
+
+#+end_src
+
+****** Savehist 
+
+#+begin_src emacs-lisp
+  (use-package savehist
+    :init
+    (savehist-mode))
+
+#+end_src
+
+****** Marginalia
+
+#+begin_src emacs-lisp
+  (use-package marginalia
+    :after vertico
+    :straight t
+    :custom
+    (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
+    :init
+    (marginalia-mode))
+
+
+#+end_src
+
+****** Orderless
+
+#+begin_src emacs-lisp
+  
+  (use-package orderless
+  :straight t
+  :config
+  (setq completion-styles '(orderless)
+	read-buffer-completion-ignore-case t))
+
+#+end_src
+
+***** Ivy and Counsel
+
+[[https://oremacs.com/swiper/][Ivy]] is an excellent completion framework for Emacs.  It provides a minimal yet powerful selection menu that appears when you open files, switch buffers, and for many other tasks in Emacs.  Counsel is a customized set of commands to replace `find-file` with `counsel-find-file`, etc which provide useful commands for each of the default completion commands.
+
+[[https://github.com/Yevgnen/ivy-rich][ivy-rich]] adds extra columns to a few of the Counsel commands to provide more information about each item.
+
+#+begin_src emacs-lisp
+
+  ;;(use-package ivy
+  ;;  :diminish
+  ;;  :bind (("C-s" . swiper)
+  ;;         :map ivy-minibuffer-map
+  ;;         ("TAB" . ivy-alt-done)
+  ;;         ("C-l" . ivy-alt-done)
+  ;;         ("C-j" . ivy-next-line)
+  ;;         ("C-k" . ivy-previous-line)
+  ;;         :map ivy-switch-buffer-map
+  ;;         ("C-k" . ivy-previous-line)
+  ;;         ("C-l" . ivy-done)
+  ;;         ("C-d" . ivy-switch-buffer-kill)
+  ;;         :map ivy-reverse-i-search-map
+  ;;         ("C-k" . ivy-previous-line)
+  ;;         ("C-d" . ivy-reverse-i-search-kill))
+  ;;  :config
+  ;;  (ivy-mode 1))
+  ;;
+  ;;(use-package ivy-rich
+  ;;  :after ivy
+  ;;  :init
+  ;;  (ivy-rich-mode 1))
+  ;;
+  ;;(use-package counsel
+  ;;  :bind (("C-M-j" . 'counsel-switch-buffer)
+  ;;         :map minibuffer-local-map
+  ;;         ("C-r" . 'counsel-minibuffer-history))
+  ;;  :custom
+  ;;  (counsel-linux-app-format-function #'counsel-linux-app-format-function-name-only)
+  ;;  :config
+  ;;  (counsel-mode 1))
+
+#+end_src
+
+**** Kanban
+
+#+begin_src emacs-lisp
+
+  (use-package kanban
+    :straight t)
+
+#+end_src
+
+**** Key-Bindings
+
+#+begin_src emacs-lisp
+
+  (with-eval-after-load 'evil
+
+    (evil-define-key '(normal insert) org-mode-map (kbd "M-h") 'org-metaleft)
+    (evil-define-key '(normal insert) org-mode-map (kbd "M-l") 'org-metaright)
+
+    (evil-define-key '(normal insert) org-mode-map (kbd "M-H") 'org-promote-subtree)
+    (evil-define-key '(normal insert) org-mode-map (kbd "M-L") 'org-demote-subtree)
+
+    ;; Move header up and down
+    (evil-define-key '(normal insert visual) org-mode-map (kbd "M-j") 'org-metadown)
+    (evil-define-key '(normal insert visual) org-mode-map (kbd "M-k") 'org-metaup)
+
+    ;; Changes priority
+    (evil-define-key '(normal) org-mode-map (kbd "K") 'org-shiftup)
+    (evil-define-key '(normal) org-mode-map (kbd "J") 'org-shiftdown)
+
+    ;; Cycles through Todo Done etc.
+    (evil-define-key '(normal) org-mode-map (kbd "L") 'org-shiftright)
+    (evil-define-key '(normal) org-mode-map (kbd "H") 'org-shiftleft)
+
+    (evil-define-key '(normal insert) org-mode-map (kbd "<tab>") 'org-cycle))
+
+#+end_src
+
+**** Emacs Documentation and Help
+***** Helpful Help Commands
 
 [[https://github.com/Wilfred/helpful][Helpful]] adds a lot of very helpful (get it?) information to Emacs' =describe-= command buffers.  For example, if you use =describe-function=, you will not only get the documentation about the function, you will also see the source code of the function and where it gets used in other places in the Emacs configuration.  It is very useful for figuring out how things work in Emacs.
 
@@ -607,7 +741,7 @@ We use [[https://github.com/joostkremers/visual-fill-column][visual-fill-column]
 
 #+end_src
 
-**** Which-key
+***** Which-key
 
 #+begin_src emacs-lisp
 
@@ -829,7 +963,7 @@ Try these commands with =M-x=:
 
   #+end_src
 
-***** Debugging with dap-mode
+****** Debugging with dap-mode
 
 [[https://emacs-lsp.github.io/dap-mode/][dap-mode]] is an excellent package for bringing rich debugging capabilities to Emacs via the [[https://microsoft.github.io/debug-adapter-protocol/][Debug Adapter Protocol]].  You should check out the [[https://emacs-lsp.github.io/dap-mode/page/configuration/][configuration docs]] to learn how to configure the debugger for your language.  Also make sure to check out the documentation for the debug adapter to see what configuration parameters are available to use for your debug templates!
 
@@ -898,56 +1032,18 @@ You can use the pyvenv package to use =virtualenv= environments in Emacs.  The =
 
 #+end_src
 
-#+begin_src emacs-lisp
-  (use-package pipenv
-    :after python-mode)
-#+end_src
-
-We use =lsp-mode= and =dap-mode= to provide a more complete development environment for Python in Emacs.  Check out [[https://emacs-lsp.github.io/lsp-mode/page/lsp-pyls/][the =pyls= configuration]] in the =lsp-mode= documentation for more details.
-
-Make sure you have the =pyls= language server installed before trying =lsp-mode=!
-
-#+begin_src sh :tangle no
-
-  pip install --user "python-language-server[all]"
-
-#+end_src
-
-There are a number of other language servers for Python so if you find that =pyls= doesn't work for you, consult the =lsp-mode= [[https://emacs-lsp.github.io/lsp-mode/page/languages/][language configuration documentation]] to try the others!
-
-#+begin_src emacs-lisp
-
-  (use-package python-mode
-    :straight t
-    :hook (python-mode . lsp-deferred)
-    ;; :hook (python-mode) ;; i mostly use python togeher with a nix-shell and pipenv
-    :custom
-    ;; NOTE: Set these if Python 3 is called "python3" on your system!
-    ;; (python-shell-interpreter "python3")
-    ;; (dap-python-executable "python3")
-    (dap-python-debugger 'debugpy)
-    :config
-    (require 'dap-python))
-
-
-#+end_src
-
-You can use the pyvenv package to use =virtualenv= environments in Emacs.  The =pyvenv-activate= command should configure Emacs to cause =lsp-mode= and =dap-mode= to use the virtual environment when they are loaded, just select the path to your virtual environment before loading your project.
-
-#+begin_src emacs-lisp
-
-  (use-package pyvenv
-    :after python-mode
-    :config
-    (pyvenv-mode 1))
-
-#+end_src
+***** Pipenv Mode
 
 #+begin_src emacs-lisp
   (use-package pipenv
     :after python-mode)
 #+end_src
 
+***** Yasnippets
+#+begin_src emacs-lisp
+  (use-package yasnippet)
+  (use-package yasnippet-snippets)
+#+end_src
 **** Company Mode
 
 [[http://company-mode.github.io/][Company Mode]] provides a nicer in-buffer completion interface than =completion-at-point= which is more reminiscent of what you would expect from an IDE.  We add a simple configuration to make the keybindings a little more useful (=TAB= now completes the selection and initiates completion at the current location if needed).
@@ -1362,4 +1458,20 @@ The downsides to Eshell are that it can be harder to configure than other packag
 
   (setq tramp-default-method "ssh")
 
+#+end_src
+
+#+begin_src emacs-lisp
+
+  (custom-set-variables
+   ;; custom-set-variables was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   '(warning-suppress-types '((comp))))
+  (custom-set-faces
+   ;; custom-set-faces was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   )
 #+end_src

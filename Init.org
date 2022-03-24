@@ -358,10 +358,10 @@ One if not the Emacs "App"
 
   (defun efs/org-babel-tangle-config ()
     (when (string-equal (file-name-directory (buffer-file-name))
-			(expand-file-name *emacsd-directory*))
+                        (expand-file-name *emacsd-directory*))
       ;; Dynamic scoping to the rescue
       (let ((org-confirm-babel-evaluate nil))
-	(org-babel-tangle))))
+        (org-babel-tangle))))
 
 
   (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'efs/org-babel-tangle-config)))
@@ -523,11 +523,11 @@ We use [[https://github.com/joostkremers/visual-fill-column][visual-fill-column]
   (use-package vertico
     :straight t
     :bind (:map vertico-map
-                ("C-j" . vertico-next)
-                ("C-k" . vertico-previous)
-                ("C-f" . vertico-exit)
-                :map minibuffer-local-map
-                ("M-h" . backward-kill-word))
+		("C-j" . vertico-next)
+		("C-k" . vertico-previous)
+		("C-f" . vertico-exit)
+		:map minibuffer-local-map
+		("M-h" . backward-kill-word))
     :custom
     (vertico-cycle t)
     :init
@@ -545,6 +545,10 @@ We use [[https://github.com/joostkremers/visual-fill-column][visual-fill-column]
     (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
     :init
     (marginalia-mode))
+
+  (use-package orderless
+    :ensure t
+    :custom (completion-styles '(orderless)))
 
 #+end_src
 

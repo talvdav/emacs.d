@@ -58,6 +58,9 @@
   (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp")))
 
 (use-package no-littering)
+(use-package all-the-icons
+  :init (all-the-icons-install-fonts t))
+
 
 (setq aut-save-file-name-transforms
       `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))

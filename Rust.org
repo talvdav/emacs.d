@@ -16,3 +16,14 @@
 
 #+end_src
 
+#+begin_src emacs-lisp
+
+  (use-package cargo)
+#+end_src
+
+#+begin_src emacs-lisp
+
+  (use-package cargo-mode
+    :hook (rust-mode . cargo-minor-mode))
+
+#+end_src

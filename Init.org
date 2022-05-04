@@ -350,15 +350,16 @@ on an of.
 We use [[https://github.com/joostkremers/visual-fill-column][visual-fill-column]] to center =org-mode= buffers for a more pleasing writing experience as it centers the contents of the buffer horizontally to seem more like you are editing a document.  This is really a matter of personal preference so you can remove the block below if you don't like the behavior.
 
 #+begin_src emacs-lisp
+  (setq visual-fill 120)
 
   (defun efs/org-mode-visual-fill ()
-    (setq visual-fill-column-width 100
-          visual-fill-column-center-text t)
+    (setq visual-fill-column-width visual-fill
+	  visual-fill-column-center-text t)
     (visual-fill-column-mode 1))
 
   (defun my/markdown-mode-visual-fill ()
-    (setq visual-fill-column-width 100
-          visual-fill-column-center-text t)
+    (setq visual-fill-column-width visual-fill
+	  visual-fill-column-center-text t)
     (visual-fill-column-mode 1))
 
   (use-package visual-fill-column
@@ -1462,6 +1463,10 @@ The downsides to Eshell are that it can be harder to configure than other packag
 
   (setq tramp-default-method "ssh")
 
+#+end_src
+
+#+begin_src emacs-lisp
+  (load-file "~/.myinit.el")
 #+end_src
 
 #+begin_src emacs-lisp

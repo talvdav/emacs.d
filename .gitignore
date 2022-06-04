@@ -37,3 +37,4 @@ straight/**
 /*.kate-swp
 /sid.el
 /eln-cache/
+/org-persist/

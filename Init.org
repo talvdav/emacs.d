@@ -428,11 +428,11 @@ We use [[https://github.com/joostkremers/visual-fill-column][visual-fill-column]
   (use-package vertico
     :straight t
     :bind (:map vertico-map
-		("C-j" . vertico-next)
-		("C-k" . vertico-previous)
-		("C-f" . vertico-exit)
-		:map minibuffer-local-map
-		("M-h" . backward-kill-word))
+                ("C-j" . vertico-next)
+                ("C-k" . vertico-previous)
+                ("C-f" . vertico-exit)
+                :map minibuffer-local-map
+                ("M-h" . backward-kill-word))
     :custom
     (vertico-cycle t)
     :init
@@ -596,11 +596,11 @@ In order to easly go back to normal mode we use "jk".
   (use-package vertico
     :straight t
     :bind (:map vertico-map
-		("C-j" . vertico-next)
-		("C-k" . vertico-previous)
-		("C-f" . vertico-exit)
-		:map minibuffer-local-map
-		("M-h" . backward-kill-word))
+                ("C-j" . vertico-next)
+                ("C-k" . vertico-previous)
+                ("C-f" . vertico-exit)
+                :map minibuffer-local-map
+                ("M-h" . backward-kill-word))
     :custom
     (vertico-cycle t)
     :init
@@ -609,7 +609,7 @@ In order to easly go back to normal mode we use "jk".
 
 #+end_src
 
-****** Savehist 
+****** Savehist
 
 #+begin_src emacs-lisp
   (use-package savehist
@@ -635,12 +635,12 @@ In order to easly go back to normal mode we use "jk".
 ****** Orderless
 
 #+begin_src emacs-lisp
-  
+
   (use-package orderless
-  :straight t
-  :config
-  (setq completion-styles '(orderless)
-	read-buffer-completion-ignore-case t))
+    :straight t
+    :config
+    (setq completion-styles '(orderless)
+          read-buffer-completion-ignore-case t))
 
 #+end_src
 
@@ -1036,6 +1036,64 @@ You can use the pyvenv package to use =virtualenv= environments in Emacs.  The =
 
 #+end_src
 
+***** Rust
+
+#+begin_src emacs-lisp
+
+  (use-package rust-mode
+    :hook (rust-mode . lsp-deferred))
+
+#+end_src
+
+#+begin_src emacs-lisp
+
+  (use-package toml-mode)
+  (add-to-list 'auto-mode-alist '("\\.toml\\'" . toml-mode))
+
+#+end_src
+
+***** Dotnet Languages
+
+#+begin_src emacs-lisp
+
+  (add-to-list 'auto-mode-alist '("\\.fsproj\\'" . xml-mode))
+  (add-to-list 'auto-mode-alist '("\\.axaml\\'" . xml-mode))
+  (add-to-list 'auto-mode-alist '("\\.xaml\\'" . xml-mode))
+  (add-to-list 'auto-mode-alist '("\\.csproj\\'" . xml-mode))
+
+#+end_src
+
+****** C#
+
+#+begin_src emacs-lisp
+
+  (use-package csharp-mode
+    :after dotnet
+    :hook (csharp-mode . lsp-deferred)
+    :bind (:map csharp-mode-map ("<f5>" . dotnet-run)))
+
+#+end_src
+
+****** F#
+
+#+begin_src emacs-lisp
+
+  (use-package fsharp-mode
+    :after dotnet
+    :hook (fsharp-mode . lsp-deferred)
+    :bind (:map fsharp-mode-map ("<f5>" . dotnet-run)))
+
+#+end_src
+
+****** Dotnet
+
+#+begin_src emacs-lisp
+
+  (use-package dotnet
+    :hook (fsharp-mode . dotnet-mode)
+    :hook (csharp-mode . dotnet-mode))
+
+#+end_src
 ***** Pipenv Mode
 
 #+begin_src emacs-lisp

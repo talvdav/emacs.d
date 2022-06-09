@@ -51,6 +51,21 @@ Show some benchmark at startup
 
 #+end_src
 
+** Freebsd
+
+#+begin_src shell :no-tangle
+
+  pkg install coreutils
+
+#+end_src
+
+#+begin_src emacs-lisp
+
+  (cond ((eq system-type 'berkeley-unix)
+	 (setq insert-directory-program "/usr/local/bin/gls")))
+
+#+end_src
+
 ** Initial Configuration
 *** Basic UI
 

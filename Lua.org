@@ -1,0 +1,9 @@
+#+PROPERTY: header-args:emacs-lisp :tangle ./conf/lua.el :mkdirp yes
+
+* Lua
+
+    #+begin_src emacs-lisp
+
+      (use-package lua-mode)
+
+#+end_src

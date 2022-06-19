@@ -576,6 +576,7 @@ In order to easly go back to normal mode we use "jk".
       "n" 'evil-buffer-new
       "r" 'reindent-buffer
       "t" 'hydra-toggle/body
+      "o" 'hydra-org-mode/body
       "s" 'hydra-text-scale/body
       "i" 'hydra-insert-date-and-time-at-point/body
       "p" 'python-shell-send-buffer))
@@ -828,6 +829,15 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
 
 #+end_src
 
+****** Org-mode Stuff
+
+#+begin_src emacs-lisp
+
+  (defhydra hydra-org-mode ()
+    "org mode"
+    ("t" org-babel-tangle "tangle current org file" :exit t))
+
+#+end_src
 **** Line Numbers
 
 #+begin_src emacs-lisp

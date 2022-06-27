@@ -62,7 +62,7 @@ Show some benchmark at startup
 #+begin_src emacs-lisp
 
   (cond ((eq system-type 'berkeley-unix)
-	 (setq insert-directory-program "/usr/local/bin/gls")))
+         (setq insert-directory-program "/usr/local/bin/gls")))
 
 #+end_src
 
@@ -185,8 +185,8 @@ In Vim you have $MYINITRC set to your config file for easy access, lets to somet
 
   ;;(package-initialize)
 
-;;  (unless package-archive-contents
-;;    (package-refresh-contents))
+  ;;  (unless package-archive-contents
+  ;;    (package-refresh-contents))
 
   ;;   ;; Initialize use-package on non-Linux platforms
   ;;   (unless (package-installed-p 'use-package)
@@ -911,13 +911,13 @@ I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://f
 
 #+begin_src emacs-lisp
 
-  ;;(use-package tree-sitter
-  ;;  :config (progn
-  ;;            (add-hook 'csharp-mode-hook #'tree-sitter-mode)
-  ;;            (add-hook 'rust-mode-hook #'tree-sitter-mode)))
+  (use-package tree-sitter
+    :init (require 'tree-sitter))
 
-  ;;(use-package tree-sitter-langs
-  ;;  :after tree-sitter)
+  (use-package tree-sitter-langs
+    :after tree-sitter
+    :init
+    (require 'tree-sitter-langs))
 
 #+end_src
 
@@ -1229,16 +1229,16 @@ Dired is a built-in file manager for Emacs that does some pretty amazing things!
 
 #+begin_src emacs-lisp
 
-  ;(use-package dired+
-  ;  :straight nil
-  ;  :straight nil
-  ;  :commands (dired dired-jump)
-  ;  :bind (("C-x C-j" . dired-jump))
-  ;  :custom ((dired-listing-switches "-agho --group-directories-first"))
-  ;  :config
-  ;  (evil-collection-define-key 'normal 'dired-mode-map
-  ;    "h" 'dired-single-up-directory
-  ;    "l" 'dired-single-buffer))
+                                          ;(use-package dired+
+                                          ;  :straight nil
+                                          ;  :straight nil
+                                          ;  :commands (dired dired-jump)
+                                          ;  :bind (("C-x C-j" . dired-jump))
+                                          ;  :custom ((dired-listing-switches "-agho --group-directories-first"))
+                                          ;  :config
+                                          ;  (evil-collection-define-key 'normal 'dired-mode-map
+                                          ;    "h" 'dired-single-up-directory
+                                          ;    "l" 'dired-single-buffer))
 
   (use-package dired-single
     :commands (dired dired-jump))

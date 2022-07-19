@@ -3,6 +3,7 @@
 * Elixir
 
 ** Elixir Mode
+
 #+begin_src emacs-lisp
   (use-package elixir-mode)
 #+end_src

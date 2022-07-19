@@ -1481,7 +1481,9 @@ The downsides to Eshell are that it can be harder to configure than other packag
   (display-time-mode 1)
 
 #+end_src
-
+#+begin_src emacs-lisp
+(cd "~")
+#+end_src
 ** Custom
 
 #+begin_src emacs-lisp

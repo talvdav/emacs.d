@@ -1,3 +1,4 @@
 (use-package elixir-mode)
 
-(use-package mix)
+(use-package mix
+  :hook (elixir-mode . mix-mode))

@@ -1427,7 +1427,7 @@ The downsides to Eshell are that it can be harder to configure than other packag
       (load-theme 'gruvbox-dark-medium t)
     (progn
       (load-theme 'moe-dark t)
-      (moe-theme-apply-color 'red)))
+      (moe-theme-apply-color 'cyan)))
 
 #+end_src
 
@@ -1484,9 +1484,13 @@ The downsides to Eshell are that it can be harder to configure than other packag
   (display-time-mode 1)
 
 #+end_src
+
 #+begin_src emacs-lisp
-(cd "~")
+
+  (cd "~")
+
 #+end_src
+
 ** Custom
 
 #+begin_src emacs-lisp

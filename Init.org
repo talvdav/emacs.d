@@ -1510,6 +1510,13 @@ The downsides to Eshell are that it can be harder to configure than other packag
 
 #+end_src
 
+#+begin_src emacs-lisp
+
+  (use-package spotify
+    :straight (:type git :host github :repo "SnootierMoon/emacs-spotify"))
+
+#+end_src
+
 ** Custom
 
 #+begin_src emacs-lisp

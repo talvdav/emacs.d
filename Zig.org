@@ -1,8 +1,0 @@
-#+PROPERTY: header-args:emacs-lisp :tangle ./conf/zig.el :mkdirp yes
-
-* Zig
-
-#+begin_src emacs-lisp
-  (use-package zig-mode)
-#+end_src
-

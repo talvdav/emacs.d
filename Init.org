@@ -53,21 +53,21 @@ Show some benchmark at startup
 
 ** Set Exec Path
 #+begin_src emacs-lisp
-(defun set-exec-path-from-shell-PATH ()
-  "Set up Emacs' `exec-path' and PATH environment variable to match
-that used by the user's shell.
-
-This is particularly useful under Mac OS X and macOS, where GUI
-apps are not started from a shell."
-  (interactive)
-  (let ((path-from-shell (replace-regexp-in-string
-			  "[ \t\n]*$" "" (shell-command-to-string
-					  "$SHELL --login -c 'echo $PATH'"
-						    ))))
-    (setenv "PATH" path-from-shell)
-    (setq exec-path (split-string path-from-shell path-separator))))
-
-(set-exec-path-from-shell-PATH)
+;;(defun set-exec-path-from-shell-PATH ()
+;;  "Set up Emacs' `exec-path' and PATH environment variable to match
+;;that used by the user's shell.
+;;
+;;This is particularly useful under Mac OS X and macOS, where GUI
+;;apps are not started from a shell."
+;;  (interactive)
+;;  (let ((path-from-shell (replace-regexp-in-string
+;;			  "[ \t\n]*$" "" (shell-command-to-string
+;;					  "$SHELL --login -c 'echo $PATH'"
+;;						    ))))
+;;    (setenv "PATH" path-from-shell)
+;;    (setq exec-path (split-string path-from-shell path-separator))))
+;;
+;;(set-exec-path-from-shell-PATH)
 #+end_src
 
 ** Freebsd
@@ -461,7 +461,6 @@ We use [[https://github.com/joostkremers/visual-fill-column][visual-fill-column]
 #+begin_src emacs-lisp
 
   (use-package vertico
-    :straight t
     :bind (:map vertico-map
                 ("C-j" . vertico-next)
                 ("C-k" . vertico-previous)
@@ -480,7 +479,6 @@ We use [[https://github.com/joostkremers/visual-fill-column][visual-fill-column]
 
   (use-package marginalia
     :after vertico
-    :straight t
     :custom
     (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
     :init
@@ -492,14 +490,6 @@ We use [[https://github.com/joostkremers/visual-fill-column][visual-fill-column]
 
 #+end_src
 
-***** Kanban
-
-#+begin_src emacs-lisp
-
-  (use-package kanban
-    :straight t)
-
-#+end_src
 
 ***** Key-Bindings
 
@@ -577,7 +567,6 @@ In order to easly go back to normal mode we use "jk".
 #+begin_src emacs-lisp
 
   (use-package evil-escape
-    :straight t
     :diminish
     :init (setq-default evil-escape-key-sequence "jk")
     :config (evil-escape-mode 1))
@@ -589,7 +578,6 @@ In order to easly go back to normal mode we use "jk".
 #+begin_src emacs-lisp
 
   (use-package evil-leader ;; After editing the key bindings reload evil-leader and evil after that!
-    :straight t
     :init (global-evil-leader-mode)
     :config (define-key evil-normal-state-map (kbd "SPC") nil)
     (evil-leader/set-leader "<SPC>")
@@ -609,7 +597,6 @@ In order to easly go back to normal mode we use "jk".
 
 #+begin_src emacs-lisp
   (use-package evil-escape
-    :straight t
     :diminish
     :init (setq-default evil-escape-key-sequence "jk")
     :config (evil-escape-mode 1))
@@ -633,7 +620,6 @@ In order to easly go back to normal mode we use "jk".
 #+begin_src emacs-lisp
 
   (use-package vertico
-    :straight t
     :bind (:map vertico-map
                 ("C-j" . vertico-next)
                 ("C-k" . vertico-previous)
@@ -662,7 +648,6 @@ In order to easly go back to normal mode we use "jk".
 #+begin_src emacs-lisp
   (use-package marginalia
     :after vertico
-    :straight t
     :custom
     (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
     :init
@@ -676,7 +661,6 @@ In order to easly go back to normal mode we use "jk".
 #+begin_src emacs-lisp
 
   (use-package orderless
-    :straight t
     :config
     (setq completion-styles '(orderless)
           read-buffer-completion-ignore-case t))
@@ -722,15 +706,6 @@ In order to easly go back to normal mode we use "jk".
   ;;  (counsel-linux-app-format-function #'counsel-linux-app-format-function-name-only)
   ;;  :config
   ;;  (counsel-mode 1))
-
-#+end_src
-
-**** Kanban
-
-#+begin_src emacs-lisp
-
-  (use-package kanban
-    :straight t)
 
 #+end_src
 
@@ -866,7 +841,6 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
 
   (use-package linum-relative
     :if (> emacs-major-version 25)
-    :straight t
     :diminish
     :init (setq linum-relative-backend 'display-line-numbers-mode)
     :config (linum-relative-mode))
@@ -905,7 +879,6 @@ I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://f
 #+begin_src emacs-lisp
 
   (use-package diminish
-    :straight t
     :init (progn
             (diminish 'undo-tree-mode)
             (diminish 'eldoc-mode)
@@ -1059,7 +1032,6 @@ There are a number of other language servers for Python so if you find that =pyl
 #+begin_src emacs-lisp
 
   (use-package python-mode
-    :straight t
     :hook (python-mode . lsp-deferred)
     ;; :hook (python-mode) ;; i mostly use python togeher with a nix-shell and pipenv
     :custom
@@ -1252,8 +1224,6 @@ Dired is a built-in file manager for Emacs that does some pretty amazing things!
 #+begin_src emacs-lisp
 
                                           ;(use-package dired+
-                                          ;  :straight nil
-                                          ;  :straight nil
                                           ;  :commands (dired dired-jump)
                                           ;  :bind (("C-x C-j" . dired-jump))
                                           ;  :custom ((dired-listing-switches "-agho --group-directories-first"))
@@ -1423,7 +1393,6 @@ The downsides to Eshell are that it can be harder to configure than other packag
 #+begin_src emacs-lisp
 
   (use-package doom-modeline
-    :straight t
     :config (doom-modeline-mode))
 
 #+end_src
@@ -1437,10 +1406,8 @@ The downsides to Eshell are that it can be harder to configure than other packag
 
                                           ;(setq custom-enabled-themes 'doom-gruvbox)
                                           ;(load-theme 'doom-gruvbox)
-  (use-package gruvbox-theme
-    :straight t)
-  (use-package moe-theme
-    :straight t)
+  (use-package gruvbox-theme)
+  (use-package moe-theme)
 
   (if (daemonp)
       (load-theme 'gruvbox-dark-medium t)

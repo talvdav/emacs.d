@@ -71,11 +71,18 @@ Show some benchmark at startup
 #+end_src
 
 ** Freebsd
+
+*** Fix for Dired
+
+In order for Dired to function properly you need to install the *GNU* version of *ls*:
+
 #+begin_src shell :no-tangle
 
   pkg install coreutils
 
 #+end_src
+
+then you need to make sure Emacs can find the binary:
 
 #+begin_src emacs-lisp
 

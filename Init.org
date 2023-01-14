@@ -53,25 +53,24 @@ Show some benchmark at startup
 
 ** Set Exec Path
 #+begin_src emacs-lisp
-(defun set-exec-path-from-shell-PATH ()
-  "Set up Emacs' `exec-path' and PATH environment variable to match
-that used by the user's shell.
+  (defun set-exec-path-from-shell-PATH ()
+    "Set up Emacs' `exec-path' and PATH environment variable to match
+  that used by the user's shell.
 
-This is particularly useful under Mac OS X and macOS, where GUI
-apps are not started from a shell."
-  (interactive)
-  (let ((path-from-shell (replace-regexp-in-string
-			  "[ \t\n]*$" "" (shell-command-to-string
-					  "$SHELL --login -c 'echo $PATH'"
-						    ))))
-    (setenv "PATH" path-from-shell)
-    (setq exec-path (split-string path-from-shell path-separator))))
+  This is particularly useful under Mac OS X and macOS, where GUI
+  apps are not started from a shell."
+    (interactive)
+    (let ((path-from-shell (replace-regexp-in-string
+                            "[ \t\n]*$" "" (shell-command-to-string
+                                            "$SHELL --login -c 'echo $PATH'"
+                                            ))))
+      (setenv "PATH" path-from-shell)
+      (setq exec-path (split-string path-from-shell path-separator))))
 
-(set-exec-path-from-shell-PATH)
+  (set-exec-path-from-shell-PATH)
 #+end_src
 
 ** Freebsd
-
 #+begin_src shell :no-tangle
 
   pkg install coreutils
@@ -148,7 +147,6 @@ use =y= and =n= instead ot tiping out =yes= or =no=
 #+end_src
 
 ** Some usefull functions
-
 *** Reindent-buffer
 
 This funktion reindents the whole buffer and removes trailing whitespaces without moving the cursor
@@ -501,44 +499,23 @@ We use [[https://github.com/joostkremers/visual-fill-column][visual-fill-column]
 
 #+end_src
 
-***** Key-Bindings
-
-#+begin_src emacs-lisp
-
-  (with-eval-after-load 'evil
-
-    (evil-define-key '(normal insert) org-mode-map (kbd "M-h") 'org-metaleft)
-    (evil-define-key '(normal insert) org-mode-map (kbd "M-l") 'org-metaright)
-
-    (evil-define-key '(normal insert) org-mode-map (kbd "M-H") 'org-promote-subtree)
-    (evil-define-key '(normal insert) org-mode-map (kbd "M-L") 'org-demote-subtree)
-
-    ;; Move header up and down
-    (evil-define-key '(normal insert visual) org-mode-map (kbd "M-j") 'org-metadown)
-    (evil-define-key '(normal insert visual) org-mode-map (kbd "M-k") 'org-metaup)
-
-    ;; Changes priority
-    (evil-define-key '(normal) org-mode-map (kbd "K") 'org-shiftup)
-    (evil-define-key '(normal) org-mode-map (kbd "J") 'org-shiftdown)
-
-    ;; Cycles through Todo Done etc.
-    (evil-define-key '(normal) org-mode-map (kbd "L") 'org-shiftright)
-    (evil-define-key '(normal) org-mode-map (kbd "H") 'org-shiftleft)
-
-    (evil-define-key '(normal insert) org-mode-map (kbd "<tab>") 'org-cycle))
-
-#+end_src
-
 **** Evil
 
 Vim keybindings are the next best thing to thinking your text into existens.
+
+Befor Evil is loaded these variables have to be set!
+
+#+begin_src emacs-lisp
+
+  (setq evil-want-keybinding nil)
+  (setq evil-want-integration t)
+
+#+end_src
 
 #+begin_src emacs-lisp
 
   (use-package evil
     :init
-    (setq evil-want-keybinding nil)
-    (setq evil-want-integration t)
     (setq evil-want-C-u-scroll t)
     (setq evil-want-C-i-jump nil)
     :after evil-leader
@@ -558,13 +535,41 @@ Vim keybindings are the next best thing to thinking your text into existens.
     (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
 
     (evil-set-initial-state 'messages-buffer-mode 'normal)
-    (evil-set-initial-state 'dashboard-mode 'normal))
+    (evil-set-initial-state 'dashboard-mode 'normal)
 
-  (use-package evil-collection
-    :after evil
-    :init (setq evil-want-keybinding nil)
-    :config
-    (evil-collection-init))
+    (evil-define-key '(normal insert) org-mode-map (kbd "M-h") 'org-metaleft)
+    (evil-define-key '(normal insert) org-mode-map (kbd "M-l") 'org-metaright)
+
+    (evil-define-key '(normal insert) org-mode-map (kbd "M-H") 'org-promote-subtree)
+    (evil-define-key '(normal insert) org-mode-map (kbd "M-L") 'org-demote-subtree)
+
+    ;; Move header up and down
+    (evil-define-key '(normal insert visual) org-mode-map (kbd "M-j") 'org-metadown)
+    (evil-define-key '(normal insert visual) org-mode-map (kbd "M-k") 'org-metaup)
+
+    ;; Changes priority
+    (evil-define-key '(normal) org-mode-map (kbd "K") 'org-shiftup)
+    (evil-define-key '(normal) org-mode-map (kbd "J") 'org-shiftdown)
+
+    ;; Cycles through Todo Done etc.
+    (evil-define-key '(normal) org-mode-map (kbd "L") 'org-shiftright)
+    (evil-define-key '(normal) org-mode-map (kbd "H") 'org-shiftleft)
+
+    (evil-define-key '(normal insert) org-mode-map (kbd "<tab>") 'org-cycle)
+    ;; DocView
+    (evil-define-key '(normal insert) doc-view-mode-map (kbd "j") 'doc-view-scroll-up-or-next-page)
+    (evil-define-key '(normal insert) doc-view-mode-map (kbd "k") 'doc-view-scroll-down-or-previous-page)
+
+    (evil-define-key '(normal insert) doc-view-mode-map (kbd "J") 'doc-view-next-line-or-next-page)
+    (evil-define-key '(normal insert) doc-view-mode-map (kbd "K") 'doc-view-previous-line-or-previous-page)
+
+    (evil-define-key '(normal insert) doc-view-mode-map (kbd "M-g") 'doc-view-goto-page)
+
+    (evil-define-key '(normal insert) doc-view-mode-map (kbd "h") 'beginning-of-buffer)
+    (evil-define-key '(normal insert) doc-view-mode-map (kbd "l") 'end-of-buffer)
+
+    (evil-define-key '(normal insert) doc-view-mode-map (kbd "M-j") 'doc-view-enlarge)
+    (evil-define-key '(normal insert) doc-view-mode-map (kbd "M-k") 'doc-view-shrink))
 
 #+end_src
 
@@ -605,17 +610,6 @@ In order to easly go back to normal mode we use "jk".
 
 #+end_src
 
-***** Evil Escape
-
-#+begin_src emacs-lisp
-  (use-package evil-escape
-    :straight t
-    :diminish
-    :init (setq-default evil-escape-key-sequence "jk")
-    :config (evil-escape-mode 1))
-
-#+end_src
-
 ***** Evil Collection
 
 #+begin_src emacs-lisp
@@ -628,6 +622,7 @@ In order to easly go back to normal mode we use "jk".
 #+end_src
 
 **** Completion
+
 ***** Vertico
 
 #+begin_src emacs-lisp
@@ -793,8 +788,8 @@ In order to easly go back to normal mode we use "jk".
 #+end_src
 
 *** Editing
-
 **** NixOs
+
 #+begin_src emacs-lisp
 
   (use-package nix-mode)
@@ -860,6 +855,7 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
     ("t" org-babel-tangle "tangle current org file" :exit t))
 
 #+end_src
+
 **** Line Numbers
 
 #+begin_src emacs-lisp
@@ -1092,10 +1088,12 @@ You can use the pyvenv package to use =virtualenv= environments in Emacs.  The =
 #+end_src
 
 ***** Yasnippets
+
 #+begin_src emacs-lisp
   (use-package yasnippet)
   (use-package yasnippet-snippets)
 #+end_src
+
 **** Company Mode
 
 [[http://company-mode.github.io/][Company Mode]] provides a nicer in-buffer completion interface than =completion-at-point= which is more reminiscent of what you would expect from an IDE.  We add a simple configuration to make the keybindings a little more useful (=TAB= now completes the selection and initiates completion at the current location if needed).

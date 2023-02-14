@@ -152,13 +152,18 @@ use =y= and =n= instead ot tiping out =yes= or =no=
 
 #+end_src
 
-*** Inhibit startup message
+*** Scratch Buffer
+**** Inhibit startup message
 #+begin_src emacs-lisp
   (setq inhibit-startup-message t)
 #+end_src
-*** Remove text from **scratch** buffer
+**** Remove text from **scratch** buffer
 #+begin_src emacs-lisp
   (setq initial-scratch-message "")
+#+end_src
+**** Set initial major mode
+#+begin_src emacs-lisp
+  (setq initial-major-mode 'org-mode)
 #+end_src
 ** Some usefull functions
 *** Reindent-buffer

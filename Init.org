@@ -153,6 +153,10 @@ use =y= and =n= instead ot tiping out =yes= or =no=
 
 #+end_src
 
+*** Remove text from **scratch** buffer
+#+begin_src emacs-lisp
+(setq initial-scratch-message "")
+#+end_src
 ** Some usefull functions
 *** Reindent-buffer
 

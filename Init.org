@@ -276,6 +276,22 @@ You can also use =M-x auto-package-update-now= to update right now!
 #+end_src
 
 ** Packages
+
+*** From Github
+
+#+begin_src emacs-lisp
+  (straight-use-package '(move-border
+    :host github
+    :repo "ramnes/move-border"
+    :branch "master"))
+
+  (require 'move-border)
+
+  (global-set-key (kbd "C-M-j") 'move-border-down)
+  (global-set-key (kbd "C-M-k") 'move-border-up)
+  (global-set-key (kbd "C-M-h") 'move-border-left)
+  (global-set-key (kbd "C-M-l") 'move-border-right)
+#+end_src
 *** Keep Folders Clean
 
 We use the [[https://github.com/emacscollective/no-littering/blob/master/no-littering.el][no-littering]] package to keep folders where we edit files and the Emacs configuration folder clean!  It knows about a wide variety of variables for built in Emacs features as well as those from community packages so it can be much easier than finding and setting these variables yourself.
@@ -612,10 +628,10 @@ In order to easly go back to normal mode we use "jk".
       "o" 'hydra-org-mode/body
       "s" 'hydra-text-scale/body
       "i" 'hydra-insert-date-and-time-at-point/body
+      "f" 'hydra-resize-frames/body
       "p" 'python-shell-send-buffer))
 
 #+end_src
-
 ***** Evil Collection
 
 #+begin_src emacs-lisp
@@ -848,6 +864,17 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
     "org mode"
     ("t" org-babel-tangle "tangle current org file" :exit t))
 
+#+end_src
+
+****** Resize Frames
+#+begin_src emacs-lisp
+  (defhydra hydra-resize-frames ()
+    "resize frames"
+    ("j" move-border-down  "move border down")
+    ("k" move-border-up    "move border up")
+    ("h" move-border-left  "move border left")
+    ("l" move-border-right "move border right")
+    ("f" nil "finished" :exit t)) 
 #+end_src
 
 **** Line Numbers
@@ -1501,6 +1528,7 @@ The downsides to Eshell are that it can be harder to configure than other packag
 
 #+end_src
 
+** Testing
 ** Custom
 
 #+begin_src emacs-lisp

@@ -777,7 +777,8 @@ In order to easly go back to normal mode we use "jk".
 
 #+begin_src emacs-lisp
 
-  (use-package which-key)
+  (use-package which-key
+    :init (which-key-mode))
 
 #+end_src
 
@@ -917,6 +918,8 @@ I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://f
 #+end_src
 
 *** Development
+
+#+end_src
 **** Tree-Sitter
 
 #+begin_src emacs-lisp
@@ -1003,6 +1006,10 @@ Try these commands with =M-x=:
 
   #+end_src
 
+****** LSP Config
+#+begin_src emacs-lisp
+(setq lsp-ui-sideline-enable t)
+#+end_src
 ****** Debugging with dap-mode
 
 [[https://emacs-lsp.github.io/dap-mode/][dap-mode]] is an excellent package for bringing rich debugging capabilities to Emacs via the [[https://microsoft.github.io/debug-adapter-protocol/][Debug Adapter Protocol]].  You should check out the [[https://emacs-lsp.github.io/dap-mode/page/configuration/][configuration docs]] to learn how to configure the debugger for your language.  Also make sure to check out the documentation for the debug adapter to see what configuration parameters are available to use for your debug templates!

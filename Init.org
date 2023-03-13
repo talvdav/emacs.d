@@ -142,14 +142,25 @@ use =y= and =n= instead ot tiping out =yes= or =no=
 
 #+begin_src emacs-lisp
 
-  (setq backup-directory-alist '(("." . "~/.emacs-backups"))
-        backup-by-copying      t  ; Don't de-link hard links
-        version-control        t  ; Use version numbers on backups
-        delete-old-versions    t  ; Automatically delete excess backups:
-        kept-new-versions      5  ; how many of the newest versions to keep
-        kept-old-versions      5) ; and how many of the old
-  (setq auto-save-default nil)
+    (setq backup-directory-alist '(("." . "~/.emacs-backups"))
+	  backup-by-copying      t  ; Don't de-link hard links
+	  version-control        t  ; Use version numbers on backups
+	  delete-old-versions    t  ; Automatically delete excess backups:
+	  kept-new-versions      5  ; how many of the newest versions to keep
+	  kept-old-versions      5) ; and how many of the old
 
+  (defvar temp-directory "~/.emacs-backups/autosave/")
+  (make-directory temp-directory t)
+  
+    (setq auto-save-default nil)
+    (setq auto-save-directory (concat temp-directory "/autosave")
+	  auto-save-hash-directory (concat temp-directory "/autosave-hash")
+	  auto-save-directory-fallback "~/emacs-autosave"
+	  auto-save-list-file-prefix (concat temp-directory "/autosave-")
+	  auto-save-hash-p nil
+	  auto-save-timeout 100
+	  auto-save-interval 300)
+    (make-directory auto-save-directory t)
 #+end_src
 
 *** Scratch Buffer
@@ -276,14 +287,13 @@ You can also use =M-x auto-package-update-now= to update right now!
 #+end_src
 
 ** Packages
-
 *** From Github
 
 #+begin_src emacs-lisp
   (straight-use-package '(move-border
-    :host github
-    :repo "ramnes/move-border"
-    :branch "master"))
+                          :host github
+                          :repo "ramnes/move-border"
+                          :branch "master"))
 
   (require 'move-border)
 
@@ -875,7 +885,7 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
     ("k" move-border-up    "move border up")
     ("h" move-border-left  "move border left")
     ("l" move-border-right "move border right")
-    ("f" nil "finished" :exit t)) 
+    ("f" nil "finished" :exit t))
 #+end_src
 
 **** Line Numbers
@@ -945,8 +955,6 @@ I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://f
 #+end_src
 
 *** Development
-
-#+end_src
 **** Tree-Sitter
 
 #+begin_src emacs-lisp
@@ -1035,7 +1043,7 @@ Try these commands with =M-x=:
 
 ****** LSP Config
 #+begin_src emacs-lisp
-(setq lsp-ui-sideline-enable t)
+  (setq lsp-ui-sideline-enable t)
 #+end_src
 ****** Debugging with dap-mode
 
@@ -1143,6 +1151,11 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
 
 #+end_src
 
+**** Flycheck
+#+begin_src emacs-lisp
+  (use-package flycheck
+    :init (global-flycheck-mode))
+#+end_src
 **** Projectile
 
 [[https://projectile.mx/][Projectile]] is a project management library for Emacs which makes it a lot easier to navigate around code projects for various languages.  Many packages integrate with Projectile so it's a good idea to have it installed even if you don't use its commands directly.

@@ -17,13 +17,15 @@ the Config used in the Videos: [[https://github.com/daviwil/emacs-from-scratch][
 
 #+end_src
 
+*** Set evil-want-keybinding befor evil is loaded
+
 #+begin_src emacs-lisp
 
   (setq evil-want-keybinding nil)
 
 #+end_src
 
-Show some benchmark at startup
+*** Show some benchmark at startup
 
 #+begin_src emacs-lisp
 
@@ -71,7 +73,6 @@ Show some benchmark at startup
 #+end_src
 
 ** Freebsd
-
 *** Fix for Dired
 
 In order for Dired to function properly you need to install the *GNU* version of *ls*:
@@ -113,7 +114,6 @@ Default blinking cursors should be banned!!!
 
 #+begin_src emacs-lisp
 
-
   (scroll-bar-mode -1)        ; Disable visible scrollbar
   (tool-bar-mode -1)          ; Disable the toolbar
   (tooltip-mode -1)           ; Disable tooltips
@@ -124,7 +124,8 @@ Default blinking cursors should be banned!!!
 #+end_src
 
 *** yes-or-no-p
-use =y= and =n= instead ot tiping out =yes= or =no=
+
+use =y= and =n= instead ot typing out =yes= or =no=
 
 #+begin_src emacs-lisp
 
@@ -142,25 +143,25 @@ use =y= and =n= instead ot tiping out =yes= or =no=
 
 #+begin_src emacs-lisp
 
-    (setq backup-directory-alist '(("." . "~/.emacs-backups"))
-	  backup-by-copying      t  ; Don't de-link hard links
-	  version-control        t  ; Use version numbers on backups
-	  delete-old-versions    t  ; Automatically delete excess backups:
-	  kept-new-versions      5  ; how many of the newest versions to keep
-	  kept-old-versions      5) ; and how many of the old
+  (setq backup-directory-alist '(("." . "~/.emacs-backups"))
+        backup-by-copying      t  ; Don't de-link hard links
+        version-control        t  ; Use version numbers on backups
+        delete-old-versions    t  ; Automatically delete excess backups:
+        kept-new-versions      5  ; how many of the newest versions to keep
+        kept-old-versions      5) ; and how many of the old
 
   (defvar temp-directory "~/.emacs-backups/autosave/")
   (make-directory temp-directory t)
-  
-    (setq auto-save-default nil)
-    (setq auto-save-directory (concat temp-directory "/autosave")
-	  auto-save-hash-directory (concat temp-directory "/autosave-hash")
-	  auto-save-directory-fallback "~/emacs-autosave"
-	  auto-save-list-file-prefix (concat temp-directory "/autosave-")
-	  auto-save-hash-p nil
-	  auto-save-timeout 100
-	  auto-save-interval 300)
-    (make-directory auto-save-directory t)
+
+  (setq auto-save-default nil)
+  (setq auto-save-directory (concat temp-directory "/autosave")
+        auto-save-hash-directory (concat temp-directory "/autosave-hash")
+        auto-save-directory-fallback "~/emacs-autosave"
+        auto-save-list-file-prefix (concat temp-directory "/autosave-")
+        auto-save-hash-p nil
+        auto-save-timeout 100
+        auto-save-interval 300)
+  (make-directory auto-save-directory t)
 #+end_src
 
 *** Scratch Buffer
@@ -168,14 +169,17 @@ use =y= and =n= instead ot tiping out =yes= or =no=
 #+begin_src emacs-lisp
   (setq inhibit-startup-message t)
 #+end_src
+
 **** Remove text from **scratch** buffer
 #+begin_src emacs-lisp
   (setq initial-scratch-message "")
 #+end_src
+
 **** Set initial major mode
 #+begin_src emacs-lisp
   (setq initial-major-mode 'org-mode)
 #+end_src
+
 ** Some usefull functions
 *** Reindent-buffer
 
@@ -654,7 +658,6 @@ In order to easly go back to normal mode we use "jk".
 #+end_src
 
 **** Completion
-
 ***** Vertico
 
 #+begin_src emacs-lisp
@@ -749,34 +752,6 @@ In order to easly go back to normal mode we use "jk".
 
 #+end_src
 
-**** Key-Bindings
-
-#+begin_src emacs-lisp
-
-  (with-eval-after-load 'evil
-
-    (evil-define-key '(normal insert) org-mode-map (kbd "M-h") 'org-metaleft)
-    (evil-define-key '(normal insert) org-mode-map (kbd "M-l") 'org-metaright)
-
-    (evil-define-key '(normal insert) org-mode-map (kbd "M-H") 'org-promote-subtree)
-    (evil-define-key '(normal insert) org-mode-map (kbd "M-L") 'org-demote-subtree)
-
-    ;; Move header up and down
-    (evil-define-key '(normal insert visual) org-mode-map (kbd "M-j") 'org-metadown)
-    (evil-define-key '(normal insert visual) org-mode-map (kbd "M-k") 'org-metaup)
-
-    ;; Changes priority
-    (evil-define-key '(normal) org-mode-map (kbd "K") 'org-shiftup)
-    (evil-define-key '(normal) org-mode-map (kbd "J") 'org-shiftdown)
-
-    ;; Cycles through Todo Done etc.
-    (evil-define-key '(normal) org-mode-map (kbd "L") 'org-shiftright)
-    (evil-define-key '(normal) org-mode-map (kbd "H") 'org-shiftleft)
-
-    (evil-define-key '(normal insert) org-mode-map (kbd "<tab>") 'org-cycle))
-
-#+end_src
-
 **** Emacs Documentation and Help
 ***** Helpful Help Commands
 
@@ -805,6 +780,34 @@ In order to easly go back to normal mode we use "jk".
 
   (use-package which-key
     :init (which-key-mode))
+
+#+end_src
+
+**** Key-Bindings
+
+#+begin_src emacs-lisp
+
+  (with-eval-after-load 'evil
+
+    (evil-define-key '(normal insert) org-mode-map (kbd "M-h") 'org-metaleft)
+    (evil-define-key '(normal insert) org-mode-map (kbd "M-l") 'org-metaright)
+
+    (evil-define-key '(normal insert) org-mode-map (kbd "M-H") 'org-promote-subtree)
+    (evil-define-key '(normal insert) org-mode-map (kbd "M-L") 'org-demote-subtree)
+
+    ;; Move header up and down
+    (evil-define-key '(normal insert visual) org-mode-map (kbd "M-j") 'org-metadown)
+    (evil-define-key '(normal insert visual) org-mode-map (kbd "M-k") 'org-metaup)
+
+    ;; Changes priority
+    (evil-define-key '(normal) org-mode-map (kbd "K") 'org-shiftup)
+    (evil-define-key '(normal) org-mode-map (kbd "J") 'org-shiftdown)
+
+    ;; Cycles through Todo Done etc.
+    (evil-define-key '(normal) org-mode-map (kbd "L") 'org-shiftright)
+    (evil-define-key '(normal) org-mode-map (kbd "H") 'org-shiftleft)
+
+    (evil-define-key '(normal insert) org-mode-map (kbd "<tab>") 'org-cycle))
 
 #+end_src
 
@@ -1461,24 +1464,21 @@ The downsides to Eshell are that it can be harder to configure than other packag
 
 #+end_src
 
-**** Color Theme
-
+**** Color Themes
+***** Install colorschemes
 #+begin_src emacs-lisp
 
-                                          ;(use-package doom-themes
-                                          ;  :init (load-theme 'doom-gruvbox t))
-
-                                          ;(setq custom-enabled-themes 'doom-gruvbox)
-                                          ;(load-theme 'doom-gruvbox)
   (use-package gruvbox-theme)
   (use-package moe-theme)
+#+end_src
 
+***** Set the MOD BAR Colour to RED if Emacs server not running
+#+begin_src emacs-lisp
   (if (daemonp)
       (load-theme 'gruvbox-dark-medium t)
     (progn
-      (load-theme 'moe-dark t)
-      (moe-theme-apply-color 'cyan)))
-
+      (load-theme 'gruvbox-dark-medium t)
+      (moe-theme-apply-color 'red)))
 #+end_src
 
 **** All The Icons
@@ -1493,11 +1493,9 @@ The downsides to Eshell are that it can be harder to configure than other packag
 #+end_src
 
 ** Misc
+*** Set frame transparency
 
 #+begin_src emacs-lisp
-
-  ;; (active-frame . inactive-frame)
-  (defvar efs/frame-transparency '(100 . 98))
 
   ;; Set frame transparency
   ;; Make frame transparency overridable
@@ -1506,6 +1504,14 @@ The downsides to Eshell are that it can be harder to configure than other packag
   (add-to-list 'default-frame-alist `(alpha . ,efs/frame-transparency)) ; do not remove the comma!
   (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
   (add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+  ;; (active-frame . inactive-frame)
+  (defvar efs/frame-transparency '(100 . 98))
+#+end_src
+
+*** Make Emacs FUCKING USE SANE ENCODINGS
+
+#+begin_src emacs-lisp
 
   ;; Make Emacs FUCKING USE SANE ENCODINGS:
   (setq locale-coding-system 'utf-8-unix)
@@ -1524,7 +1530,11 @@ The downsides to Eshell are that it can be harder to configure than other packag
     (set-selection-coding-system 'utf-8-unix))
 
   (prefer-coding-system 'utf-8-unix)
+#+end_src
 
+*** Date and Time
+
+#+begin_src emacs-lisp
   ;; Date and Time
 
   (setq display-time-24hr-format t)
@@ -1535,12 +1545,7 @@ The downsides to Eshell are that it can be harder to configure than other packag
 
 #+end_src
 
-#+begin_src emacs-lisp
-
-  (cd "~")
-
-#+end_src
-
+** Testing
 #+begin_src emacs-lisp
 
   (use-package spotify
@@ -1548,7 +1553,6 @@ The downsides to Eshell are that it can be harder to configure than other packag
 
 #+end_src
 
-** Testing
 ** Custom
 
 #+begin_src emacs-lisp
@@ -1559,6 +1563,7 @@ The downsides to Eshell are that it can be harder to configure than other packag
 
 #+begin_src emacs-lisp
   (load-file "~/.myinit.el")
+  (cd "~")
 #+end_src
 
 #+begin_src emacs-lisp

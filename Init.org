@@ -166,16 +166,19 @@ use =y= and =n= instead ot typing out =yes= or =no=
 
 *** Scratch Buffer
 **** Inhibit startup message
+
 #+begin_src emacs-lisp
   (setq inhibit-startup-message t)
 #+end_src
 
 **** Remove text from **scratch** buffer
+
 #+begin_src emacs-lisp
   (setq initial-scratch-message "")
 #+end_src
 
 **** Set initial major mode
+
 #+begin_src emacs-lisp
   (setq initial-major-mode 'org-mode)
 #+end_src
@@ -197,6 +200,7 @@ This funktion reindents the whole buffer and removes trailing whitespaces withou
 #+end_src
 
 *** My init.el
+
 In Vim you have $MYINITRC set to your config file for easy access, lets to something similar!
 #+begin_src emacs-lisp
 
@@ -306,6 +310,7 @@ You can also use =M-x auto-package-update-now= to update right now!
   (global-set-key (kbd "C-M-h") 'move-border-left)
   (global-set-key (kbd "C-M-l") 'move-border-right)
 #+end_src
+
 *** Keep Folders Clean
 
 We use the [[https://github.com/emacscollective/no-littering/blob/master/no-littering.el][no-littering]] package to keep folders where we edit files and the Emacs configuration folder clean!  It knows about a wide variety of variables for built in Emacs features as well as those from community packages so it can be much easier than finding and setting these variables yourself.
@@ -646,6 +651,7 @@ In order to easly go back to normal mode we use "jk".
       "p" 'python-shell-send-buffer))
 
 #+end_src
+
 ***** Evil Collection
 
 #+begin_src emacs-lisp
@@ -673,7 +679,6 @@ In order to easly go back to normal mode we use "jk".
     (vertico-cycle t)
     :init
     (vertico-mode))
-
 
 #+end_src
 
@@ -759,18 +764,18 @@ In order to easly go back to normal mode we use "jk".
 
 #+begin_src emacs-lisp
 
-                                          ;(use-package helpful
-                                          ;  :commands (helpful-callable helpful-variable helpful-command helpful-key)
-                                          ;  :custom
-                                          ;  (counsel-describe-function-function #'helpful-callable)
-                                          ;  (counsel-describe-variable-function #'helpful-variable)
-                                          ;  :bind
-                                          ;  ([remap describe-function] . counsel-describe-function)
-                                          ;  ([remap describe-command] . helpful-command)
-                                          ;  ([remap describe-variable] . counsel-describe-variable)
-                                          ;  ([remap describe-key] . helpful-key))
+  (use-package helpful
+    :commands (helpful-callable helpful-variable helpful-command helpful-key)
+    :custom
+    (counsel-describe-function-function #'helpful-callable)
+    (counsel-describe-variable-function #'helpful-variable)
+    :bind
+    ([remap describe-function] . counsel-describe-function)
+    ([remap describe-command] . helpful-command)
+    ([remap describe-variable] . counsel-describe-variable)
+    ([remap describe-key] . helpful-key))
 
-  (use-package helpful)
+  ;;  (use-package helpful)
 
 #+end_src
 
@@ -783,7 +788,7 @@ In order to easly go back to normal mode we use "jk".
 
 #+end_src
 
-**** Key-Bindings
+**** Evil Key-Bindings
 
 #+begin_src emacs-lisp
 
@@ -1045,9 +1050,11 @@ Try these commands with =M-x=:
   #+end_src
 
 ****** LSP Config
+
 #+begin_src emacs-lisp
   (setq lsp-ui-sideline-enable t)
 #+end_src
+
 ****** Debugging with dap-mode
 
 [[https://emacs-lsp.github.io/dap-mode/][dap-mode]] is an excellent package for bringing rich debugging capabilities to Emacs via the [[https://microsoft.github.io/debug-adapter-protocol/][Debug Adapter Protocol]].  You should check out the [[https://emacs-lsp.github.io/dap-mode/page/configuration/][configuration docs]] to learn how to configure the debugger for your language.  Also make sure to check out the documentation for the debug adapter to see what configuration parameters are available to use for your debug templates!
@@ -1155,10 +1162,12 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
 #+end_src
 
 **** Flycheck
+
 #+begin_src emacs-lisp
   (use-package flycheck
     :init (global-flycheck-mode))
 #+end_src
+
 **** Projectile
 
 [[https://projectile.mx/][Projectile]] is a project management library for Emacs which makes it a lot easier to navigate around code projects for various languages.  Many packages integrate with Projectile so it's a good idea to have it installed even if you don't use its commands directly.
@@ -1497,6 +1506,9 @@ The downsides to Eshell are that it can be harder to configure than other packag
 
 #+begin_src emacs-lisp
 
+  ;; (active-frame . inactive-frame)
+  (defvar efs/frame-transparency '(100 . 98))
+
   ;; Set frame transparency
   ;; Make frame transparency overridable
 
@@ -1505,8 +1517,6 @@ The downsides to Eshell are that it can be harder to configure than other packag
   (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
   (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
-  ;; (active-frame . inactive-frame)
-  (defvar efs/frame-transparency '(100 . 98))
 #+end_src
 
 *** Make Emacs FUCKING USE SANE ENCODINGS
@@ -1550,6 +1560,30 @@ The downsides to Eshell are that it can be harder to configure than other packag
 
   (use-package spotify
     :straight (:type git :host github :repo "SnootierMoon/emacs-spotify"))
+
+#+end_src
+#+begin_src emacs-lisp
+
+(use-package embark
+  :ensure t
+
+  :bind
+  (("C-." . embark-act)         ;; pick some comfortable binding
+   ("C-;" . embark-dwim)        ;; good alternative: M-.
+   ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
+
+  :init
+
+  ;; Optionally replace the key help with a completing-read interface
+  (setq prefix-help-command #'embark-prefix-help-command)
+
+  :config
+
+  ;; Hide the mode line of the Embark live/completions buffers
+  (add-to-list 'display-buffer-alist
+               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                 nil
+                 (window-parameters (mode-line-format . none)))))
 
 #+end_src
 

@@ -6,7 +6,7 @@ Youtube Channel =System Crafters=. [[https://www.youtube.com/playlist?list=PLEoM
 the Config used in the Videos: [[https://github.com/daviwil/emacs-from-scratch][emacs-from-scratch]]
 
 * Emacs Config
-j
+
 #+begin_src emacs-lisp
 
   ;;; myinitel --- My Emacs config.
@@ -53,6 +53,7 @@ j
 
   (defvar *emacsd-directory* user-emacs-directory)
   (defvar *conf-directory* "~/.emacs.d/conf")
+
   (setq user-emacs-directory  "~/.emacs.d/cache/")
 
 #+end_src
@@ -62,6 +63,7 @@ j
 This code is not cross platform right now, so tangle is set to no
 
 #+begin_src emacs-lisp :tangle no
+
   (defun set-exec-path-from-shell-PATH ()
     "Set up Emacs' `exec-path' and PATH environment variable to match
   that used by the user's shell.
@@ -70,13 +72,14 @@ This code is not cross platform right now, so tangle is set to no
   apps are not started from a shell."
     (interactive)
     (let ((path-from-shell (replace-regexp-in-string
-                            "[ \t\n]*$" "" (shell-command-to-string
-                                            "$SHELL --login -c 'echo $PATH'"
-                                            ))))
+			    "[ \t\n]*$" "" (shell-command-to-string
+					    "$SHELL --login -c 'echo $PATH'"
+					    ))))
       (setenv "PATH" path-from-shell)
       (setq exec-path (split-string path-from-shell path-separator))))
 
   (set-exec-path-from-shell-PATH)
+
 #+end_src
 
 ** Freebsd
@@ -152,30 +155,31 @@ use =y= and =n= instead ot typing out =yes= or =no=
 #+begin_src emacs-lisp
 
   (setq backup-directory-alist '(("." . "~/.emacs-backups"))
-        backup-by-copying      t  ; Don't de-link hard links
-        version-control        t  ; Use version numbers on backups
-        delete-old-versions    t  ; Automatically delete excess backups:
-        kept-new-versions      5  ; how many of the newest versions to keep
-        kept-old-versions      5) ; and how many of the old
+	backup-by-copying      t  ; Don't de-link hard links
+	version-control        t  ; Use version numbers on backups
+	delete-old-versions    nil  ; Automatically delete excess backups:
+	kept-new-versions      5  ; how many of the newest versions to keep
+	kept-old-versions      5) ; and how many of the old
 
   (defvar temp-directory "~/.emacs-backups/autosave/")
   (make-directory temp-directory t)
 
   (setq auto-save-default nil)
   (setq auto-save-directory (concat temp-directory "/autosave")
-        auto-save-hash-directory (concat temp-directory "/autosave-hash")
-        auto-save-directory-fallback "~/emacs-autosave"
-        auto-save-list-file-prefix (concat temp-directory "/autosave-")
-        auto-save-hash-p nil
-        auto-save-timeout 100
-        auto-save-interval 300)
+	auto-save-hash-directory (concat temp-directory "/autosave-hash")
+	auto-save-directory-fallback "~/emacs-autosave"
+	auto-save-list-file-prefix (concat temp-directory "/autosave-")
+	auto-save-hash-p nil
+	auto-save-timeout 100
+	auto-save-interval 300)
   (make-directory auto-save-directory t)
+
 #+end_src
 
 *** Scratch Buffer
 **** Inhibit startup message
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 
   (setq inhibit-startup-message t)
 
@@ -287,7 +291,7 @@ In Vim you have $MYINITRC set to your config file for easy access, lets to somet
   (straight-use-package 'use-package)
 
   (setq straight-use-package-by-default t)
-  (setq use-package-always-ensure f)
+                                          ;(setq use-package-always-ensure f)
 
 #+end_src
 
@@ -457,18 +461,19 @@ on an of.
 We use [[https://github.com/jOOSTKREMERS/visual-fill-column][visual-fill-column]] to center =org-mode= buffers for a more pleasing writing experience as it centers the contents of the buffer horizontally to seem more like you are editing a document.  This is really a matter of personal preference so you can remove the block below if you don't like the behavior.
 
 #+begin_src emacs-lisp
+
   (setq visual-fill 120)
 
   (defun efs/org-mode-visual-fill ()
     "Function from emacs from scratch."
     (setq visual-fill-column-width visual-fill
-          visual-fill-column-center-text t)
+	  visual-fill-column-center-text t)
     (visual-fill-column-mode 1))
 
   (defun my/markdown-mode-visual-fill ()
     "Function from emacs from scratch."
     (setq visual-fill-column-width visual-fill
-          visual-fill-column-center-text t)
+	  visual-fill-column-center-text t)
     (visual-fill-column-mode 1))
 
   (use-package visual-fill-column
@@ -686,6 +691,45 @@ In order to easly go back to normal mode we use "jk".
 
 #+end_src
 
+***** Evil Key-Bindings
+
+#+begin_src emacs-lisp
+
+  (with-eval-after-load 'evil
+
+    (evil-define-key '(normal insert) org-mode-map (kbd "M-h") 'org-metaleft)
+    (evil-define-key '(normal insert) org-mode-map (kbd "M-l") 'org-metaright)
+
+    (evil-define-key '(normal insert) org-mode-map (kbd "M-H") 'org-promote-subtree)
+    (evil-define-key '(normal insert) org-mode-map (kbd "M-L") 'org-demote-subtree)
+
+    ;; Move header up and down
+    (evil-define-key '(normal insert visual) org-mode-map (kbd "M-j") 'org-metadown)
+    (evil-define-key '(normal insert visual) org-mode-map (kbd "M-k") 'org-metaup)
+
+    ;; Changes priority
+    (evil-define-key '(normal) org-mode-map (kbd "K") 'org-shiftup)
+    (evil-define-key '(normal) org-mode-map (kbd "J") 'org-shiftdown)
+
+    ;; Cycles through Todo Done etc.
+    (evil-define-key '(normal) org-mode-map (kbd "L") 'org-shiftright)
+    (evil-define-key '(normal) org-mode-map (kbd "H") 'org-shiftleft)
+
+    (evil-define-key '(normal insert) org-mode-map (kbd "<tab>") 'org-cycle))
+
+#+end_src
+***** Evil Nerd Commenter
+
+
+Emacs' built in commenting functionality =comment-dwim= (usually bound to =M-;=) doesn't always comment things in the way you might expect so we use [[https://github.com/redguardtoo/evil-nerd-commenter][evil-nerd-commenter]] to provide a more familiar behavior.  I've bound it to =M-/= since other editors sometimes use this binding but you could also replace Emacs' =M-;= binding with this command.
+
+#+begin_src emacs-lisp
+
+  (use-package evil-nerd-commenter
+    :bind ("M-/" . evilnc-comment-or-uncomment-lines))
+
+#+end_src
+
 **** Completion
 ***** Vertico
 
@@ -767,31 +811,260 @@ In order to easly go back to normal mode we use "jk".
 
 #+end_src
 
-**** Evil Key-Bindings
+**** Tree-Sitter
 
 #+begin_src emacs-lisp
 
-  (with-eval-after-load 'evil
+  (use-package tree-sitter
+    :init (require 'tree-sitter))
 
-    (evil-define-key '(normal insert) org-mode-map (kbd "M-h") 'org-metaleft)
-    (evil-define-key '(normal insert) org-mode-map (kbd "M-l") 'org-metaright)
+  (use-package tree-sitter-langs
+    :after tree-sitter
+    :init
+    (require 'tree-sitter-langs))
 
-    (evil-define-key '(normal insert) org-mode-map (kbd "M-H") 'org-promote-subtree)
-    (evil-define-key '(normal insert) org-mode-map (kbd "M-L") 'org-demote-subtree)
+#+end_src
 
-    ;; Move header up and down
-    (evil-define-key '(normal insert visual) org-mode-map (kbd "M-j") 'org-metadown)
-    (evil-define-key '(normal insert visual) org-mode-map (kbd "M-k") 'org-metaup)
+*** Development
+**** IDE Features
+***** lsp-mode
 
-    ;; Changes priority
-    (evil-define-key '(normal) org-mode-map (kbd "K") 'org-shiftup)
-    (evil-define-key '(normal) org-mode-map (kbd "J") 'org-shiftdown)
+We use the excellent [[https://emacs-lsp.github.io/lsp-mode/][lsp-mode]] to enable IDE-like functionality for many different programming languages via "language servers" that speak the [[https://microsoft.github.io/language-server-protocol/][Language Server Protocol]].  Before trying to set up =lsp-mode= for a particular language, check out the [[https://emacs-lsp.github.io/lsp-mode/page/languages/][documentation for your language]] so that you can learn which language servers are available and how to install them.
+The =lsp-keymap-prefix= setting enables you to define a prefix for where =lsp-mode='s default keybindings will be added.  I *highly recommend* using the prefix to find out what you can do with =lsp-mode= in a buffer.
+The =which-key= integration adds helpful descriptions of the various keys so you should be able to learn a lot just by pressing =C-c l= in a =lsp-mode= buffer and trying different things that you find there.
 
-    ;; Cycles through Todo Done etc.
-    (evil-define-key '(normal) org-mode-map (kbd "L") 'org-shiftright)
-    (evil-define-key '(normal) org-mode-map (kbd "H") 'org-shiftleft)
+#+begin_src emacs-lisp
 
-    (evil-define-key '(normal insert) org-mode-map (kbd "<tab>") 'org-cycle))
+  (defun efs/lsp-mode-setup ()
+    "Function from emacs from scratch."
+    (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
+    (lsp-headerline-breadcrumb-mode))
+
+  (use-package lsp-mode
+    :commands (lsp lsp-deferred)
+    ;;:hook (lsp-mode . efs/lsp-mode-setup)
+    :init
+    (setq lsp-keymap-prefix "C-c l")  ;; Or 'C-l', 's-l'
+    :config
+    (lsp-enable-which-key-integration t))
+
+#+end_src
+
+***** lsp-ui
+
+[[https://emacs-lsp.github.io/lsp-ui/][lsp-ui]] is a set of UI enhancements built on top of =lsp-mode= which make Emacs feel even more like an IDE.  Check out the screenshots on the =lsp-ui= homepage (linked at the beginning of this paragraph) to see examples of what it can do.
+
+#+begin_src emacs-lisp
+
+  (use-package lsp-ui
+    :hook (lsp-mode . lsp-ui-mode)
+    :custom
+    (lsp-ui-doc-position 'bottom))
+
+#+end_src
+
+***** lsp-treemacs
+
+[[https://github.com/emacs-lsp/lsp-treemacs][lsp-treemacs]] provides nice tree views for different aspects of your code like symbols in a file, references of a symbol, or diagnostic messages (errors and warnings) that are found in your code.
+
+Try these commands with =M-x=:
+
+- =lsp-treemacs-symbols= - Show a tree view of the symbols in the current file
+- =lsp-treemacs-references= - Show a tree view for the references of the symbol under the cursor
+- =lsp-treemacs-error-list= - Show a tree view for the diagnostic messages in the project
+
+  This package is built on the [[https://github.com/Alexander-Miller/treemacs][treemacs]] package which might be of some interest to you if you like to have a file browser at the left side of your screen in your editor.
+
+  #+begin_src emacs-lisp
+
+    (use-package lsp-treemacs
+      :after lsp)
+
+  #+end_src
+
+***** lsp-ivy
+
+[[https://github.com/emacs-lsp/lsp-ivy][lsp-ivy]] integrates Ivy with =lsp-mode= to make it easy to search for things by name in your code.  When you run these commands, a prompt will appear in the minibuffer allowing you to type part of the name of a symbol in your code.  Results will be populated in the minibuffer so that you can find what you're looking for and jump to that location in the code upon selecting the result.
+
+Try these commands with =M-x=:
+
+- =lsp-ivy-workspace-symbol= - Search for a symbol name in the current project workspace
+- =lsp-ivy-global-workspace-symbol= - Search for a symbol name in all active project workspaces
+
+  #+begin_src emacs-lisp
+
+    (use-package lsp-ivy
+      :after lsp)
+
+  #+end_src
+
+***** Debugging with dap-mode
+
+[[https://emacs-lsp.github.io/dap-mode/][dap-mode]] is an excellent package for bringing rich debugging capabilities to Emacs via the [[https://microsoft.github.io/debug-adapter-protocol/][Debug Adapter Protocol]].  You should check out the [[https://emacs-lsp.github.io/dap-mode/page/configuration/][configuration docs]] to learn how to configure the debugger for your language.  Also make sure to check out the documentation for the debug adapter to see what configuration parameters are available to use for your debug templates!
+
+#+begin_src emacs-lisp
+
+  (use-package dap-mode
+    ;; Uncomment the config below if you want all UI panes to be hidden by default!
+    ;; :custom
+    ;; (lsp-enable-dap-auto-configure nil)
+    ;; :config
+    ;; (dap-ui-mode 1)
+    :commands dap-debug
+    :config
+    ;; Set up Node debugging
+    (require 'dap-node)
+    (dap-node-setup) ;; Automatically installs Node debug adapter if needed
+
+    ;; Bind `C-c l d` to `dap-hydra` for easy access
+                                          ;(general-define-key
+                                          ; :keymaps 'lsp-mode-map
+                                          ; :prefix lsp-keymap-prefix
+                                          ; "d" '(dap-hydra t :wk "debugger"))
+    )
+
+#+end_src
+
+***** Company Mode
+
+[[http://company-mode.github.io/][Company Mode]] provides a nicer in-buffer completion interface than =completion-at-point= which is more reminiscent of what you would expect from an IDE.  We add a simple configuration to make the keybindings a little more useful (=TAB= now completes the selection and initiates completion at the current location if needed).
+
+We also use [[https://github.com/sebastiencs/company-box][company-box]] to further enhance the look of the completions with icons and better overall presentation.
+
+#+begin_src emacs-lisp
+
+  (use-package company
+    :after lsp-mode
+    :hook (lsp-mode . company-mode)
+    :bind (:map company-active-map
+                ("<tab>" . company-complete-selection))
+    (:map lsp-mode-map
+          ("<tab>" . company-indent-or-complete-common))
+    :custom
+    (company-minimum-prefix-length 2)
+    (company-idle-delay 0.0))
+
+  (use-package company-box
+    :hook (company-mode . company-box-mode))
+
+#+end_src
+
+***** Flycheck
+
+#+begin_src emacs-lisp
+
+  (use-package flycheck
+    :init (global-flycheck-mode))
+
+#+end_src
+
+***** Projectile
+
+[[https://projectile.mx/][Projectile]] is a project management library for Emacs which makes it a lot easier to navigate around code projects for various languages.  Many packages integrate with Projectile so it's a good idea to have it installed even if you don't use its commands directly.
+
+#+begin_src emacs-lisp
+
+  (use-package projectile
+    :diminish projectile-mode
+    :config (projectile-mode)
+                                          ;:custom ((projectile-completion-system 'vertico))
+    :bind-keymap
+    ("C-c p" . projectile-command-map)
+    :init
+    ;; NOTE: Set this to the folder where you keep your Git repos!
+    (when (file-directory-p "~/Projects")
+      (setq projectile-project-search-path '("~/Projects")))
+    (setq projectile-switch-project-action #'projectile-dired))
+
+                                          ;(use-package counsel-projectile
+                                          ;  :after projectile
+                                          ;  :config (counsel-projectile-mode))
+
+#+end_src
+
+***** Magit
+
+[[https://magit.vc/][Magit]] is the best Git interface I've ever used.  Common Git operations are easy to execute quickly using Magit's command panel system.
+
+#+begin_src emacs-lisp
+
+  (use-package magit
+    :commands magit-status
+    :custom
+    (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
+
+  ;; NOTE: Make sure to configure a GitHub token before using this package!
+  ;; - https://magit.vc/manual/forge/Token-Creation.html#Token-Creation
+  ;; - https://magit.vc/manual/ghub/Getting-Started.html#Getting-Started
+  (use-package forge
+    :after magit)
+
+#+end_src
+
+***** Languages
+****** Python
+
+We use =lsp-mode= and =dap-mode= to provide a more complete development environment for Python in Emacs.  Check out [[https://emacs-lsp.github.io/lsp-mode/page/lsp-pyls/][the =pyls= configuration]] in the =lsp-mode= documentation for more details.
+
+Make sure you have the =pyls= language server installed before trying =lsp-mode=!
+
+#+begin_src sh :tangle no
+
+  pip install --user "python-language-server[all]"
+
+#+end_src
+
+There are a number of other language servers for Python so if you find that =pyls= doesn't work for you, consult the =lsp-mode= [[https://emacs-lsp.github.io/lsp-mode/page/languages/][language configuration documentation]] to try the others!
+
+#+begin_src emacs-lisp
+
+  (use-package python-mode
+    :hook (python-mode . lsp-deferred)
+    ;; :hook (python-mode) ;; i mostly use python togeher with a nix-shell and pipenv
+    :custom
+    ;; NOTE: Set these if Python 3 is called "python3" on your system!
+    ;; (python-shell-interpreter "python3")
+    ;; (dap-python-executable "python3")
+    (dap-python-debugger 'debugpy)
+    :config
+    (require 'dap-python))
+
+
+#+end_src
+
+You can use the pyvenv package to use =virtualenv= environments in Emacs.  The =pyvenv-activate= command should configure Emacs to cause =lsp-mode= and =dap-mode= to use the virtual environment when they are loaded, just select the path to your virtual environment before loading your project.
+
+#+begin_src emacs-lisp
+
+  (use-package pyvenv
+    :after python-mode
+    :config
+    (pyvenv-mode 1))
+
+#+end_src
+
+****** Yasnippets
+
+#+begin_src emacs-lisp
+  (use-package yasnippet)
+  (use-package yasnippet-snippets)
+#+end_src
+
+****** Pipenv Mode
+
+#+begin_src emacs-lisp
+  (use-package pipenv
+    :after python-mode)
+#+end_src
+
+**** Rainbow Delimiters
+
+[[https://github.com/Fanael/rainbow-delimiters][rainbow-delimiters]] is useful in programming modes because it colorizes nested parentheses and brackets according to their nesting depth.  This makes it a lot easier to visually match parentheses in Emacs Lisp code without having to count them yourself.
+
+#+begin_src emacs-lisp
+
+  (use-package rainbow-delimiters
+    :hook (prog-mode . rainbow-delimiters-mode))
 
 #+end_src
 
@@ -939,280 +1212,6 @@ I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://f
 
   (use-package window-numbering
     :config (window-numbering-mode))
-
-#+end_src
-
-*** Development
-**** Tree-Sitter
-
-#+begin_src emacs-lisp
-
-  (use-package tree-sitter
-    :init (require 'tree-sitter))
-
-  (use-package tree-sitter-langs
-    :after tree-sitter
-    :init
-    (require 'tree-sitter-langs))
-
-#+end_src
-
-**** Languages
-***** IDE Features with lsp-mode
-****** lsp-mode
-
-We use the excellent [[https://emacs-lsp.github.io/lsp-mode/][lsp-mode]] to enable IDE-like functionality for many different programming languages via "language servers" that speak the [[https://microsoft.github.io/language-server-protocol/][Language Server Protocol]].  Before trying to set up =lsp-mode= for a particular language, check out the [[https://emacs-lsp.github.io/lsp-mode/page/languages/][documentation for your language]] so that you can learn which language servers are available and how to install them.
-The =lsp-keymap-prefix= setting enables you to define a prefix for where =lsp-mode='s default keybindings will be added.  I *highly recommend* using the prefix to find out what you can do with =lsp-mode= in a buffer.
-The =which-key= integration adds helpful descriptions of the various keys so you should be able to learn a lot just by pressing =C-c l= in a =lsp-mode= buffer and trying different things that you find there.
-
-#+begin_src emacs-lisp
-
-  (defun efs/lsp-mode-setup ()
-    "Function from emacs from scratch."
-    (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
-    (lsp-headerline-breadcrumb-mode))
-
-  (use-package lsp-mode
-    :commands (lsp lsp-deferred)
-    :hook (lsp-mode . efs/lsp-mode-setup)
-    :init
-    (setq lsp-keymap-prefix "C-c l")  ;; Or 'C-l', 's-l'
-    :config
-    (lsp-enable-which-key-integration t))
-
-#+end_src
-
-****** lsp-ui
-
-[[https://emacs-lsp.github.io/lsp-ui/][lsp-ui]] is a set of UI enhancements built on top of =lsp-mode= which make Emacs feel even more like an IDE.  Check out the screenshots on the =lsp-ui= homepage (linked at the beginning of this paragraph) to see examples of what it can do.
-
-#+begin_src emacs-lisp
-
-  (use-package lsp-ui
-    :hook (lsp-mode . lsp-ui-mode)
-    :custom
-    (lsp-ui-doc-position 'bottom))
-
-#+end_src
-
-****** lsp-treemacs
-
-[[https://github.com/emacs-lsp/lsp-treemacs][lsp-treemacs]] provides nice tree views for different aspects of your code like symbols in a file, references of a symbol, or diagnostic messages (errors and warnings) that are found in your code.
-
-Try these commands with =M-x=:
-
-- =lsp-treemacs-symbols= - Show a tree view of the symbols in the current file
-- =lsp-treemacs-references= - Show a tree view for the references of the symbol under the cursor
-- =lsp-treemacs-error-list= - Show a tree view for the diagnostic messages in the project
-
-  This package is built on the [[https://github.com/Alexander-Miller/treemacs][treemacs]] package which might be of some interest to you if you like to have a file browser at the left side of your screen in your editor.
-
-  #+begin_src emacs-lisp
-
-    (use-package lsp-treemacs
-      :after lsp)
-
-  #+end_src
-
-****** lsp-ivy
-
-[[https://github.com/emacs-lsp/lsp-ivy][lsp-ivy]] integrates Ivy with =lsp-mode= to make it easy to search for things by name in your code.  When you run these commands, a prompt will appear in the minibuffer allowing you to type part of the name of a symbol in your code.  Results will be populated in the minibuffer so that you can find what you're looking for and jump to that location in the code upon selecting the result.
-
-Try these commands with =M-x=:
-
-- =lsp-ivy-workspace-symbol= - Search for a symbol name in the current project workspace
-- =lsp-ivy-global-workspace-symbol= - Search for a symbol name in all active project workspaces
-
-  #+begin_src emacs-lisp
-
-    (use-package lsp-ivy
-      :after lsp)
-
-  #+end_src
-
-****** LSP Config
-
-#+begin_src emacs-lisp
-  (setq lsp-ui-sideline-enable t)
-#+end_src
-
-****** Debugging with dap-mode
-
-[[https://emacs-lsp.github.io/dap-mode/][dap-mode]] is an excellent package for bringing rich debugging capabilities to Emacs via the [[https://microsoft.github.io/debug-adapter-protocol/][Debug Adapter Protocol]].  You should check out the [[https://emacs-lsp.github.io/dap-mode/page/configuration/][configuration docs]] to learn how to configure the debugger for your language.  Also make sure to check out the documentation for the debug adapter to see what configuration parameters are available to use for your debug templates!
-
-#+begin_src emacs-lisp
-
-  (use-package dap-mode
-    ;; Uncomment the config below if you want all UI panes to be hidden by default!
-    ;; :custom
-    ;; (lsp-enable-dap-auto-configure nil)
-    ;; :config
-    ;; (dap-ui-mode 1)
-    :commands dap-debug
-    :config
-    ;; Set up Node debugging
-    (require 'dap-node)
-    (dap-node-setup) ;; Automatically installs Node debug adapter if needed
-
-    ;; Bind `C-c l d` to `dap-hydra` for easy access
-                                          ;(general-define-key
-                                          ; :keymaps 'lsp-mode-map
-                                          ; :prefix lsp-keymap-prefix
-                                          ; "d" '(dap-hydra t :wk "debugger"))
-    )
-
-#+end_src
-
-***** Python
-
-We use =lsp-mode= and =dap-mode= to provide a more complete development environment for Python in Emacs.  Check out [[https://emacs-lsp.github.io/lsp-mode/page/lsp-pyls/][the =pyls= configuration]] in the =lsp-mode= documentation for more details.
-
-Make sure you have the =pyls= language server installed before trying =lsp-mode=!
-
-#+begin_src sh :tangle no
-
-  pip install --user "python-language-server[all]"
-
-#+end_src
-
-There are a number of other language servers for Python so if you find that =pyls= doesn't work for you, consult the =lsp-mode= [[https://emacs-lsp.github.io/lsp-mode/page/languages/][language configuration documentation]] to try the others!
-
-#+begin_src emacs-lisp
-
-  (use-package python-mode
-    :hook (python-mode . lsp-deferred)
-    ;; :hook (python-mode) ;; i mostly use python togeher with a nix-shell and pipenv
-    :custom
-    ;; NOTE: Set these if Python 3 is called "python3" on your system!
-    ;; (python-shell-interpreter "python3")
-    ;; (dap-python-executable "python3")
-    (dap-python-debugger 'debugpy)
-    :config
-    (require 'dap-python))
-
-
-#+end_src
-
-You can use the pyvenv package to use =virtualenv= environments in Emacs.  The =pyvenv-activate= command should configure Emacs to cause =lsp-mode= and =dap-mode= to use the virtual environment when they are loaded, just select the path to your virtual environment before loading your project.
-
-#+begin_src emacs-lisp
-
-  (use-package pyvenv
-    :after python-mode
-    :config
-    (pyvenv-mode 1))
-
-#+end_src
-
-***** Pipenv Mode
-
-#+begin_src emacs-lisp
-  (use-package pipenv
-    :after python-mode)
-#+end_src
-
-***** Yasnippets
-
-#+begin_src emacs-lisp
-  (use-package yasnippet)
-  (use-package yasnippet-snippets)
-#+end_src
-
-**** Company Mode
-
-[[http://company-mode.github.io/][Company Mode]] provides a nicer in-buffer completion interface than =completion-at-point= which is more reminiscent of what you would expect from an IDE.  We add a simple configuration to make the keybindings a little more useful (=TAB= now completes the selection and initiates completion at the current location if needed).
-
-We also use [[https://github.com/sebastiencs/company-box][company-box]] to further enhance the look of the completions with icons and better overall presentation.
-
-#+begin_src emacs-lisp
-
-  (use-package company
-    :after lsp-mode
-    :hook (lsp-mode . company-mode)
-    :bind (:map company-active-map
-                ("<tab>" . company-complete-selection))
-    (:map lsp-mode-map
-          ("<tab>" . company-indent-or-complete-common))
-    :custom
-    (company-minimum-prefix-length 1)
-    (company-idle-delay 0.0))
-
-  (use-package company-box
-    :hook (company-mode . company-box-mode))
-
-#+end_src
-
-**** Flycheck
-
-#+begin_src emacs-lisp
-
-  (use-package flycheck
-    :init (global-flycheck-mode))
-
-#+end_src
-
-**** Projectile
-
-[[https://projectile.mx/][Projectile]] is a project management library for Emacs which makes it a lot easier to navigate around code projects for various languages.  Many packages integrate with Projectile so it's a good idea to have it installed even if you don't use its commands directly.
-
-#+begin_src emacs-lisp
-
-  (use-package projectile
-    :diminish projectile-mode
-    :config (projectile-mode)
-                                          ;:custom ((projectile-completion-system 'vertico))
-    :bind-keymap
-    ("C-c p" . projectile-command-map)
-    :init
-    ;; NOTE: Set this to the folder where you keep your Git repos!
-    (when (file-directory-p "~/Projects")
-      (setq projectile-project-search-path '("~/Projects")))
-    (setq projectile-switch-project-action #'projectile-dired))
-
-                                          ;(use-package counsel-projectile
-                                          ;  :after projectile
-                                          ;  :config (counsel-projectile-mode))
-
-#+end_src
-
-**** Magit
-
-[[https://magit.vc/][Magit]] is the best Git interface I've ever used.  Common Git operations are easy to execute quickly using Magit's command panel system.
-
-#+begin_src emacs-lisp
-
-  (use-package magit
-    :commands magit-status
-    :custom
-    (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
-
-  ;; NOTE: Make sure to configure a GitHub token before using this package!
-  ;; - https://magit.vc/manual/forge/Token-Creation.html#Token-Creation
-  ;; - https://magit.vc/manual/ghub/Getting-Started.html#Getting-Started
-  (use-package forge
-    :after magit)
-
-#+end_src
-
-**** Commenting
-
-Emacs' built in commenting functionality =comment-dwim= (usually bound to =M-;=) doesn't always comment things in the way you might expect so we use [[https://github.com/redguardtoo/evil-nerd-commenter][evil-nerd-commenter]] to provide a more familiar behavior.  I've bound it to =M-/= since other editors sometimes use this binding but you could also replace Emacs' =M-;= binding with this command.
-
-#+begin_src emacs-lisp
-
-  (use-package evil-nerd-commenter
-    :bind ("M-/" . evilnc-comment-or-uncomment-lines))
-
-#+end_src
-
-**** Rainbow Delimiters
-
-[[https://github.com/Fanael/rainbow-delimiters][rainbow-delimiters]] is useful in programming modes because it colorizes nested parentheses and brackets according to their nesting depth.  This makes it a lot easier to visually match parentheses in Emacs Lisp code without having to count them yourself.
-
-#+begin_src emacs-lisp
-
-  (use-package rainbow-delimiters
-    :hook (prog-mode . rainbow-delimiters-mode))
 
 #+end_src
 
@@ -1546,23 +1545,19 @@ The downsides to Eshell are that it can be harder to configure than other packag
     :straight (:type git :host github :repo "SnootierMoon/emacs-spotify"))
 
 #+end_src
+
 #+begin_src emacs-lisp
 
   (use-package embark
     :ensure t
-
     :bind
     (("C-." . embark-act)         ;; pick some comfortable binding
      ("C-;" . embark-dwim)        ;; good alternative: M-.
      ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
-
     :init
-
     ;; Optionally replace the key help with a completing-read interface
     (setq prefix-help-command #'embark-prefix-help-command)
-
     :config
-
     ;; Hide the mode line of the Embark live/completions buffers
     (add-to-list 'display-buffer-alist
                  '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
@@ -1580,8 +1575,10 @@ The downsides to Eshell are that it can be harder to configure than other packag
 #+end_src
 
 #+begin_src emacs-lisp
+
   (load-file "~/.myinit.el")
   (cd "~")
+
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1598,4 +1595,5 @@ The downsides to Eshell are that it can be harder to configure than other packag
    ;; Your init file should contain only one such instance.
    ;; If there is more than one, they won't work right.
    )
+
 #+end_src

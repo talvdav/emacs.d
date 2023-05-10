@@ -15,4 +15,5 @@
 
 (use-package dotnet
   :hook (fsharp-mode . dotnet-mode)
-  :hook (csharp-mode . dotnet-mode))
+  :hook (csharp-mode . dotnet-mode)
+  :hook (xml-mode . dotnet-mode))

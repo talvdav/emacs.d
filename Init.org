@@ -240,8 +240,7 @@ In Vim you have $MYINITRC set to your config file for easy access, lets to somet
     (insert (format-time-string "[%Y-%m-%d %a %H:%M]")))
 
   (defun today ()
-    "Insert string for today's date nicely formatted in American style,
-  e.g. Sunday, September 17, 2000."
+    "Insert string for today's date nicely formatted in American style, e.g. Sunday, September 17, 2000."
     (interactive)                 ; permit invocation in minibuffer
     (insert (format-time-string "%A, %B %e, %Y")))
 

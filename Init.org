@@ -1585,14 +1585,13 @@ The downsides to Eshell are that it can be harder to configure than other packag
 #+end_src
 
 #+begin_src emacs-lisp
+
   (defun python-or-python3 ()
     (if (< 0 (call-process (executable-find python-shell-interpreter) nil nil nil "--version"))
 	(if (string= python-shell-interpreter "python3")
 	    "python"
 	  "python3")
       python-shell-interpreter))
-
-  (python-or-python3)
 
 #+end_src
 

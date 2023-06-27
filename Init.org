@@ -104,13 +104,22 @@ then you need to make sure Emacs can find the binary:
 
 ** Initial Configuration
 *** Basic UI
-
+**** Cursor
 Default blinking cursors should be banned!!!
 
 #+begin_src emacs-lisp
 
   (blink-cursor-mode 0)       ; kill it with fire!
 
+#+end_src
+**** Minibuffer
+
+#+begin_src emacs-lisp
+ (setq column-number-mode t)
+#+end_src
+**** Editor
+#+begin_src emacs-lisp
+(global-hl-line-mode 0)
 #+end_src
 
 *** blink instead of beep
@@ -246,6 +255,19 @@ In Vim you have $MYINITRC set to your config file for easy access, lets to somet
 
 #+end_src
 
+*** Copy result of eval into kill-ring
+#+begin_src emacs-lisp
+
+  (defun my-eval-last-sexp ()
+    (interactive)
+    (elisp--eval-last-sexp nil)
+    (let (result)
+      (with-current-buffer (get-buffer " *Echo Area 0*")
+	(goto-char (point-min))
+	(setq result (read (current-buffer))))
+      (kill-new (format "%s" result))))
+
+#+end_src
 ** Initialize package management
 
 #+begin_src emacs-lisp :tangle no
@@ -986,8 +1008,10 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
 [[https://magit.vc/][Magit]] is the best Git interface I've ever used.  Common Git operations are easy to execute quickly using Magit's command panel system.
 
 #+begin_src emacs-lisp
+  (use-package sqlite)
 
   (use-package magit
+    :after sqlite
     :commands magit-status
     :custom
     (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))

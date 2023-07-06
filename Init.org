@@ -112,14 +112,17 @@ Default blinking cursors should be banned!!!
   (blink-cursor-mode 0)       ; kill it with fire!
 
 #+end_src
+
 **** Minibuffer
 
 #+begin_src emacs-lisp
- (setq column-number-mode t)
+  (setq column-number-mode t)
 #+end_src
+
 **** Editor
+
 #+begin_src emacs-lisp
-(global-hl-line-mode 0)
+  (global-hl-line-mode 0)
 #+end_src
 
 *** blink instead of beep
@@ -256,6 +259,7 @@ In Vim you have $MYINITRC set to your config file for easy access, lets to somet
 #+end_src
 
 *** Copy result of eval into kill-ring
+
 #+begin_src emacs-lisp
 
   (defun my-eval-last-sexp ()
@@ -263,11 +267,12 @@ In Vim you have $MYINITRC set to your config file for easy access, lets to somet
     (elisp--eval-last-sexp nil)
     (let (result)
       (with-current-buffer (get-buffer " *Echo Area 0*")
-	(goto-char (point-min))
-	(setq result (read (current-buffer))))
+        (goto-char (point-min))
+        (setq result (read (current-buffer))))
       (kill-new (format "%s" result))))
 
 #+end_src
+
 ** Initialize package management
 
 #+begin_src emacs-lisp :tangle no
@@ -512,6 +517,9 @@ We use [[https://github.com/jOOSTKREMERS/visual-fill-column][visual-fill-column]
 
   (use-package ox-rst ;; Export to reStructuredText
     :config (require 'ox-rst))
+
+  (use-package ox-pandoc
+    :config (require 'ox-pandoc))
 
 #+end_src
 
@@ -1150,7 +1158,8 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
 
   (defhydra hydra-org-mode ()
     "org mode"
-    ("t" org-babel-tangle "tangle current org file" :exit t))
+    ("t" org-babel-tangle "tangle current org file" :exit t)
+    ("e" org-export-dispatch "export current org buffer" :exit t))
 
 #+end_src
 
@@ -1586,7 +1595,7 @@ The downsides to Eshell are that it can be harder to configure than other packag
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package ement)
+  (use-package ement)
 #+end_src
 
 ** Custom
@@ -1608,9 +1617,9 @@ The downsides to Eshell are that it can be harder to configure than other packag
 
   (defun python-or-python3 ()
     (if (< 0 (call-process (executable-find python-shell-interpreter) nil nil nil "--version"))
-	(if (string= python-shell-interpreter "python3")
-	    "python"
-	  "python3")
+        (if (string= python-shell-interpreter "python3")
+            "python"
+          "python3")
       python-shell-interpreter))
 
 #+end_src

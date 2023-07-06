@@ -232,10 +232,15 @@ This funktion reindents the whole buffer and removes trailing whitespaces withou
 In Vim you have $MYINITRC set to your config file for easy access, lets to something similar!
 #+begin_src emacs-lisp
 
-  (defun myinitel ()
-    "Easy access to the config."
+  (defun myinitorg ()
+    "Easy access to the main configuration file."
     (interactive)
     (find-file "~/.emacs.d/Init.org"))
+
+  (defun myinitel ()
+    "Easy access to the secondary configuration file."
+    (interactive)
+    (find-file "~/.myinit.el"))
 
 #+end_src
 
@@ -1501,6 +1506,13 @@ The downsides to Eshell are that it can be harder to configure than other packag
 
   (use-package all-the-icons)
 
+#+end_src
+
+*** Nix OS
+
+#+begin_src emacs-lisp
+  (use-package nix-mode)
+  (use-package nix-buffer)
 #+end_src
 
 ** Misc

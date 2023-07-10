@@ -48,8 +48,6 @@ the Config used in the Videos: [[https://github.com/daviwil/emacs-from-scratch][
 
 #+begin_src emacs-lisp
 
-  (defvar efs/default-font-size 120)
-  (defvar efs/default-variable-font-size 120)
 
   (defvar *emacsd-directory* user-emacs-directory)
   (defvar *conf-directory* "~/.emacs.d/conf")
@@ -1209,6 +1207,9 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
 I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://fonts.google.com/specimen/Cantarell][Cantarell]] fonts for this configuration which will more than likely need to be installed on your machine.  Both can usually be found in the various Linux distro package managers or downloaded from the links above.
 
 #+begin_src emacs-lisp
+
+  (defvar efs/default-font-size 110)
+  (defvar efs/default-variable-font-size 110)
 
   (set-face-attribute 'default nil :font "Fira Code" :height efs/default-font-size)
 

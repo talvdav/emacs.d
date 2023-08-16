@@ -3,10 +3,11 @@
 (add-to-list 'auto-mode-alist '("\\.xaml\\'" . xml-mode))
 (add-to-list 'auto-mode-alist '("\\.csproj\\'" . xml-mode))
 
+(if (< emacs-major-version 29)
 (use-package csharp-mode
   :after dotnet
   :hook (csharp-mode . lsp-deferred)
-  :bind (:map csharp-mode-map ("<f5>" . dotnet-run)))
+  :bind (:map csharp-mode-map ("<f5>" . dotnet-run))))
 
 (use-package fsharp-mode
   :after dotnet

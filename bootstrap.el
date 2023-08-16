@@ -55,7 +55,10 @@
   (require 'org-tempo)
 
   (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
-  (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp")))
+  (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+  (add-to-list 'org-structure-template-alist '("zig" . "src zig"))
+  (add-to-list 'org-structure-template-alist '("lua" . "src lua"))
+  (add-to-list 'org-structure-template-alist '("ps1" . "src powershell")))
 
 (use-package no-littering)
 (use-package all-the-icons

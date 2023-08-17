@@ -1,4 +1,4 @@
-;;#+PROPERTY: header-args:emacs-lisp :tangle ./init.el :mkdirp yes
+;;#+PROPERTY: header-args:emacs-lisp :-tangle ./init.el :mkdirp yes
 
 This Configuration is heaviely inspired by the Emacs from Scratch series by David Wilson from the
 Youtube Channel =System Crafters=. [[https://www.youtube.com/playlist?list=PLEoMzSkcN8oPH1au7H6B7bBJ4ZO7BXjS][Playlist]]
@@ -370,8 +370,6 @@ We use the [[https://github.com/emacscollective/no-littering/blob/master/no-litt
 
   ;; NOTE: If you want to move everything out of the ~/.emacs.d folder
   ;; reliably, set `user-emacs-directory` before loading no-littering!
-
-  (setq user-emacs-directory  "~/.emacs.d/cache/")
 
   (use-package no-littering)
 
@@ -1504,7 +1502,7 @@ The downsides to Eshell are that it can be harder to configure than other packag
   (if (daemonp)
       (load-theme 'gruvbox-dark-medium t)
     (progn
-      (load-theme 'gruvbox-dark-medium t)
+      (load-theme 'moe-dark t)
       (moe-theme-apply-color 'red)))
 #+end_src
 

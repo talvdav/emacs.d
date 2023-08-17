@@ -1,4 +1,4 @@
-(load-file "./global-settings.el")
+(load-file "~/.emacs.d/global-settings.el")
 
 (defvar bootstrap-version)
 (let ((bootstrap-file

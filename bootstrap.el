@@ -1,7 +1,10 @@
-(load-file "./straight-bootstrap.el")
+(load-file "~/.emacs.d/straight-bootstrap.el")
 
 
 (use-package org)
+
+(defvar evil-want-keybinding nil)
+(defvar evil-want-integration t)
 
 (use-package evil
   :config
@@ -56,4 +59,4 @@
 (if (file-exists-p "~/.emacs")
     (delete-file "~/.emacs"))
 
-; (load-file "~/.emacs.d/init.el")
+(load-file "~/.emacs.d/init.el")

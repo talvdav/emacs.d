@@ -38,3 +38,5 @@ straight/**
 /sid.el
 /eln-cache/
 /org-persist/
+/emacs/
+/fonts/

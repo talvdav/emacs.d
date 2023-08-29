@@ -16,8 +16,39 @@ the Config used in the Videos: [[https://github.com/daviwil/emacs-from-scratch][
 #+end_src
 
 * Emacs Config
+** Global Variables
 
-** Encodings
+In this file i define some things that both my init file and the bootstrap file need.
+
+#+begin_src emacs-lisp
+
+  (defvar *emacsd-directory* user-emacs-directory)
+  (defvar *conf-directory* "~/.emacs.d/conf")
+  (setq user-emacs-directory  "~/.emacs.d/emacs/")
+
+    (setq backup-directory-alist '(("." . "~/.emacs-backups"))
+	  backup-by-copying      t  ; Don't de-link hard links
+	  version-control        t  ; Use version numbers on backups
+	  delete-old-versions    nil  ; Automatically delete excess backups:
+	  kept-new-versions      5  ; how many of the newest versions to keep
+	  kept-old-versions      5) ; and how many of the old
+
+    (defvar temp-directory "~/.emacs-backups/autosave/")
+    (make-directory temp-directory t)
+
+    (setq auto-save-default nil)
+    (setq auto-save-directory (concat temp-directory "/autosave")
+	  auto-save-hash-directory (concat temp-directory "/autosave-hash")
+	  auto-save-directory-fallback "~/emacs-autosave"
+	  auto-save-list-file-prefix (concat temp-directory "/autosave-")
+	  auto-save-hash-p nil
+	  auto-save-timeout 100
+	  auto-save-interval 300)
+    (make-directory auto-save-directory t)
+
+#+end_src
+
+*** Encodings
 
 #+begin_src emacs-lisp
 
@@ -40,60 +71,25 @@ the Config used in the Videos: [[https://github.com/daviwil/emacs-from-scratch][
   (prefer-coding-system 'utf-8-unix)
 #+end_src
 
-
-** Reindent-buffer
-
-This funktion reindents the whole buffer and removes trailing whitespaces without moving the cursor
-#+begin_src emacs-lisp
-
-  (defun reindent-buffer ()
-    "Reindents the whole buffer."
-    (interactive)
-    (delete-trailing-whitespace)
-    (indent-region (point-min) (point-max) nil)
-    (untabify (point-min) (point-max)))
-
-  (global-set-key [f12] 'reindent-buffer)
-
-#+end_src
-
-** global Variables
-
-In this file i define some things that both my init file and the bootstrap file need.
-
-#+begin_src emacs-lisp
-
-  (load-file "~/.emacs.d/global-settings.el")
-
-#+end_src
-
-** My init.el
-
-In Vim you have $MYINITRC set to your config file for easy access, lets to something similar!
-#+begin_src emacs-lisp
-
-  (defun myinitorg ()
-    "Easy access to the main configuration file."
-    (interactive)
-    (find-file "~/.emacs.d/Init.org"))
-
-  (defun myinitel ()
-    "Easy access to the secondary configuration file."
-    (interactive)
-    (find-file "~/.myinit.el"))
-
-  (defun conf-reload ()
-    (interactive)
-    (progn
-      (org-babel-tangle)
-      (load-file "~/.emacs.d/init.el")))
-#+end_src
-
 ** Straight.el
 
 #+begin_src emacs-lisp
 
-  (load-file "~/.emacs.d/straight-bootstrap.el")
+  (defvar bootstrap-version)
+  (let ((bootstrap-file
+	 (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+	(bootstrap-version 5))
+    (unless (file-exists-p bootstrap-file)
+      (with-current-buffer
+	  (url-retrieve-synchronously
+	   "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+	   'silent 'inhibit-cookies)
+	(goto-char (point-max))
+	(eval-print-last-sexp)))
+    (load bootstrap-file nil 'nomessage))
+
+  (straight-use-package 'use-package)
+  (setq straight-use-package-by-default t)
 
 #+end_src
 
@@ -121,14 +117,29 @@ In Vim you have $MYINITRC set to your config file for easy access, lets to somet
 
 #+end_src
 
-** Nix OS
+** My init.el
 
+In Vim you have $MYINITRC set to your config file for easy access, lets to something similar!
 #+begin_src emacs-lisp
-  (use-package nix-mode)
-  ;(use-package nix-buffer)
+
+  (defun myinitorg ()
+    "Easy access to the main configuration file."
+    (interactive)
+    (find-file "~/.emacs.d/Init.org"))
+
+  (defun myinitel ()
+    "Easy access to the secondary configuration file."
+    (interactive)
+    (find-file "~/.myinit.el"))
+
+  (defun conf-reload ()
+    (interactive)
+    (progn
+      (org-babel-tangle)
+      (load-file "~/.emacs.d/init.el")))
 #+end_src
 
-*** Evil
+** Evil
 
 Vim keybindings are the next best thing to thinking your text into existens.
 
@@ -303,10 +314,44 @@ Emacs' built in commenting functionality =comment-dwim= (usually bound to =M-;=)
 
 #+end_src
 
+** Window/Frame management
+
+#+begin_src emacs-lisp
+
+  (use-package window-numbering
+    :config (window-numbering-mode))
+
+#+end_src
+
+** Nix OS
+
+#+begin_src emacs-lisp
+  (use-package nix-mode)
+  ;(use-package nix-buffer)
+#+end_src
+
 ** Modeline
 
 #+begin_src emacs-lisp
   (setq column-number-mode t)
+#+end_src
+
+*** Diminish
+
+#+begin_src emacs-lisp
+
+  (use-package diminish
+    :init (progn
+            (diminish 'undo-tree-mode)
+            (diminish 'eldoc-mode)
+            (diminish 'auto-revert-mode)
+            (diminish 'flycheck-mode)
+            (diminish 'company-mode)
+            (diminish 'dotnet-mode)
+            (diminish 'counsel-mode)
+            (diminish 'ivy-mode)
+            (diminish 'list-interaction-mode)))
+
 #+end_src
 
 ** Editor
@@ -336,7 +381,6 @@ Emacs' built in commenting functionality =comment-dwim= (usually bound to =M-;=)
 #+end_src
 
 ** Org
-
 *** Emphasis Marker
 
 In Org you can surround text with special characters to make them *bold*, /italic/ and so on.
@@ -377,6 +421,7 @@ on an of.
 
 ** Usefull Functions and Hydras
 *** Hydra
+
 #+begin_src emacs-lisp
 
   (use-package hydra
@@ -384,8 +429,8 @@ on an of.
 
 #+end_src
 
-*** Hydras
-**** Toggle stuff
+**** Hydras
+***** Toggle stuff
 
 #+begin_src emacs-lisp
 
@@ -399,7 +444,7 @@ on an of.
 
 #+end_src
 
-**** Text Scaling
+***** Text Scaling
 
 This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to design a transient key binding for quickly adjusting the scale of the text on screen.  We define a hydra that is bound to =C-s t s= and, once activated, =j= and =k= increase and decrease the text scale.  You can press any other key (or =f= specifically) to exit the transient key map.
 
@@ -413,7 +458,7 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
 
 #+end_src
 
-**** Insert date time at point
+***** Insert date time at point
 
 #+begin_src emacs-lisp
 
@@ -424,7 +469,7 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
 
 #+end_src
 
-**** Org-mode Stuff
+***** Org-mode Stuff
 
 #+begin_src emacs-lisp
 
@@ -435,7 +480,7 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
 
 #+end_src
 
-**** Resize Frames
+***** Resize Frames
 
 #+begin_src emacs-lisp
 
@@ -446,6 +491,22 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
     ("h" move-border-left  "move border left")
     ("l" move-border-right "move border right")
     ("f" nil "finished" :exit t))
+
+#+end_src
+
+*** Reindent-buffer
+
+This funktion reindents the whole buffer and removes trailing whitespaces without moving the cursor
+#+begin_src emacs-lisp
+
+  (defun reindent-buffer ()
+    "Reindents the whole buffer."
+    (interactive)
+    (delete-trailing-whitespace)
+    (indent-region (point-min) (point-max) nil)
+    (untabify (point-min) (point-max)))
+
+  (global-set-key [f12] 'reindent-buffer)
 
 #+end_src
 
@@ -641,6 +702,7 @@ We use the [[https://github.com/emacscollective/no-littering/blob/master/no-litt
 
 *** Color Themes
 **** Install colorschemes
+
 #+begin_src emacs-lisp
 
   (use-package gruvbox-theme)
@@ -649,6 +711,7 @@ We use the [[https://github.com/emacscollective/no-littering/blob/master/no-litt
 #+end_src
 
 **** Set the MOD BAR Colour to RED if Emacs server not running
+
 #+begin_src emacs-lisp
   (if (daemonp)
       (load-theme 'gruvbox-dark-medium t)

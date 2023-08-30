@@ -1,7 +1,7 @@
-#+PROPERTY: header-args:emacs-lisp :tangle ./init.el :mkdirp yes
-
 This Configuration is heaviely inspired by the Emacs from Scratch series by David Wilson from the
 Youtube Channel =System Crafters=. [[https://www.youtube.com/playlist?list=PLEoMzSkcN8oPH1au7H6B7bBJ4ZO7BXjS][Playlist]]
+
+#+PROPERTY: header-args:emacs-lisp :tangle ./init.el :mkdirp yes
 
 the Config used in the Videos: [[https://github.com/daviwil/emacs-from-scratch][emacs-from-scratch]]
 
@@ -26,25 +26,25 @@ In this file i define some things that both my init file and the bootstrap file 
   (defvar *conf-directory* "~/.emacs.d/conf")
   (setq user-emacs-directory  "~/.emacs.d/emacs/")
 
-    (setq backup-directory-alist '(("." . "~/.emacs-backups"))
-	  backup-by-copying      t  ; Don't de-link hard links
-	  version-control        t  ; Use version numbers on backups
-	  delete-old-versions    nil  ; Automatically delete excess backups:
-	  kept-new-versions      5  ; how many of the newest versions to keep
-	  kept-old-versions      5) ; and how many of the old
+  (setq backup-directory-alist '(("." . "~/.emacs-backups"))
+        backup-by-copying      t  ; Don't de-link hard links
+        version-control        t  ; Use version numbers on backups
+        delete-old-versions    nil  ; Automatically delete excess backups:
+        kept-new-versions      5  ; how many of the newest versions to keep
+        kept-old-versions      5) ; and how many of the old
 
-    (defvar temp-directory "~/.emacs-backups/autosave/")
-    (make-directory temp-directory t)
+  (defvar temp-directory "~/.emacs-backups/autosave/")
+  (make-directory temp-directory t)
 
-    (setq auto-save-default nil)
-    (setq auto-save-directory (concat temp-directory "/autosave")
-	  auto-save-hash-directory (concat temp-directory "/autosave-hash")
-	  auto-save-directory-fallback "~/emacs-autosave"
-	  auto-save-list-file-prefix (concat temp-directory "/autosave-")
-	  auto-save-hash-p nil
-	  auto-save-timeout 100
-	  auto-save-interval 300)
-    (make-directory auto-save-directory t)
+  (setq auto-save-default nil)
+  (setq auto-save-directory (concat temp-directory "/autosave")
+        auto-save-hash-directory (concat temp-directory "/autosave-hash")
+        auto-save-directory-fallback "~/emacs-autosave"
+        auto-save-list-file-prefix (concat temp-directory "/autosave-")
+        auto-save-hash-p nil
+        auto-save-timeout 100
+        auto-save-interval 300)
+  (make-directory auto-save-directory t)
 
 #+end_src
 
@@ -60,15 +60,16 @@ In this file i define some things that both my init file and the bootstrap file 
 
     ;; better scrolling experience
     (setq scroll-margin 0
-          scroll-conservatively 10000
-          scroll-preserve-screen-position t
-          auto-window-vscroll nil)
+	  scroll-conservatively 10000
+	  scroll-preserve-screen-position t
+	  auto-window-vscroll nil)
 
     ;; on Win32, cooperation between Emacs and other Unicode applications is weird.
     ;; let's avoid that.
     (set-selection-coding-system 'utf-8-unix))
 
   (prefer-coding-system 'utf-8-unix)
+
 #+end_src
 
 ** Straight.el
@@ -77,21 +78,22 @@ In this file i define some things that both my init file and the bootstrap file 
 
   (defvar bootstrap-version)
   (let ((bootstrap-file
-	 (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-	(bootstrap-version 5))
+         (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+        (bootstrap-version 5))
     (unless (file-exists-p bootstrap-file)
       (with-current-buffer
-	  (url-retrieve-synchronously
-	   "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-	   'silent 'inhibit-cookies)
-	(goto-char (point-max))
-	(eval-print-last-sexp)))
+          (url-retrieve-synchronously
+           "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+           'silent 'inhibit-cookies)
+        (goto-char (point-max))
+        (eval-print-last-sexp)))
     (load bootstrap-file nil 'nomessage))
 
   (straight-use-package 'use-package)
   (setq straight-use-package-by-default t)
 
 #+end_src
+
 
 ** Tangle Emacs Configuration
 
@@ -254,7 +256,7 @@ In order to easly go back to normal mode we use "jk".
       "o" 'hydra-org-mode/body
       "s" 'hydra-text-scale/body
       "i" 'hydra-insert-date-and-time-at-point/body
-      "p" 'python-shell-send-buffer))
+      "e" 'hydra-emacs-actions/body))
 
 #+end_src
 
@@ -266,34 +268,6 @@ In order to easly go back to normal mode we use "jk".
     :after evil
     :config
     (evil-collection-init))
-
-#+end_src
-
-**** Evil Key-Bindings
-
-#+begin_src emacs-lisp
-
-  (with-eval-after-load 'evil
-
-    (evil-define-key '(normal insert) org-mode-map (kbd "M-h") 'org-metaleft)
-    (evil-define-key '(normal insert) org-mode-map (kbd "M-l") 'org-metaright)
-
-    (evil-define-key '(normal insert) org-mode-map (kbd "M-H") 'org-promote-subtree)
-    (evil-define-key '(normal insert) org-mode-map (kbd "M-L") 'org-demote-subtree)
-
-    ;; Move header up and down
-    (evil-define-key '(normal insert visual) org-mode-map (kbd "M-j") 'org-metadown)
-    (evil-define-key '(normal insert visual) org-mode-map (kbd "M-k") 'org-metaup)
-
-    ;; Changes priority
-    (evil-define-key '(normal) org-mode-map (kbd "K") 'org-shiftup)
-    (evil-define-key '(normal) org-mode-map (kbd "J") 'org-shiftdown)
-
-    ;; Cycles through Todo Done etc.
-    (evil-define-key '(normal) org-mode-map (kbd "L") 'org-shiftright)
-    (evil-define-key '(normal) org-mode-map (kbd "H") 'org-shiftleft)
-
-    (evil-define-key '(normal insert) org-mode-map (kbd "<tab>") 'org-cycle))
 
 #+end_src
 
@@ -326,8 +300,9 @@ Emacs' built in commenting functionality =comment-dwim= (usually bound to =M-;=)
 ** Nix OS
 
 #+begin_src emacs-lisp
+
   (use-package nix-mode)
-  ;(use-package nix-buffer)
+					  ;(use-package nix-buffer)
 #+end_src
 
 ** Modeline
@@ -380,45 +355,104 @@ Emacs' built in commenting functionality =comment-dwim= (usually bound to =M-;=)
 
 #+end_src
 
-** Org
-*** Emphasis Marker
+** IDE Features
+*** lsp-mode
 
-In Org you can surround text with special characters to make them *bold*, /italic/ and so on.
-The characters are
-
-| Character | Example  | Meaning        |
-|-----------+----------+----------------|
-| "*"       | *Foobar* | bold           |
-| "/"       | /Foobar/ | italic         |
-| "="       | =Foobar= | verbatim       |
-| "~"       | ~Foobar~ | code           |
-| "_"       | _Foobar_ | underlined     |
-| "+"       | +Foobar+ | strike-through |
-
-To make Org files look prettier i do not show those characters by default, this however
-can make editing text a bit difficult, so here i define some functions to toggle this feature
-on an of.
+We use the excellent [[https://emacs-lsp.github.io/lsp-mode/][lsp-mode]] to enable IDE-like functionality for many different programming languages via "language servers" that speak the [[https://microsoft.github.io/language-server-protocol/][Language Server Protocol]].  Before trying to set up =lsp-mode= for a particular language, check out the [[https://emacs-lsp.github.io/lsp-mode/page/languages/][documentation for your language]] so that you can learn which language servers are available and how to install them.
+The =lsp-keymap-prefix= setting enables you to define a prefix for where =lsp-mode='s default keybindings will be added.  I *highly recommend* using the prefix to find out what you can do with =lsp-mode= in a buffer.
+The =which-key= integration adds helpful descriptions of the various keys so you should be able to learn a lot just by pressing =C-c l= in a =lsp-mode= buffer and trying different things that you find there.
 
 #+begin_src emacs-lisp
 
-  (defun my/org-emphasis-markers-status ()
-    "Get the status of org-hide-emphasis-markers."
-    (interactive)
-    (message "org-hide-emphasis-markers %s"
-             (if org-hide-emphasis-markers "ON" "OFF")))
+  (defun efs/lsp-mode-setup ()
+    "Function from emacs from scratch."
+    (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
+    (lsp-headerline-breadcrumb-mode))
 
-  (defun my/toggle-org-hide-emphasis-markers ()
-    "Toggle emphasis markers."
-    (interactive)
-    (setq org-hide-emphasis-markers
-          (not org-hide-emphasis-markers))
-    (org-mode-restart)
-    (my/org-emphasis-markers-status))
-
-  (global-set-key [f9] 'my/toggle-org-hide-emphasis-markers)
+  (use-package lsp-mode
+    :commands (lsp lsp-deferred)
+    ;;:hook (lsp-mode . efs/lsp-mode-setup)
+    :init
+    (setq lsp-keymap-prefix "C-c l")  ;; Or 'C-l', 's-l'
+    :config
+    (lsp-enable-which-key-integration t))
 
 #+end_src
 
+*** lsp-ui
+
+[[https://emacs-lsp.github.io/lsp-ui/][lsp-ui]] is a set of UI enhancements built on top of =lsp-mode= which make Emacs feel even more like an IDE.  Check out the screenshots on the =lsp-ui= homepage (linked at the beginning of this paragraph) to see examples of what it can do.
+
+#+begin_src emacs-lisp
+
+  (use-package lsp-ui
+    :hook (lsp-mode . lsp-ui-mode)
+    :custom
+    (lsp-ui-doc-position 'bottom))
+
+#+end_src
+
+*** lsp-treemacs
+
+[[https://github.com/emacs-lsp/lsp-treemacs][lsp-treemacs]] provides nice tree views for different aspects of your code like symbols in a file, references of a symbol, or diagnostic messages (errors and warnings) that are found in your code.
+
+Try these commands with =M-x=:
+
+- =lsp-treemacs-symbols= - Show a tree view of the symbols in the current file
+- =lsp-treemacs-references= - Show a tree view for the references of the symbol under the cursor
+- =lsp-treemacs-error-list= - Show a tree view for the diagnostic messages in the project
+
+  This package is built on the [[https://github.com/Alexander-Miller/treemacs][treemacs]] package which might be of some interest to you if you like to have a file browser at the left side of your screen in your editor.
+
+  #+begin_src emacs-lisp
+
+    (use-package lsp-treemacs
+      :after lsp)
+
+  #+end_src
+
+*** lsp-ivy
+
+[[https://github.com/emacs-lsp/lsp-ivy][lsp-ivy]] integrates Ivy with =lsp-mode= to make it easy to search for things by name in your code.  When you run these commands, a prompt will appear in the minibuffer allowing you to type part of the name of a symbol in your code.  Results will be populated in the minibuffer so that you can find what you're looking for and jump to that location in the code upon selecting the result.
+
+Try these commands with =M-x=:
+
+- =lsp-ivy-workspace-symbol= - Search for a symbol name in the current project workspace
+- =lsp-ivy-global-workspace-symbol= - Search for a symbol name in all active project workspaces
+
+  #+begin_src emacs-lisp
+
+    (use-package lsp-ivy
+      :after lsp)
+
+  #+end_src
+
+*** Debugging with dap-mode
+
+[[https://emacs-lsp.github.io/dap-mode/][dap-mode]] is an excellent package for bringing rich debugging capabilities to Emacs via the [[https://microsoft.github.io/debug-adapter-protocol/][Debug Adapter Protocol]].  You should check out the [[https://emacs-lsp.github.io/dap-mode/page/configuration/][configuration docs]] to learn how to configure the debugger for your language.  Also make sure to check out the documentation for the debug adapter to see what configuration parameters are available to use for your debug templates!
+
+#+begin_src emacs-lisp
+
+  (use-package dap-mode
+    ;; Uncomment the config below if you want all UI panes to be hidden by default!
+    ;; :custom
+    ;; (lsp-enable-dap-auto-configure nil)
+    ;; :config
+    ;; (dap-ui-mode 1)
+    :commands dap-debug
+    :config
+    ;; Set up Node debugging
+    (require 'dap-node)
+    (dap-node-setup) ;; Automatically installs Node debug adapter if needed
+
+    ;; Bind `C-c l d` to `dap-hydra` for easy access
+                                          ;(general-define-key
+                                          ; :keymaps 'lsp-mode-map
+                                          ; :prefix lsp-keymap-prefix
+                                          ; "d" '(dap-hydra t :wk "debugger"))
+    )
+
+#+end_src
 ** Usefull Functions and Hydras
 *** Hydra
 
@@ -430,6 +464,19 @@ on an of.
 #+end_src
 
 **** Hydras
+
+***** Emacs Actions
+
+#+begin_src emacs-lisp
+  (defhydra hydra-emacs-actions (:timeout 5)
+    "toggle"
+    ("t" toggle-truncate-lines "truncate lines" :exit t)
+    ("l" linum-relative-toggle "line numbers" :exit t)
+    ("c" visual-fill-column-mode "center text in buffers" :exit t)
+    ("d" display-fill-column-indicator-mode "column indicator" :exit t)
+    ("e" my/toggle-org-hide-emphasis-markers "emphasis-markers" :exit t))
+#+end_src
+
 ***** Toggle stuff
 
 #+begin_src emacs-lisp
@@ -507,6 +554,45 @@ This funktion reindents the whole buffer and removes trailing whitespaces withou
     (untabify (point-min) (point-max)))
 
   (global-set-key [f12] 'reindent-buffer)
+
+#+end_src
+
+*** Org
+**** Emphasis Marker
+
+In Org you can surround text with special characters to make them *bold*, /italic/ and so on.
+The characters are
+
+| Character | Example  | Meaning        |
+|-----------+----------+----------------|
+| "*"       | *Foobar* | bold           |
+| "/"       | /Foobar/ | italic         |
+| "="       | =Foobar= | verbatim       |
+| "~"       | ~Foobar~ | code           |
+| "_"       | _Foobar_ | underlined     |
+| "+"       | +Foobar+ | strike-through |
+
+To make Org files look prettier i do not show those characters by default, this however
+can make editing text a bit difficult, so here i define some functions to toggle this feature
+on an of.
+
+#+begin_src emacs-lisp
+
+  (defun my/org-emphasis-markers-status ()
+    "Get the status of org-hide-emphasis-markers."
+    (interactive)
+    (message "org-hide-emphasis-markers %s"
+             (if org-hide-emphasis-markers "ON" "OFF")))
+
+  (defun my/toggle-org-hide-emphasis-markers ()
+    "Toggle emphasis markers."
+    (interactive)
+    (setq org-hide-emphasis-markers
+          (not org-hide-emphasis-markers))
+    (org-mode-restart)
+    (my/org-emphasis-markers-status))
+
+  (global-set-key [f9] 'my/toggle-org-hide-emphasis-markers)
 
 #+end_src
 
@@ -746,10 +832,10 @@ The name for the default python interpreter differs between windows and between 
 so i try to find out what it is called on the current system and set the python-shell-interpreter accordingly.
 #+begin_src emacs-lisp
 
-    (defun python-or-python3 ()
-      (if (< 0 (call-process (executable-find "python") nil nil nil "--version"))
-	  "python3"
-	  "python"))
+  (defun python-or-python3 ()
+    (if (< 0 (call-process (executable-find "python") nil nil nil "--version"))
+        "python3"
+      "python"))
 
 #+end_src
 
@@ -761,6 +847,8 @@ so i try to find out what it is called on the current system and set the python-
    ;; If you edit it by hand, you could mess it up, so be careful.
    ;; Your init file should contain only one such instance.
    ;; If there is more than one, they won't work right.
+   '(custom-safe-themes
+     '("bffa745f938fb438516648940f3460cac5e00533cf932930742fb59b7d12b45d" "2c76cf3a077f7c947887fce479285f00983b04f1edd501156736a1521306585d" "31fcff8646c425ce53d53af9157ccab68a8ff52ae0a11ff97744baf0b085f7e1" "0e5dac263cf162b53edb21dd22348a27055b83d8c7c25c81b13514196c73070a" "5163d71d6468c78656e74713d60c95839fe28b1d5a336455559191685e1f0fc8" "a73a73ae1cd9a1a98d43a135b188a59f21b11dd209746cbed3decae03f7754dd" "790294604ee6682b2239c63ef2d7bbb24467160f96b99086c75a1d418bed1213" default))
    '(python-shell-interpreter (python-or-python3))
    '(warning-suppress-types '((use-package) (comp))))
   (custom-set-faces
@@ -775,7 +863,7 @@ so i try to find out what it is called on the current system and set the python-
 * End of File
 
 #+begin_src emacs-lisp
-  (cd "~") 
+  (cd "~")
   (provide 'init)
     ;;; init.el ends here
 #+end_src

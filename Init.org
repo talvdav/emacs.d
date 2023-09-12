@@ -419,8 +419,8 @@ I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://f
 
 #+begin_src emacs-lisp
 
-  (defvar efs/default-font-size 110)
-  (defvar efs/default-variable-font-size 110)
+  (defvar efs/default-font-size 125)
+  (defvar efs/default-variable-font-size 125)
 
   (set-face-attribute 'default nil :font "Fira Code" :height efs/default-font-size)
 
@@ -929,6 +929,7 @@ so i try to find out what it is called on the current system and set the python-
 #+begin_src emacs-lisp
 
   (cd "~")
+  (load-file "~/.myinit.el")
   (provide 'init)
     ;;; init.el ends here
 

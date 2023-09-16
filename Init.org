@@ -5,6 +5,8 @@ Youtube Channel =System Crafters=. [[https://www.youtube.com/playlist?list=PLEoM
 
 the Config used in the Videos: [[https://github.com/daviwil/emacs-from-scratch][emacs-from-scratch]]
 
+* Emacs Config
+
 #+begin_src emacs-lisp
 
   ;;; myinitel --- My Emacs config.
@@ -15,7 +17,6 @@ the Config used in the Videos: [[https://github.com/daviwil/emacs-from-scratch][
 
 #+end_src
 
-* Emacs Config
 ** Global Variables
 
 In this file i define some things that both my init file and the bootstrap file need.
@@ -60,9 +61,9 @@ In this file i define some things that both my init file and the bootstrap file 
 
     ;; better scrolling experience
     (setq scroll-margin 0
-	  scroll-conservatively 10000
-	  scroll-preserve-screen-position t
-	  auto-window-vscroll nil)
+        scroll-conservatively 10000
+        scroll-preserve-screen-position t
+        auto-window-vscroll nil)
 
     ;; on Win32, cooperation between Emacs and other Unicode applications is weird.
     ;; let's avoid that.
@@ -218,6 +219,7 @@ In Vim you have $MYINITRC set to your config file for easy access, lets to somet
     (progn
       (org-babel-tangle)
       (load-file "~/.emacs.d/init.el")))
+
 #+end_src
 
 ** Evil
@@ -235,7 +237,7 @@ Befor Evil is loaded these variables have to be set!
 
 **** Which-key
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 
   (use-package which-key
     :init (which-key-mode))
@@ -369,10 +371,32 @@ Emacs' built in commenting functionality =comment-dwim= (usually bound to =M-;=)
 
 ** Window/Frame management
 
+*** Window Numbering
+
+Every Window will be asigned a number and can be selected by pressing M-{1-9}
+
 #+begin_src emacs-lisp
 
   (use-package window-numbering
     :config (window-numbering-mode))
+
+#+end_src
+
+*** Move Border
+
+#+begin_src emacs-lisp
+
+  (straight-use-package '(move-border
+                          :host github
+                          :repo "ramnes/move-border"
+                          :branch "master"))
+
+  (require 'move-border)
+
+  (global-set-key (kbd "C-M-j") 'move-border-down)
+  (global-set-key (kbd "C-M-k") 'move-border-up)
+  (global-set-key (kbd "C-M-h") 'move-border-left)
+  (global-set-key (kbd "C-M-l") 'move-border-right)
 
 #+end_src
 
@@ -381,7 +405,7 @@ Emacs' built in commenting functionality =comment-dwim= (usually bound to =M-;=)
 #+begin_src emacs-lisp
 
   (use-package nix-mode)
-					  ;(use-package nix-buffer)
+                                        ;(use-package nix-buffer)
 #+end_src
 
 ** Modeline
@@ -582,6 +606,7 @@ Try these commands with =M-x=:
     )
 
 #+end_src
+
 ** Usefull Functions and Hydras
 *** Hydra
 
@@ -688,7 +713,7 @@ This funktion reindents the whole buffer and removes trailing whitespaces withou
 #+end_src
 
 **** Org
-**** Emphasis Marker
+***** Emphasis Marker
 
 In Org you can surround text with special characters to make them *bold*, /italic/ and so on.
 The characters are
@@ -924,12 +949,29 @@ so i try to find out what it is called on the current system and set the python-
 
 #+end_src
 
-* End of File
+** Move to HOME directory
 
 #+begin_src emacs-lisp
 
   (cd "~")
+
+#+end_src
+
+** Load ~/.myinitel
+I want to be able to have some things specific to the maschine im working on. So i put some put some stuff into ~/.myinitel.
+
+#+begin_src emacs-lisp
+
+  (load-file "~/.myinit.el")
+
+#+end_src
+
+* End of File
+
+#+begin_src emacs-lisp
+
   (provide 'init)
-    ;;; init.el ends here
+
+  ;;; init.el ends here
 
 #+end_src

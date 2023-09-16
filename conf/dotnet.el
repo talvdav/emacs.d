@@ -5,16 +5,14 @@
 
 (if (< emacs-major-version 29)
 (use-package csharp-mode
-  :after dotnet
-  :hook (csharp-mode . lsp-deferred)
-  :bind (:map csharp-mode-map ("<f5>" . dotnet-run))))
+  :after dotnet))
 
 (use-package fsharp-mode
-  :after dotnet
-  :hook (fsharp-mode . lsp-deferred)
-  :bind (:map fsharp-mode-map ("<f5>" . dotnet-run)))
+  :after dotnet)
 
 (use-package dotnet
   :hook (fsharp-mode . dotnet-mode)
   :hook (csharp-mode . dotnet-mode)
-  :hook (xml-mode . dotnet-mode))
+  :hook (xml-mode . dotnet-mode)
+  :hook (dotnet-mode . lsp-deferred)
+  :bind (:map dotnet-mode-map ("<f5>" . dotnet-run)))

@@ -108,7 +108,7 @@ In this file i define some things that both my init file and the bootstrap file 
 
   (with-eval-after-load 'org
     ;;;; This is needed as of Org 9.2
-    ;;(require 'org-tempo)
+    (require 'org-tempo)
 
     (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
     (add-to-list 'org-structure-template-alist '("rs" . "src rust"))

@@ -73,7 +73,17 @@ In this file i define some things that both my init file and the bootstrap file 
 
 #+end_src
 
-** Straight.el
+** Packages
+*** Archives
+
+#+begin_src emacs-lisp
+
+  (setq package-archives '(("melpa" . "https://melpa.org/packages/")
+                           ("org" . "https://orgmode.org/elpa/")
+                           ("elpa" . "https://elpa.gnu.org/packages/")))
+
+#+end_src
+*** Straight.el
 
 #+begin_src emacs-lisp
 

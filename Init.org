@@ -347,7 +347,8 @@ In order to easly go back to normal mode we use "jk".
       "o" 'hydra-org-mode/body
       "s" 'hydra-text-scale/body
       "i" 'hydra-insert-date-and-time-at-point/body
-      "e" 'hydra-emacs-actions/body))
+      "e" 'hydra-emacs-actions/body
+      "h" 'harpoon-quick-menu-hydra))
 
 #+end_src
 
@@ -535,6 +536,58 @@ I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://f
 
 #+end_src
 
+**** Harpoon
+
+#+begin_src emacs-lisp
+
+  (use-package harpoon)
+
+#+end_src
+
+***** Harpoon keybindings
+
+#+begin_src emacs-lisp :tangle no
+  ;; On vanilla (You can use another prefix instead C-c h)
+
+  ;; You can use this hydra menu that have all the commands
+  (global-set-key (kbd "C-c a") 'harpoon-quick-menu-hydra)
+  (global-set-key (kbd "C-c h <return>") 'harpoon-add-file)
+
+  ;; And the vanilla commands
+  (global-set-key (kbd "C-c h f") 'harpoon-toggle-file)
+  (global-set-key (kbd "C-c h h") 'harpoon-toggle-quick-menu)
+  (global-set-key (kbd "C-c h c") 'harpoon-clear)
+  (global-set-key (kbd "C-c h 1") 'harpoon-go-to-1)
+  (global-set-key (kbd "C-c h 2") 'harpoon-go-to-2)
+  (global-set-key (kbd "C-c h 3") 'harpoon-go-to-3)
+  (global-set-key (kbd "C-c h 4") 'harpoon-go-to-4)
+  (global-set-key (kbd "C-c h 5") 'harpoon-go-to-5)
+  (global-set-key (kbd "C-c h 6") 'harpoon-go-to-6)
+  (global-set-key (kbd "C-c h 7") 'harpoon-go-to-7)
+  (global-set-key (kbd "C-c h 8") 'harpoon-go-to-8)
+  (global-set-key (kbd "C-c h 9") 'harpoon-go-to-9)
+
+  ;; On doom emacs
+
+  ;; You can use this hydra menu that have all the commands
+  (map! :n "C-SPC" 'harpoon-quick-menu-hydra)
+  (map! :n "C-s" 'harpoon-add-file)
+
+  ;; And the vanilla commands
+  (map! :leader "j c" 'harpoon-clear)
+  (map! :leader "j f" 'harpoon-toggle-file)
+  (map! :leader "1" 'harpoon-go-to-1)
+  (map! :leader "2" 'harpoon-go-to-2)
+  (map! :leader "3" 'harpoon-go-to-3)
+  (map! :leader "4" 'harpoon-go-to-4)
+  (map! :leader "5" 'harpoon-go-to-5)
+  (map! :leader "6" 'harpoon-go-to-6)
+  (map! :leader "7" 'harpoon-go-to-7)
+  (map! :leader "8" 'harpoon-go-to-8)
+  (map! :leader "9" 'harpoon-go-to-9)
+
+#+end_src
+
 *** lsp-mode
 
 We use the excellent [[https://emacs-lsp.github.io/lsp-mode/][lsp-mode]] to enable IDE-like functionality for many different programming languages via "language servers" that speak the [[https://microsoft.github.io/language-server-protocol/][Language Server Protocol]].  Before trying to set up =lsp-mode= for a particular language, check out the [[https://emacs-lsp.github.io/lsp-mode/page/languages/][documentation for your language]] so that you can learn which language servers are available and how to install them.
@@ -628,17 +681,12 @@ Try these commands with =M-x=:
 #+end_src
 
 **** Hydras
-
 ***** Emacs Actions
 
 #+begin_src emacs-lisp
   (defhydra hydra-emacs-actions (:timeout 5)
-    "toggle"
-    ("t" toggle-truncate-lines "truncate lines" :exit t)
-    ("l" linum-relative-toggle "line numbers" :exit t)
-    ("c" visual-fill-column-mode "center text in buffers" :exit t)
-    ("d" display-fill-column-indicator-mode "column indicator" :exit t)
-    ("e" my/toggle-org-hide-emphasis-markers "emphasis-markers" :exit t))
+    "actions"
+    ("g" lsp-ui-doc-show "display hover information" :exit t))
 #+end_src
 
 ***** Toggle stuff

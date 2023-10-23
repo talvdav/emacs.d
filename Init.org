@@ -47,6 +47,8 @@ In this file i define some things that both my init file and the bootstrap file 
         auto-save-interval 300)
   (make-directory auto-save-directory t)
 
+  (setq create-lockfiles nil)
+
 #+end_src
 
 *** Encodings
@@ -702,6 +704,11 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
 
 #+end_src
 
+*** Yasnippet
+#+begin_src emacs-lisp
+  (use-package yasnippet)
+  (use-package yasnippet-snippets)
+#+end_src
 ** Usefull Functions and Hydras
 *** Hydra
 

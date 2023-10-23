@@ -85,6 +85,7 @@ In this file i define some things that both my init file and the bootstrap file 
                            ("elpa" . "https://elpa.gnu.org/packages/")))
 
 #+end_src
+
 *** Straight.el
 
 #+begin_src emacs-lisp

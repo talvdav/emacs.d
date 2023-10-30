@@ -38,7 +38,7 @@ In this file i define some things that both my init file and the bootstrap file 
   (make-directory temp-directory t)
 
   (setq auto-save-default nil)
-  (setq auto-save-directory (concat temp-directory "/autosave")
+  (setq auto-save-directory temp-directory 
         auto-save-hash-directory (concat temp-directory "/autosave-hash")
         auto-save-directory-fallback "~/emacs-autosave"
         auto-save-list-file-prefix (concat temp-directory "/autosave-")

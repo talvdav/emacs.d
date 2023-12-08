@@ -314,7 +314,8 @@ Befor Evil is loaded these variables have to be set!
     (evil-define-key '(normal insert) doc-view-mode-map (kbd "l") 'end-of-buffer)
 
     (evil-define-key '(normal insert) doc-view-mode-map (kbd "M-j") 'doc-view-enlarge)
-    (evil-define-key '(normal insert) doc-view-mode-map (kbd "M-k") 'doc-view-shrink))
+    (evil-define-key '(normal insert) doc-view-mode-map (kbd "M-k") 'doc-view-shrink)
+    (evil-global-set-key 'normal (kbd "K") 'lsp-ui-doc-show))
 
 #+end_src
 

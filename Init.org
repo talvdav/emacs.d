@@ -385,7 +385,6 @@ Emacs' built in commenting functionality =comment-dwim= (usually bound to =M-;=)
 #+end_src
 
 ** Window/Frame management
-
 *** Window Numbering
 
 Every Window will be asigned a number and can be selected by pressing M-{1-9}

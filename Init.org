@@ -17,6 +17,24 @@ the Config used in the Videos: [[https://github.com/daviwil/emacs-from-scratch][
 
 #+end_src
 
+** Custom set variables
+
+#+begin_src emacs-lisp
+
+  (setq custom-file (concat *emacsd-directory* "custom-set-variables.el"))
+
+  (custom-set-variables
+   ;; custom-set-variables was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   '(python-shell-interpreter (python-or-python3))
+   '(warning-suppress-types '((use-package) (comp))))
+
+  (load-file custom-file)
+
+#+end_src
+
 ** Global Variables
 
 In this file i define some things that both my init file and the bootstrap file need.
@@ -457,8 +475,8 @@ I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://f
 
 #+begin_src emacs-lisp
 
-  (defvar efs/default-font-size 125)
-  (defvar efs/default-variable-font-size 125)
+  (defvar efs/default-font-size 110)
+  (defvar efs/default-variable-font-size 110)
 
   (set-face-attribute 'default nil :font "Fira Code" :height efs/default-font-size)
 
@@ -1031,27 +1049,6 @@ so i try to find out what it is called on the current system and set the python-
 
 #+end_src
 
-** Custom set variables
-#+begin_src emacs-lisp
-
-  (custom-set-variables
-   ;; custom-set-variables was added by Custom.
-   ;; If you edit it by hand, you could mess it up, so be careful.
-   ;; Your init file should contain only one such instance.
-   ;; If there is more than one, they won't work right.
-   '(custom-safe-themes
-     '("bffa745f938fb438516648940f3460cac5e00533cf932930742fb59b7d12b45d" "2c76cf3a077f7c947887fce479285f00983b04f1edd501156736a1521306585d" "31fcff8646c425ce53d53af9157ccab68a8ff52ae0a11ff97744baf0b085f7e1" "0e5dac263cf162b53edb21dd22348a27055b83d8c7c25c81b13514196c73070a" "5163d71d6468c78656e74713d60c95839fe28b1d5a336455559191685e1f0fc8" "a73a73ae1cd9a1a98d43a135b188a59f21b11dd209746cbed3decae03f7754dd" "790294604ee6682b2239c63ef2d7bbb24467160f96b99086c75a1d418bed1213" default))
-   '(python-shell-interpreter (python-or-python3))
-   '(warning-suppress-types '((use-package) (comp))))
-  (custom-set-faces
-   ;; custom-set-faces was added by Custom.
-   ;; If you edit it by hand, you could mess it up, so be careful.
-   ;; Your init file should contain only one such instance.
-   ;; If there is more than one, they won't work right.
-   )
-
-#+end_src
-
 ** Other Stuff
 
 The stuff here is all the stuff i don't want to be part of the initial config.
@@ -1314,19 +1311,10 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
 
 #+end_src
 
-** Load ~/.myinitel
-I want to be able to have some things specific to the maschine im working on. So i put some put some stuff into ~/.myinitel.
-
+** Finishing up
 #+begin_src emacs-lisp
 
-  (load-file "~/.myinit.el")
-
-#+end_src
-
-** Move to HOME directory
-
-#+begin_src emacs-lisp
-
+  (load-file "~/.myinit.el") ; I want to be able to have some things specific to the maschine im working on. So i put some put some stuff into ~/.myinitel.
   (cd "~")
 
 #+end_src

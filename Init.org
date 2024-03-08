@@ -1,9 +1,8 @@
-This Configuration is heaviely inspired by the Emacs from Scratch series by David Wilson from the
+This Configuration is heaviely inspired by the Emacs from Scratch series by David Wilson from the the Config used in the Videos: [[https://github.com/daviwil/emacs-from-scratch][emacs-from-scratch]]
+
 Youtube Channel =System Crafters=. [[https://www.youtube.com/playlist?list=PLEoMzSkcN8oPH1au7H6B7bBJ4ZO7BXjS][Playlist]]
 
 #+PROPERTY: header-args:emacs-lisp :tangle ./init.el :mkdirp yes
-
-the Config used in the Videos: [[https://github.com/daviwil/emacs-from-scratch][emacs-from-scratch]]
 
 * Emacs Config
 
@@ -96,7 +95,7 @@ then you need to make sure Emacs can find the binary:
 
 #+end_src
 
-**** Python
+*** Python
 The name for the default python interpreter differs between windows and between linux distributions
 so i try to find out what it is called on the current system and set the python-shell-interpreter accordingly.
 #+begin_src emacs-lisp
@@ -105,24 +104,6 @@ so i try to find out what it is called on the current system and set the python-
     (if (< 0 (call-process (executable-find "python") nil nil nil "--version"))
         "python3"
       "python"))
-
-#+end_src
-
-** Custom set variables
-
-#+begin_src emacs-lisp
-
-  (setq custom-file (concat *emacsd-directory* "custom-set-variables.el"))
-
-  (custom-set-variables
-   ;; custom-set-variables was added by Custom.
-   ;; If you edit it by hand, you could mess it up, so be careful.
-   ;; Your init file should contain only one such instance.
-   ;; If there is more than one, they won't work right.
-   '(python-shell-interpreter (python-or-python3))
-   '(warning-suppress-types '((use-package) (comp))))
-
-  (load-file custom-file)
 
 #+end_src
 
@@ -470,7 +451,7 @@ Every Window will be asigned a number and can be selected by pressing M-{1-9}
 #+begin_src emacs-lisp
 
   (use-package nix-mode)
-                                        ;(use-package nix-buffer)
+
 #+end_src
 
 ** Modeline
@@ -497,9 +478,19 @@ Every Window will be asigned a number and can be selected by pressing M-{1-9}
 #+end_src
 
 ** Editor
+*** Settings
+#+begin_src emacs-lisp
+
+  (global-hl-line-mode t)
+
+#+end_src
+
+*** Line Numbers
 
 #+begin_src emacs-lisp
-  (global-hl-line-mode 0)
+
+  (setq display-line-numbers-typer 'relative)
+
 #+end_src
 
 *** Font Configuration
@@ -542,11 +533,15 @@ I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://f
 
 #+end_src
 
-*** Autocomplete
-#+begin_src emacs-lisp
-(use-package auto-complete)
-#+end_src
 ** IDE Features
+*** Autocomplete
+
+#+begin_src emacs-lisp
+
+  (use-package auto-complete)
+
+#+end_src
+
 *** Project Management
 **** Projectile
 
@@ -761,93 +756,13 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
 #+end_src
 
 *** Yasnippet
+
 #+begin_src emacs-lisp
   (use-package yasnippet)
   (use-package yasnippet-snippets)
 #+end_src
+
 ** Usefull Functions and Hydras
-*** Hydra
-
-#+begin_src emacs-lisp
-
-  (use-package hydra
-    :defer t)
-
-#+end_src
-
-**** Hydras
-***** Emacs Actions
-
-#+begin_src emacs-lisp
-  (defhydra hydra-emacs-actions (:timeout 5)
-    "actions"
-    ("g" lsp-ui-doc-show "display hover information" :exit t))
-#+end_src
-
-***** Toggle stuff
-
-#+begin_src emacs-lisp
-
-  (defhydra hydra-toggle (:timeout 5)
-    "toggle"
-    ("t" toggle-truncate-lines "truncate lines" :exit t)
-    ("l" linum-relative-toggle "line numbers" :exit t)
-    ("c" visual-fill-column-mode "center text in buffers" :exit t)
-    ("d" display-fill-column-indicator-mode "column indicator" :exit t)
-    ("e" my/toggle-org-hide-emphasis-markers "emphasis-markers" :exit t))
-
-#+end_src
-
-***** Text Scaling
-
-This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to design a transient key binding for quickly adjusting the scale of the text on screen.  We define a hydra that is bound to =C-s t s= and, once activated, =j= and =k= increase and decrease the text scale.  You can press any other key (or =f= specifically) to exit the transient key map.
-
-#+begin_src emacs-lisp
-
-  (defhydra hydra-text-scale (:timeout 5)
-    "scale text"
-    ("j" text-scale-increase "in")
-    ("k" text-scale-decrease "out")
-    ("f" nil "finished" :exit t))
-
-#+end_src
-
-***** Insert date time at point
-
-#+begin_src emacs-lisp
-
-  (defhydra hydra-insert-date-and-time-at-point ()
-    "insert date and time at point"
-    ("n" now "insert date and time" :exit t)
-    ("t" today "insert date time long" :exit t))
-
-#+end_src
-
-***** Org-mode Stuff
-
-#+begin_src emacs-lisp
-
-  (defhydra hydra-org-mode ()
-    "org mode"
-    ("t" org-babel-tangle "tangle current org file" :exit t)
-    ("e" org-export-dispatch "export current org buffer" :exit t))
-
-#+end_src
-
-***** Resize Frames
-
-#+begin_src emacs-lisp
-
-  (defhydra hydra-resize-frames ()
-    "resize frames"
-    ("j" move-border-down  "move border down")
-    ("k" move-border-up    "move border up")
-    ("h" move-border-left  "move border left")
-    ("l" move-border-right "move border right")
-    ("f" nil "finished" :exit t))
-
-#+end_src
-
 *** Funcions
 **** Reindent-buffer
 
@@ -901,6 +816,88 @@ on an of.
     (my/org-emphasis-markers-status))
 
   (global-set-key [f9] 'my/toggle-org-hide-emphasis-markers)
+
+#+end_src
+
+*** Hydra
+
+#+begin_src emacs-lisp
+
+  (use-package hydra
+    :defer t)
+
+#+end_src
+
+**** Hydras
+***** Emacs Actions
+
+#+begin_src emacs-lisp
+  (defhydra hydra-emacs-actions (:timeout 5)
+    "actions"
+    ("g" lsp-ui-doc-show "display hover information" :exit t))
+#+end_src
+
+***** Toggle stuff
+
+#+begin_src emacs-lisp
+
+  (defhydra hydra-toggle (:timeout 5)
+    "toggle"
+    ("t" toggle-truncate-lines "truncate lines" :exit t)
+    ("l" display-line-numbers-mode "line numbers" :exit t)
+    ("c" visual-fill-column-mode "center text in buffers" :exit t)
+    ("d" display-fill-column-indicator-mode "column indicator" :exit t)
+    ("e" my/toggle-org-hide-emphasis-markers "emphasis-markers" :exit t))
+
+#+end_src
+
+***** Text Scaling
+
+This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to design a transient key binding for quickly adjusting the scale of the text on screen.  We define a hydra that is bound to =C-s t s= and, once activated, =j= and =k= increase and decrease the text scale.  You can press any other key (or =f= specifically) to exit the transient key map.
+
+#+begin_src emacs-lisp
+
+  (defhydra hydra-text-scale (:timeout 5)
+    "scale text"
+    ("j" text-scale-increase "in")
+    ("k" text-scale-decrease "out")
+    ("f" nil "finished" :exit t))
+
+#+end_src
+
+***** Insert date time at point
+
+#+begin_src emacs-lisp
+
+  (defhydra hydra-insert-date-and-time-at-point ()
+    "insert date and time at point"
+    ("n" now "insert date and time" :exit t)
+    ("t" today "insert date time long" :exit t))
+
+#+end_src
+
+***** Org-mode Stuff
+
+#+begin_src emacs-lisp
+
+  (defhydra hydra-org-mode ()
+    "org mode"
+    ("t" org-babel-tangle "tangle current org file" :exit t)
+    ("e" org-export-dispatch "export current org buffer" :exit t))
+
+#+end_src
+
+***** Resize Frames
+
+#+begin_src emacs-lisp
+
+  (defhydra hydra-resize-frames ()
+    "resize frames"
+    ("j" move-border-down  "move border down")
+    ("k" move-border-up    "move border up")
+    ("h" move-border-left  "move border left")
+    ("l" move-border-right "move border right")
+    ("f" nil "finished" :exit t))
 
 #+end_src
 
@@ -1053,6 +1050,24 @@ We use the [[https://github.com/emacscollective/no-littering/blob/master/no-litt
 
 #+end_src
 
+** Custom set variables
+
+#+begin_src emacs-lisp
+
+  (setq custom-file (concat *emacsd-directory* "custom-set-variables.el"))
+
+  (custom-set-variables
+   ;; custom-set-variables was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   '(python-shell-interpreter (python-or-python3))
+   '(warning-suppress-types '((use-package) (comp))))
+
+  (load-file custom-file)
+
+#+end_src
+
 ** Other Stuff
 
 The stuff here is all the stuff i don't want to be part of the initial config.
@@ -1064,18 +1079,6 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
 #+begin_src emacs-lisp :tangle ./conf/cc.el
 
   (add-hook 'cc-mode 'lsp-deferred)
-
-#+end_src
-
-*** clojure.el
-
-#+begin_src emacs-lisp :tangle ./conf/clojure.el
-
-  (use-package clojure-mode)
-  (use-package cider)
-
-  (when (eq system-type 'gnu/linux)
-    (setq exec-path (append exec-path '("~/bin/"))))
 
 #+end_src
 
@@ -1101,6 +1104,7 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
     :hook (xml-mode . dotnet-mode)
     :hook (dotnet-mode . lsp-deferred)
     :bind (:map dotnet-mode-map ("<f5>" . dotnet-run)))
+
 #+end_src
 
 *** elixir.el
@@ -1115,6 +1119,7 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
 
   (use-package erlang)
   (use-package edts)
+
 #+end_src
 
 *** go.el
@@ -1158,6 +1163,19 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
     :hook (kotlin-mode . lsp))
 
   (add-to-list 'auto-mode-alist '("\\.kts\\'" . kotlin-mode))
+
+#+end_src
+
+*** clojure.el
+
+#+begin_src emacs-lisp :tangle ./conf/clojure.el
+
+  (use-package clojure-mode)
+  (use-package cider)
+
+  (when (eq system-type 'gnu/linux)
+    (setq exec-path (append exec-path '("~/bin/"))))
+
 #+end_src
 
 *** jvm.el
@@ -1197,17 +1215,6 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
 
   (use-package nix-mode)
   (use-package nix-buffer)
-#+end_src
-
-*** obsidian.el
-
-#+begin_src emacs-lisp :tangle ./conf/obsidian.el
-
-  (use-package obsidian
-    :straight (:type git :host github :repo "licht1stein/obsidian.el")
-    :config (obsidian-specify-path "~/Documents/Dokumentation.Wiki")
-    :custom
-    (obsidian-inbox-directory "Inbox"))
 
 #+end_src
 
@@ -1305,6 +1312,7 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
   (use-package yaml-mode)
   (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
   (add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-mode))
+
 #+end_src
 
 *** zig.el
@@ -1316,6 +1324,7 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
 #+end_src
 
 ** Finishing up
+
 #+begin_src emacs-lisp
 
   (load-file "~/.myinit.el") ; I want to be able to have some things specific to the maschine im working on. So i put some put some stuff into ~/.myinitel.

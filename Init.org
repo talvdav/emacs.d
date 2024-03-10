@@ -700,7 +700,7 @@ Try these commands with =M-x=:
 
 [[https://emacs-lsp.github.io/dap-mode/][dap-mode]] is an excellent package for bringing rich debugging capabilities to Emacs via the [[https://microsoft.github.io/debug-adapter-protocol/][Debug Adapter Protocol]].  You should check out the [[https://emacs-lsp.github.io/dap-mode/page/configuration/][configuration docs]] to learn how to configure the debugger for your language.  Also make sure to check out the documentation for the debug adapter to see what configuration parameters are available to use for your debug templates!
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp tangle: no
 
   (use-package dap-mode
     ;; Uncomment the config below if you want all UI panes to be hidden by default!
@@ -969,6 +969,25 @@ We use the [[https://github.com/emacscollective/no-littering/blob/master/no-litt
 
 #+end_src
 
+** Custom set variables
+
+#+begin_src emacs-lisp
+
+  (setq custom-file (concat *emacsd-directory* "custom-set-variables.el"))
+  (unless (file-exists-p custom-file)
+  (write-region "" nil custom-file))
+  (custom-set-variables
+   ;; custom-set-variables was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   '(python-shell-interpreter (python-or-python3))
+   '(warning-suppress-types '((use-package) (comp))))
+
+  (load-file custom-file)
+
+#+end_src
+
 ** Eye Candy
 *** Set frame transparency
 
@@ -1047,24 +1066,6 @@ We use the [[https://github.com/emacscollective/no-littering/blob/master/no-litt
   ;;    (moe-theme-apply-color 'red)))
 
   (load-theme theme)
-
-#+end_src
-
-** Custom set variables
-
-#+begin_src emacs-lisp
-
-  (setq custom-file (concat *emacsd-directory* "custom-set-variables.el"))
-
-  (custom-set-variables
-   ;; custom-set-variables was added by Custom.
-   ;; If you edit it by hand, you could mess it up, so be careful.
-   ;; Your init file should contain only one such instance.
-   ;; If there is more than one, they won't work right.
-   '(python-shell-interpreter (python-or-python3))
-   '(warning-suppress-types '((use-package) (comp))))
-
-  (load-file custom-file)
 
 #+end_src
 

@@ -48,6 +48,8 @@ In this file i define some things that both my init file and the bootstrap file 
 
   (setq create-lockfiles nil)
 
+  (setq display-line-numbers-type 'relative)
+
 #+end_src
 
 *** Encodings

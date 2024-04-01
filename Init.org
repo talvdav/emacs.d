@@ -183,8 +183,8 @@ We use [[https://github.com/jOOSTKREMERS/visual-fill-column][visual-fill-column]
   (use-package ox-rst ;; Export to reStructuredText
     :config (require 'ox-rst))
 
-  (use-package ox-pandoc
-    :config (require 'ox-pandoc))
+  ;;(use-package ox-pandoc
+  ;;  :config (require 'ox-pandoc))
 
 #+end_src
 

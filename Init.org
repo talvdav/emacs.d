@@ -48,6 +48,8 @@ In this file i define some things that both my init file and the bootstrap file 
 
   (setq create-lockfiles nil)
 
+  (setq display-line-numbers-type 'relative)
+
 #+end_src
 
 *** Encodings
@@ -162,7 +164,8 @@ so i try to find out what it is called on the current system and set the python-
     (add-to-list 'org-structure-template-alist '("py" . "src python"))
     (add-to-list 'org-structure-template-alist '("dt" . "src dot"))
     (add-to-list 'org-structure-template-alist '("zg" . "src zig"))
-    (add-to-list 'org-structure-template-alist '("go" . "src go")))
+    (add-to-list 'org-structure-template-alist '("go" . "src go"))
+    (add-to-list 'org-structure-template-alist '("ex" . "src elixir")))
 
 #+end_src
 
@@ -793,7 +796,7 @@ The characters are
 | "="       | =Foobar= | verbatim       |
 | "~"       | ~Foobar~ | code           |
 | "_"       | _Foobar_ | underlined     |
-| "+"       | +Foobar+ | strike-through |
+| "+"       | Foobar+ | strike-through |
 
 To make Org files look prettier i do not show those characters by default, this however
 can make editing text a bit difficult, so here i define some functions to toggle this feature
@@ -974,8 +977,10 @@ We use the [[https://github.com/emacscollective/no-littering/blob/master/no-litt
 #+begin_src emacs-lisp
 
   (setq custom-file (concat *emacsd-directory* "custom-set-variables.el"))
+
   (unless (file-exists-p custom-file)
   (write-region "" nil custom-file))
+
   (custom-set-variables
    ;; custom-set-variables was added by Custom.
    ;; If you edit it by hand, you could mess it up, so be careful.
@@ -1094,9 +1099,11 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
 
   (if (< emacs-major-version 29)
       (use-package csharp-mode
+        :defer t
         :after dotnet))
 
   (use-package fsharp-mode
+    :defer t
     :after dotnet)
 
   (use-package dotnet
@@ -1116,10 +1123,13 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
     :hook (elixir-mode . lsp-deferred)
     :hook (elixir-mode . yas-minor-mode))
 
-  (use-package mix)
+  (use-package mix
+    :defer t)
 
-  (use-package erlang)
-  (use-package edts)
+  (use-package erlang
+    :defer t)
+  (use-package edts
+    :defer t)
 
 #+end_src
 
@@ -1127,7 +1137,8 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
 
 #+begin_src emacs-lisp :tangle ./conf/go.el
 
-  (use-package go-mode)
+  (use-package go-mode
+    :defer t)
 
 #+end_src
 
@@ -1136,7 +1147,7 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
 #+begin_src emacs-lisp :tangle ./conf/graphviz.el
 
   (use-package graphviz-dot-mode
-    :ensure t
+    :defer t
     :config
     (setq graphviz-dot-indent-width 4))
 
@@ -1146,7 +1157,8 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
 
 #+begin_src emacs-lisp :tangle ./conf/haskell.el
 
-  (use-package haskell-mode)
+  (use-package haskell-mode
+    :defer t)
 
 #+end_src
 
@@ -1154,9 +1166,12 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
 
 #+begin_src emacs-lisp :tangle ./conf/java.el
 
-  (use-package javap-mode)
-  (use-package kotlin-mode) ;; for gradle kotlin script files
-  (use-package scala-mode)
+  (use-package javap-mode
+    :defer t)
+  (use-package kotlin-mode
+    :defer t) ;; for gradle kotlin script files
+  (use-package scala-mode
+    :defer t)
 
   (use-package lsp-java
     :hook (java-mode . lsp)
@@ -1171,8 +1186,10 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
 
 #+begin_src emacs-lisp :tangle ./conf/clojure.el
 
-  (use-package clojure-mode)
-  (use-package cider)
+  (use-package clojure-mode
+    :defer t)
+  (use-package cider
+    :defer t)
 
   (when (eq system-type 'gnu/linux)
     (setq exec-path (append exec-path '("~/bin/"))))
@@ -1183,13 +1200,19 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
 
 #+begin_src emacs-lisp :tangle ./conf/jvm.el
 
-  (use-package clojure-mode)
-  (use-package cider)
+  (use-package clojure-mode
+    :defer t)
+  (use-package cider
+    :defer t)
 
-  (use-package javap-mode)
-  (use-package kotlin-mode) ;; for gradle kotlin script files
-  (use-package scala-mode)
-  (use-package groovy-mode)
+  (use-package javap-mode
+    :defer t)
+  (use-package kotlin-mode
+    :defer t) ;; for gradle kotlin script files
+  (use-package scala-mode
+    :defer t)
+  (use-package groovy-mode
+    :defer t)
 
   (use-package lsp-java
     :hook (java-mode . lsp)
@@ -1206,7 +1229,8 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
 
 #+begin_src emacs-lisp :tangle ./conf/lua.el
 
-  (use-package lua-mode)
+  (use-package lua-mode
+    :defer t)
 
 #+end_src
 
@@ -1214,8 +1238,10 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
 
 #+begin_src emacs-lisp :tangle ./conf/nix.el
 
-  (use-package nix-mode)
-  (use-package nix-buffer)
+  (use-package nix-mode
+    :defer t)
+  (use-package nix-buffer
+    :defer t)
 
 #+end_src
 
@@ -1238,7 +1264,8 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
       ;; Use opam switch to lookup ocamlmerlin binary
       (setq merlin-command 'opam)))
 
-  (use-package tuareg-mode)
+  (use-package tuareg-mode
+    :defer t)
 
 #+end_src
 
@@ -1246,7 +1273,8 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
 
 #+begin_src emacs-lisp :tangle ./conf/php.el
 
-  (use-package php-mode)
+  (use-package php-mode
+    :defer t)
 
 #+end_src
 
@@ -1254,7 +1282,8 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
 
 #+begin_src emacs-lisp :tangle ./conf/powershell.el
 
-  (use-package powershell)
+  (use-package powershell
+    :defer t)
 
 #+end_src
 
@@ -1262,8 +1291,10 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
 
 #+begin_src emacs-lisp :tangle ./conf/python.el
 
-  (use-package pyenv-mode)
-  (use-package kivy-mode)
+  (use-package pyenv-mode
+    :defer t)
+  (use-package kivy-mode
+    :defer t)
 
 #+end_src
 
@@ -1271,9 +1302,12 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
 
 #+begin_src emacs-lisp :tangle ./conf/racket.el
 
-  (use-package racket-mode)
-  (use-package geiser)
-  (use-package geiser-racket)
+  (use-package racket-mode
+    :defer t)
+  (use-package geiser
+    :defer t)
+  (use-package geiser-racket
+    :defer t)
 
 #+end_src
 
@@ -1284,10 +1318,12 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
   (use-package rust-mode
     :hook (rust-mode . lsp-deferred))
 
-  (use-package toml-mode)
+  (use-package toml-mode
+    :defer t)
   (add-to-list 'auto-mode-alist '("\\.toml\\'" . toml-mode))
 
-  (use-package cargo)
+  (use-package cargo
+    :defer t)
 
   (use-package cargo-mode
     :hook (rust-mode . cargo-minor-mode))
@@ -1310,7 +1346,8 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
 
 #+begin_src emacs-lisp :tangle ./conf/yaml.el
 
-  (use-package yaml-mode)
+  (use-package yaml-mode
+    :defer t)
   (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
   (add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-mode))
 
@@ -1320,7 +1357,8 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
 
 #+begin_src emacs-lisp :tangle ./conf/zig.el
 
-  (use-package zig-mode)
+  (use-package zig-mode
+    :defer t)
 
 #+end_src
 

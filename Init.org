@@ -50,6 +50,11 @@ In this file i define some things that both my init file and the bootstrap file 
 
   (setq display-line-numbers-type 'relative)
 
+  (setq-default indent-tabs-mode nil)
+  (setq tab-width 4)
+  (defvaralias 'c-basic-offset 'tab-width)
+  (defvaralias 'cperl-indent-level 'tab-width)
+
 #+end_src
 
 *** Encodings
@@ -64,9 +69,9 @@ In this file i define some things that both my init file and the bootstrap file 
 
     ;; better scrolling experience
     (setq scroll-margin 0
-        scroll-conservatively 10000
-        scroll-preserve-screen-position t
-        auto-window-vscroll nil)
+          scroll-conservatively 10000
+          scroll-preserve-screen-position t
+          auto-window-vscroll nil)
 
     ;; on Win32, cooperation between Emacs and other Unicode applications is weird.
     ;; let's avoid that.

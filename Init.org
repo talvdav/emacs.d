@@ -983,6 +983,9 @@ We use the [[https://github.com/emacscollective/no-littering/blob/master/no-litt
 
   (setq custom-file (concat *emacsd-directory* "custom-set-variables.el"))
 
+  (unless (file-exists-p custom-file)
+  (write-region "" nil custom-file))
+
   (custom-set-variables
    ;; custom-set-variables was added by Custom.
    ;; If you edit it by hand, you could mess it up, so be careful.

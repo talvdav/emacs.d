@@ -14,11 +14,14 @@
 
 * Convenience Functions and Aliases
 
+** Aliases
 #+begin_src emacs-lisp
 
   (defalias 'tangle 'org-babel-tangle "tangle the current file")
 
 #+end_src
+
+** Functions
 
 * Config
 ** Global Variables
@@ -94,25 +97,6 @@ In this file i define some things that both my init file and the bootstrap file 
 
 #+end_src
 
-** Org Structure Templates
-
-#+begin_src emacs-lisp
-
-  (with-eval-after-load 'org
-    ;;;; This is needed as of Org 9.2
-    (require 'org-tempo)
-
-    (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
-    (add-to-list 'org-structure-template-alist '("rs" . "src rust"))
-    (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
-    (add-to-list 'org-structure-template-alist '("py" . "src python"))
-    (add-to-list 'org-structure-template-alist '("dt" . "src dot"))
-    (add-to-list 'org-structure-template-alist '("zg" . "src zig"))
-    (add-to-list 'org-structure-template-alist '("go" . "src go"))
-    (add-to-list 'org-structure-template-alist '("ex" . "src elixir")))
-
-#+end_src
-
 ** More realestate by removing scrollbars and toolbars
 
 #+begin_src emacs-lisp
@@ -154,8 +138,15 @@ In this file i define some things that both my init file and the bootstrap file 
 
 #+end_src
 
+** Inhibit startup message
+
+#+begin_src emacs-lisp
+
+  (setq inhibit-startup-message t)
+
+#+end_src
 * Packagemanagement
-*** Straight.el
+** Straight.el
 
 #+begin_src emacs-lisp
 
@@ -176,9 +167,89 @@ In this file i define some things that both my init file and the bootstrap file 
   (setq straight-use-package-by-default t)
 
 #+end_src
+* Packages
+** Org
 
-*** Org
-*** Which-key
+#+begin_src emacs-lisp
+
+  (straight-use-package 'org)
+
+#+end_src
+
+*** Org Structure Templates
+
+#+begin_src emacs-lisp
+
+  (with-eval-after-load 'org
+    ;;;; This is needed as of Org 9.2
+    (require 'org-tempo)
+
+    (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
+    (add-to-list 'org-structure-template-alist '("rs" . "src rust"))
+    (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+    (add-to-list 'org-structure-template-alist '("py" . "src python"))
+    (add-to-list 'org-structure-template-alist '("dt" . "src dot"))
+    (add-to-list 'org-structure-template-alist '("zg" . "src zig"))
+    (add-to-list 'org-structure-template-alist '("go" . "src go"))
+    (add-to-list 'org-structure-template-alist '("ex" . "src elixir")))
+
+#+end_src
+
+*** Org Bullets
+
+[[https://github.com/sabof/org-bullets][org-bullets]] replaces the heading stars in =org-mode= buffers with nicer looking characters that you can control.  Another option for this is [[https://github.com/integral-dw/org-superstar-mode][org-superstar-mode]] which we may cover in a later video.
+
+#+begin_src emacs-lisp
+
+  (use-package org-bullets
+    :hook (org-mode . org-bullets-mode)
+    :custom
+    (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+
+#+end_src
+
+*** Center Org Buffers
+
+We use [[https://github.com/jOOSTKREMERS/visual-fill-column][visual-fill-column]] to center =org-mode= buffers for a more pleasing writing experience as it centers the contents of the buffer horizontally to seem more like you are editing a document.  This is really a matter of personal preference so you can remove the block below if you don't like the behavior.
+
+#+begin_src emacs-lisp :tangle no
+
+  (setq visual-fill 120)
+
+  (defun efs/org-mode-visual-fill ()
+    "Function from emacs from scratch."
+    (setq visual-fill-column-width visual-fill
+          visual-fill-column-center-text t)
+    (visual-fill-column-mode 1))
+
+  (defun my/markdown-mode-visual-fill ()
+    "Function from emacs from scratch."
+    (setq visual-fill-column-width visual-fill
+          visual-fill-column-center-text t)
+    (visual-fill-column-mode 1))
+
+  (use-package visual-fill-column
+    :hook (org-mode . efs/org-mode-visual-fill)
+    :hook (markdown-mode . my/markdown-mode-visual-fill))
+
+#+end_src
+
+*** Org Export
+
+#+begin_src emacs-lisp
+
+  (use-package ox-gfm ;; Github Flavored Markdown
+    :config (require 'ox-gfm))
+
+  (use-package ox-rst ;; Export to reStructuredText
+    :config (require 'ox-rst))
+
+  (use-package ox-pandoc
+    :config (require 'ox-pandoc))
+
+#+end_src
+
+** Which-key
 
 #+begin_src emacs-lisp
 
@@ -304,7 +375,6 @@ Emacs' built in commenting functionality =comment-dwim= (usually bound to =M-;=)
 
 #+end_src
 
-
 *** Colorscheme
 
 #+begin_src emacs-lisp
@@ -316,9 +386,39 @@ Emacs' built in commenting functionality =comment-dwim= (usually bound to =M-;=)
 
 #+end_src
 
-* End
+** Window/Frame management
+*** Window Numbering
+
+Every Window will be asigned a number and can be selected by pressing M-{1-9}
+
 #+begin_src emacs-lisp
 
+  (use-package window-numbering
+    :config (window-numbering-mode))
+
+#+end_src
+
+*** Move Border
+
+#+begin_src emacs-lisp
+
+  (straight-use-package '(move-border
+                          :host github
+                          :repo "ramnes/move-border"
+                          :branch "master"))
+
+  (require 'move-border)
+
+  (global-set-key (kbd "C-M-j") 'move-border-down)
+  (global-set-key (kbd "C-M-k") 'move-border-up)
+  (global-set-key (kbd "C-M-h") 'move-border-left)
+  (global-set-key (kbd "C-M-l") 'move-border-right)
+
+#+end_src
+
+* End
+#+begin_src emacs-lisp
+  (cd "~")
   (provide 'init)
   ;;; init.el ends here
 

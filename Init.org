@@ -107,11 +107,31 @@ The name for the default python interpreter differs between windows and between 
 so i try to find out what it is called on the current system and set the python-shell-interpreter accordingly.
 #+begin_src emacs-lisp
 
-  (defun python-or-python3 ()
-    (if (< 0 (call-process (executable-find "python") nil nil nil "--version"))
-        "python3"
-      "python"))
+  (setq pyexe (executable-find "python"))
+  (setq py3exe (executable-find "python3"))
 
+  (defun python-exe ()
+    (if pyexe
+        (if (= 0 (call-process pyexe nil nil nil "--version"))
+            :t
+          nil)
+      nil))
+
+  (defun python3-exe ()
+    (if py3exe
+        (if (= 0 (call-process py3exe nil nil nil "--version"))
+            true
+          nil)
+      nil))
+
+  (defun python-or-python3 ()
+    (if (python3-exe)
+        py3exe
+      (if (python-exe)
+          pyexe
+        "")))
+
+  (python-or-python3)
 #+end_src
 
 ** Packages
@@ -241,7 +261,8 @@ We use [[https://github.com/jOOSTKREMERS/visual-fill-column][visual-fill-column]
         (org-babel-tangle))))
 
 
-  (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'efs/org-babel-tangle-config)))
+  ;(add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'efs/org-babel-tangle-config)))
+
   (with-eval-after-load 'org
     (org-babel-do-load-languages
      'org-babel-load-languages
@@ -984,7 +1005,7 @@ We use the [[https://github.com/emacscollective/no-littering/blob/master/no-litt
   (setq custom-file (concat *emacsd-directory* "custom-set-variables.el"))
 
   (unless (file-exists-p custom-file)
-  (write-region "" nil custom-file))
+    (write-region "" nil custom-file))
 
   (custom-set-variables
    ;; custom-set-variables was added by Custom.

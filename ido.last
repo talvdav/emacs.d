@@ -1,0 +1,27 @@
+;;; -*- coding: utf-8 -*-
+
+;; ----- ido-last-directory-list -----
+(
+ ("c:/Users/thoma/" . ".emacs.d/")
+)
+
+;; ----- ido-work-directory-list -----
+(
+ "c:/Users/thoma/.emacs.d/"
+)
+
+;; ----- ido-work-file-list -----
+(
+ "Init.org"
+ "Kickstart.el.org"
+)
+
+;; ----- ido-dir-file-cache -----
+(
+ ("c:/Users/thoma/.emacs.d/" (26178 9833 0 0) "straight/" "snippets/" "server/" "README.md" "Old_Init.org" "Kickstart.el.org~" "Kickstart.el.org" "Init.org" "init.el" "emacs/" "elpa/" "edts/" "custom-set-variables.el" "conf/" "auto-save-list/" ".projectile" ".gitignore" ".git/" ".#Kickstart.el.org" "#Init.org#" "../" "./")
+
+ ("c:/Users/thoma/" (26177 48318 0 0) "_lesshst" "zipFile.zip" "Websiten-Designer.org" "vue_2/" "Vorlagen/" "VirtualBox VMs/" "Videos/" "todos.exe" "StudioProjects/" "stubbig m opnsense-praktiker.epub" "Startmenü/" "source/" "Software/" "sid.php" "sid.m" "Sid.livemd" "sid.jpeg" "SendTo/" "Searches/" "sda.svg" "Scripts/" "Saved Games/" "rg.out" "REGEDIT4.reg" "Recent/" "q2H6YIW.jpeg" "pwdb.keyx" "Projects/" "Playground/" "Pictures/" "Path2.txt" "Path.txt" "package-lock.json" "Org-Spreadsheet.tex" "Org-Spreadsheet.pdf" "OneDrive/" "Omada Controller/" "Oberflächen.txt" "ntuser.ini" "NTUSER.DAT{a2332f18-cdbf-11ec-8680-002248483d79}.TMContainer00000000000000000002.regtrans-ms" "NTUSER.DAT{a2332f18-cdbf-11ec-8680-002248483d79}.TMContainer00000000000000000001.regtrans-ms" "NTUSER.DAT{a2332f18-cdbf-11ec-8680-002248483d79}.TM.blf" "ntuser.dat.LOG2" "ntuser.dat.LOG1" "NTUSER.DAT" "notes.org" "nginx.nix" "Netzwerkumgebung/" "NetHier/" "NetHack/" "Music/" "Main.hs" "main.c" "Lokale Einstellungen/" "Links/" "kern.org" "KastenDokuAWS.org" "jmg" "Intel/" "InstallationLog.txt" "Init.org.html" "ideavimrc" "hoechstadt-kd.dyndns.info/" "GSued.org" "go/" "fw_mac_list_cleanedup.org" "fw_mac_list.org" "fu/" "fs/" "foobar.txt" "foo.odt" "foo.html" "fonts/" "Feuerweher_AP_Inventarisierung.org" "Feuerweher_AP_Inventarisierung.odt" "Favorites/" "fac.hs" "Eigene Dateien/" "eicher.org" "eclipse-workspace/" "eclipse/" "dyndns-ping-test.cmd" "Druckumgebung/" "DreamChess-0.3.0-win64/" "Downloads/" "dotfiles/" "Documents/" "Docker/" "Desktop/" "decode.jpg" "Cookies/" "Contacts/" "command-line-murder-mystery/" "cli-tools.txt" "choco_list.txt" "choco_list.ps1" "bin/" "AWS_Inventar_Tafeln_AppleTV_etc.org" "AWS_Inventar_Tafeln_AppleTV_etc.odt" "AppData/" "Anwendungsdaten/" "ansel/" "all.zip" "Adressnummern.txt" "3D Objects/" "20230117_backup_folivora/" "11111.xml" ".zvm/" ".zenmap/" ".yarnrc" ".wezterm.lua" ".vscode/" ".vrapperrc" ".virtualenvs/" ".VirtualBox/" ".viminfo" ".texlive2023/" ".templateengine/" ".sts4/" ".ssh/" ".spyder-py3/" ".sonic-pi/" ".rustup/" ".redhat/" ".python_history" ".p2/" ".org-timestamps/" ".openjfx/" ".omnisharp/" ".obsidian.vimrc" ".nuget/" ".node_repl_history" ".myinit.el" ".mupdf.history" ".mix/" ".matplotlib/" ".m2/" ".logseq/" ".local/" ".lesshst" ".lemminx/" ".lein/" ".jupyter/" ".jdks/" ".ipython/" ".idlerc/" ".ideavimrc" ".hex/" ".gwteambuilder/" ".gradle/" ".gnupg/" ".gitnuro/" ".gitlibs/" ".gitconfig" ".git-for-windows-updater" ".erlang.cookie" ".emulator_console_auth_token" ".emacs.d/" ".emacs-backups/" ".elixir_ls/" ".eclipse/" ".dotnet/" ".docker/" ".dbus-keyrings/" ".continuum/" ".config/" ".condarc" ".conda/" ".clojure/" ".chocolatey/" ".cargo/" ".cache/" ".bash_history" ".azure/" ".aws/" ".android/" ".anaconda/" ".#Feuerweher_AP_Inventarisierung.org" "../" "./")
+)
+
+;; ----- ido-unc-hosts-cache -----
+t

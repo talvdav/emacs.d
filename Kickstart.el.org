@@ -145,6 +145,42 @@ In this file i define some things that both my init file and the bootstrap file 
   (setq inhibit-startup-message t)
 
 #+end_src
+
+** yes-or-no-p
+
+use =y= and =n= instead ot typing out =yes= or =no=
+
+#+begin_src emacs-lisp
+
+  (fset 'yes-or-no-p 'y-or-n-p)
+
+#+end_src
+
+#+begin_src emacs-lisp
+
+  (setq confirm-kill-emacs 'yes-or-no-p)
+
+#+end_src
+
+*** Font Configuration
+
+I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://fonts.google.com/specimen/Cantarell][Cantarell]] fonts for this configuration which will more than likely need to be installed on your machine.  Both can usually be found in the various Linux distro package managers or downloaded from the links above.
+
+#+begin_src emacs-lisp
+
+  (defvar efs/default-font-size 110)
+  (defvar efs/default-variable-font-size 110)
+
+  (set-face-attribute 'default nil :font "Fira Code" :height efs/default-font-size)
+
+  ;; Set the fixed pitch face
+  (set-face-attribute 'fixed-pitch nil :font "Fira Code" :height efs/default-font-size)
+
+  ;; Set the variable pitch face
+  (set-face-attribute 'variable-pitch nil :font "Cantarell" :height efs/default-variable-font-size :weight 'regular)
+
+#+end_src
+
 * Packagemanagement
 ** Straight.el
 

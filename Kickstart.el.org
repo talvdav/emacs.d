@@ -12,19 +12,19 @@
 
 #+end_src
 
-* Convenience Functions and Aliases
+** Convenience Functions and Aliases
+*** Aliases
 
-** Aliases
 #+begin_src emacs-lisp
 
   (defalias 'tangle 'org-babel-tangle "tangle the current file")
 
 #+end_src
 
-** Functions
+Functions
 
-* Config
-** Global Variables
+** Config
+*** Global Variables
 
 In this file i define some things that both my init file and the bootstrap file need.
 
@@ -35,23 +35,23 @@ In this file i define some things that both my init file and the bootstrap file 
   (setq user-emacs-directory  "~/.emacs.d/emacs/")
 
   (setq backup-directory-alist '(("." . "~/.emacs-backups"))
-	backup-by-copying      t  ; Don't de-link hard links
-	version-control        t  ; Use version numbers on backups
-	delete-old-versions    nil  ; Automatically delete excess backups:
-	kept-new-versions      5  ; how many of the newest versions to keep
-	kept-old-versions      5) ; and how many of the old
+        backup-by-copying      t  ; Don't de-link hard links
+        version-control        t  ; Use version numbers on backups
+        delete-old-versions    nil  ; Automatically delete excess backups:
+        kept-new-versions      5  ; how many of the newest versions to keep
+        kept-old-versions      5) ; and how many of the old
 
   (defvar temp-directory "~/.emacs-backups/autosave/")
   (make-directory temp-directory t)
 
   (setq auto-save-default nil)
   (setq auto-save-directory temp-directory
-	auto-save-hash-directory (concat temp-directory "/autosave-hash")
-	auto-save-directory-fallback "~/emacs-autosave"
-	auto-save-list-file-prefix (concat temp-directory "/autosave-")
-	auto-save-hash-p nil
-	auto-save-timeout 100
-	auto-save-interval 300)
+        auto-save-hash-directory (concat temp-directory "/autosave-hash")
+        auto-save-directory-fallback "~/emacs-autosave"
+        auto-save-list-file-prefix (concat temp-directory "/autosave-")
+        auto-save-hash-p nil
+        auto-save-timeout 100
+        auto-save-interval 300)
   (make-directory auto-save-directory t)
 
   (setq create-lockfiles nil)
@@ -65,7 +65,7 @@ In this file i define some things that both my init file and the bootstrap file 
 
 #+end_src
 
-*** Blinking Cursors are the worst invention since NULL
+**** Blinking Cursors are the worst invention since NULL
 
 #+begin_src emacs-lisp
 
@@ -73,7 +73,7 @@ In this file i define some things that both my init file and the bootstrap file 
 
 #+end_src
 
-*** Encodings
+**** Encodings
 
 #+begin_src emacs-lisp
 
@@ -85,9 +85,9 @@ In this file i define some things that both my init file and the bootstrap file 
 
     ;; better scrolling experience
     (setq scroll-margin 0
-	  scroll-conservatively 10000
-	  scroll-preserve-screen-position t
-	  auto-window-vscroll nil)
+          scroll-conservatively 10000
+          scroll-preserve-screen-position t
+          auto-window-vscroll nil)
 
     ;; on Win32, cooperation between Emacs and other Unicode applications is weird.
     ;; let's avoid that.
@@ -97,7 +97,7 @@ In this file i define some things that both my init file and the bootstrap file 
 
 #+end_src
 
-** More realestate by removing scrollbars and toolbars
+*** More realestate by removing scrollbars and toolbars
 
 #+begin_src emacs-lisp
 
@@ -110,7 +110,7 @@ In this file i define some things that both my init file and the bootstrap file 
 
 #+end_src
 
-** Blink instead of beep
+*** Blink instead of beep
 
 #+begin_src emacs-lisp
 
@@ -118,7 +118,7 @@ In this file i define some things that both my init file and the bootstrap file 
 
 #+end_src
 
-** Completion
+*** Completion
 
 #+begin_src emacs-lisp
 
@@ -126,7 +126,7 @@ In this file i define some things that both my init file and the bootstrap file 
 
 #+end_src
 
-** Better scrolling
+*** Better scrolling
 
 #+begin_src emacs-lisp
 
@@ -138,7 +138,7 @@ In this file i define some things that both my init file and the bootstrap file 
 
 #+end_src
 
-** Inhibit startup message
+*** Inhibit startup message
 
 #+begin_src emacs-lisp
 
@@ -146,7 +146,7 @@ In this file i define some things that both my init file and the bootstrap file 
 
 #+end_src
 
-** yes-or-no-p
+*** yes-or-no-p
 
 use =y= and =n= instead ot typing out =yes= or =no=
 
@@ -181,30 +181,30 @@ I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://f
 
 #+end_src
 
-* Packagemanagement
-** Straight.el
+** Packagemanagement
+*** Straight.el
 
 #+begin_src emacs-lisp
 
   (defvar bootstrap-version)
   (let ((bootstrap-file
-	 (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-	(bootstrap-version 5))
+         (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+        (bootstrap-version 5))
     (unless (file-exists-p bootstrap-file)
       (with-current-buffer
-	  (url-retrieve-synchronously
-	   "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-	   'silent 'inhibit-cookies)
-	(goto-char (point-max))
-	(eval-print-last-sexp)))
+          (url-retrieve-synchronously
+           "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+           'silent 'inhibit-cookies)
+        (goto-char (point-max))
+        (eval-print-last-sexp)))
     (load bootstrap-file nil 'nomessage))
 
   (straight-use-package 'use-package)
   (setq straight-use-package-by-default t)
 
 #+end_src
-* Packages
-** Org
+*** Packages
+**** Org
 
 #+begin_src emacs-lisp
 
@@ -212,7 +212,7 @@ I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://f
 
 #+end_src
 
-*** Org Structure Templates
+**** Org Structure Templates
 
 #+begin_src emacs-lisp
 
@@ -231,7 +231,7 @@ I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://f
 
 #+end_src
 
-*** Org Bullets
+**** Org Bullets
 
 [[https://github.com/sabof/org-bullets][org-bullets]] replaces the heading stars in =org-mode= buffers with nicer looking characters that you can control.  Another option for this is [[https://github.com/integral-dw/org-superstar-mode][org-superstar-mode]] which we may cover in a later video.
 
@@ -244,7 +244,7 @@ I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://f
 
 #+end_src
 
-*** Center Org Buffers
+**** Center Org Buffers
 
 We use [[https://github.com/jOOSTKREMERS/visual-fill-column][visual-fill-column]] to center =org-mode= buffers for a more pleasing writing experience as it centers the contents of the buffer horizontally to seem more like you are editing a document.  This is really a matter of personal preference so you can remove the block below if you don't like the behavior.
 
@@ -270,7 +270,7 @@ We use [[https://github.com/jOOSTKREMERS/visual-fill-column][visual-fill-column]
 
 #+end_src
 
-*** Org Export
+**** Org Export
 
 #+begin_src emacs-lisp
 
@@ -285,7 +285,7 @@ We use [[https://github.com/jOOSTKREMERS/visual-fill-column][visual-fill-column]
 
 #+end_src
 
-** Which-key
+*** Which-key
 
 #+begin_src emacs-lisp
 
@@ -422,8 +422,8 @@ Emacs' built in commenting functionality =comment-dwim= (usually bound to =M-;=)
 
 #+end_src
 
-** Window/Frame management
-*** Window Numbering
+*** Window/Frame management
+**** Window Numbering
 
 Every Window will be asigned a number and can be selected by pressing M-{1-9}
 
@@ -434,7 +434,7 @@ Every Window will be asigned a number and can be selected by pressing M-{1-9}
 
 #+end_src
 
-*** Move Border
+**** Move Border
 
 #+begin_src emacs-lisp
 
@@ -449,6 +449,521 @@ Every Window will be asigned a number and can be selected by pressing M-{1-9}
   (global-set-key (kbd "C-M-k") 'move-border-up)
   (global-set-key (kbd "C-M-h") 'move-border-left)
   (global-set-key (kbd "C-M-l") 'move-border-right)
+
+#+end_src
+
+*** Programming
+**** Projectmanagement
+***** Projectile
+
+[[https://projectile.mx/][Projectile]] is a project management library for Emacs which makes it a lot easier to navigate around code projects for various languages.  Many packages integrate with Projectile so it's a good idea to have it installed even if you don't use its commands directly.
+
+#+begin_src emacs-lisp
+
+  (use-package projectile
+    :diminish projectile-mode
+    :config (projectile-mode)
+    :custom ((projectile-completion-system 'vertico))
+    :bind-keymap
+    ("C-c p" . projectile-command-map)
+    :init
+    ;; NOTE: Set this to the folder where you keep your Git repos!
+    (when (file-directory-p "~/Projects")
+      (setq projectile-project-search-path '("~/Projects")))
+    (setq projectile-switch-project-action #'projectile-dired))
+
+  (use-package counsel-projectile
+    :after projectile
+    :config (counsel-projectile-mode))
+
+#+end_src
+
+***** Magit
+
+[[https://magit.vc/][Magit]] is the best Git interface I've ever used.  Common Git operations are easy to execute quickly using Magit's command panel system.
+
+#+begin_src emacs-lisp
+                                          ;(use-package sqlite)
+                                          ;(use-package sqlite3)
+
+  (use-package magit
+    :after sqlite
+    :commands magit-status
+    :custom
+    (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
+
+  ;; NOTE: Make sure to configure a GitHub token before using this package!
+  ;; - https://magit.vc/manual/forge/Token-Creation.html#Token-Creation
+  ;; - https://magit.vc/manual/ghub/Getting-Started.html#Getting-Started
+  (use-package forge
+    :after magit)
+
+#+end_src
+
+***** Harpoon
+
+#+begin_src emacs-lisp
+
+  (use-package harpoon)
+
+#+end_src
+
+****** Harpoon keybindings
+
+#+begin_src emacs-lisp :tangle no
+  ;; On vanilla (You can use another prefix instead C-c h)
+
+  ;; You can use this hydra menu that have all the commands
+  (global-set-key (kbd "C-c a") 'harpoon-quick-menu-hydra)
+  (global-set-key (kbd "C-c h <return>") 'harpoon-add-file)
+
+  ;; And the vanilla commands
+  (global-set-key (kbd "C-c h f") 'harpoon-toggle-file)
+  (global-set-key (kbd "C-c h h") 'harpoon-toggle-quick-menu)
+  (global-set-key (kbd "C-c h c") 'harpoon-clear)
+  (global-set-key (kbd "C-c h 1") 'harpoon-go-to-1)
+  (global-set-key (kbd "C-c h 2") 'harpoon-go-to-2)
+  (global-set-key (kbd "C-c h 3") 'harpoon-go-to-3)
+  (global-set-key (kbd "C-c h 4") 'harpoon-go-to-4)
+  (global-set-key (kbd "C-c h 5") 'harpoon-go-to-5)
+  (global-set-key (kbd "C-c h 6") 'harpoon-go-to-6)
+  (global-set-key (kbd "C-c h 7") 'harpoon-go-to-7)
+  (global-set-key (kbd "C-c h 8") 'harpoon-go-to-8)
+  (global-set-key (kbd "C-c h 9") 'harpoon-go-to-9)
+
+  ;; On doom emacs
+
+  ;; You can use this hydra menu that have all the commands
+  (map! :n "C-SPC" 'harpoon-quick-menu-hydra)
+  (map! :n "C-s" 'harpoon-add-file)
+
+  ;; And the vanilla commands
+  (map! :leader "j c" 'harpoon-clear)
+  (map! :leader "j f" 'harpoon-toggle-file)
+  (map! :leader "1" 'harpoon-go-to-1)
+  (map! :leader "2" 'harpoon-go-to-2)
+  (map! :leader "3" 'harpoon-go-to-3)
+  (map! :leader "4" 'harpoon-go-to-4)
+  (map! :leader "5" 'harpoon-go-to-5)
+  (map! :leader "6" 'harpoon-go-to-6)
+  (map! :leader "7" 'harpoon-go-to-7)
+  (map! :leader "8" 'harpoon-go-to-8)
+  (map! :leader "9" 'harpoon-go-to-9)
+
+#+end_src
+
+**** LSP
+***** lsp-mode
+
+We use the excellent [[https://emacs-lsp.github.io/lsp-mode/][lsp-mode]] to enable IDE-like functionality for many different programming languages via "language servers" that speak the [[https://microsoft.github.io/language-server-protocol/][Language Server Protocol]].  Before trying to set up =lsp-mode= for a particular language, check out the [[https://emacs-lsp.github.io/lsp-mode/page/languages/][documentation for your language]] so that you can learn which language servers are available and how to install them.
+The =lsp-keymap-prefix= setting enables you to define a prefix for where =lsp-mode='s default keybindings will be added.  I *highly recommend* using the prefix to find out what you can do with =lsp-mode= in a buffer.
+The =which-key= integration adds helpful descriptions of the various keys so you should be able to learn a lot just by pressing =C-c l= in a =lsp-mode= buffer and trying different things that you find there.
+
+#+begin_src emacs-lisp
+
+  (defun efs/lsp-mode-setup ()
+    "Function from emacs from scratch."
+    (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
+    (lsp-headerline-breadcrumb-mode))
+
+  (use-package lsp-mode
+    :commands (lsp lsp-deferred)
+    ;;:hook (lsp-mode . efs/lsp-mode-setup)
+    :init
+    (setq lsp-keymap-prefix "C-c l")  ;; Or 'C-l', 's-l'
+    :config
+    (lsp-enable-which-key-integration t))
+
+#+end_src
+
+***** lsp-ui
+
+[[https://emacs-lsp.github.io/lsp-ui/][lsp-ui]] is a set of UI enhancements built on top of =lsp-mode= which make Emacs feel even more like an IDE.  Check out the screenshots on the =lsp-ui= homepage (linked at the beginning of this paragraph) to see examples of what it can do.
+
+#+begin_src emacs-lisp
+
+  (use-package lsp-ui
+    :hook (lsp-mode . lsp-ui-mode)
+    :custom
+    (lsp-ui-doc-position 'bottom))
+
+#+end_src
+
+***** lsp-treemacs
+
+[[https://github.com/emacs-lsp/lsp-treemacs][lsp-treemacs]] provides nice tree views for different aspects of your code like symbols in a file, references of a symbol, or diagnostic messages (errors and warnings) that are found in your code.
+
+Try these commands with =M-x=:
+
+- =lsp-treemacs-symbols= - Show a tree view of the symbols in the current file
+- =lsp-treemacs-references= - Show a tree view for the references of the symbol under the cursor
+- =lsp-treemacs-error-list= - Show a tree view for the diagnostic messages in the project
+
+  This package is built on the [[https://github.com/Alexander-Miller/treemacs][treemacs]] package which might be of some interest to you if you like to have a file browser at the left side of your screen in your editor.
+
+  #+begin_src emacs-lisp
+
+    (use-package lsp-treemacs
+      :after lsp)
+
+  #+end_src
+
+**** Debugging with dap-mode
+
+[[https://emacs-lsp.github.io/dap-mode/][dap-mode]] is an excellent package for bringing rich debugging capabilities to Emacs via the [[https://microsoft.github.io/debug-adapter-protocol/][Debug Adapter Protocol]].  You should check out the [[https://emacs-lsp.github.io/dap-mode/page/configuration/][configuration docs]] to learn how to configure the debugger for your language.  Also make sure to check out the documentation for the debug adapter to see what configuration parameters are available to use for your debug templates!
+
+#+begin_src emacs-lisp tangle: no
+
+  (use-package dap-mode
+    ;; Uncomment the config below if you want all UI panes to be hidden by default!
+    ;; :custom
+    ;; (lsp-enable-dap-auto-configure nil)
+    ;; :config
+    ;; (dap-ui-mode 1)
+    :commands dap-debug
+    :config
+    ;; Set up Node debugging
+    (require 'dap-node)
+    (dap-node-setup) ;; Automatically installs Node debug adapter if needed
+
+    ;; Bind `C-c l d` to `dap-hydra` for easy access
+                                          ;(general-define-key
+                                          ; :keymaps 'lsp-mode-map
+                                          ; :prefix lsp-keymap-prefix
+                                          ; "d" '(dap-hydra t :wk "debugger"))
+    )
+
+#+end_src
+
+**** Company
+
+[[http://company-mode.github.io/][Company Mode]] provides a nicer in-buffer completion interface than =completion-at-point= which is more reminiscent of what you would expect from an IDE.  We add a simple configuration to make the keybindings a little more useful (=TAB= now completes the selection and initiates completion at the current location if needed).
+
+We also use [[https://github.com/sebastiencs/company-box][company-box]] to further enhance the look of the completions with icons and better overall presentation.
+
+#+begin_src emacs-lisp
+
+  (use-package company
+    :after lsp-mode
+    :hook (lsp-mode . company-mode)
+    :bind (:map company-active-map
+                ("<tab>" . company-complete-selection))
+    (:map lsp-mode-map
+          ("<tab>" . company-indent-or-complete-common))
+    :custom
+    (company-minimum-prefix-length 2)
+    (company-idle-delay 0.0))
+
+  (use-package company-box
+    :hook (company-mode . company-box-mode))
+#+end_src
+
+**** Flycheck
+
+#+begin_src emacs-lisp
+
+  (use-package flycheck
+    :init (global-flycheck-mode))
+
+#+end_src
+
+**** Yasnippet
+
+#+begin_src emacs-lisp
+  (use-package yasnippet)
+  (use-package yasnippet-snippets)
+#+end_src
+
+** Other Stuff
+
+The stuff here is all the stuff i don't want to be part of the initial config.
+I load the stuff through the ~/.myinitel if needed.
+All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
+
+*** cc.el
+
+#+begin_src emacs-lisp :tangle ./conf/cc.el
+
+  (add-hook 'cc-mode 'lsp-deferred)
+
+#+end_src
+
+*** dotnet.el
+
+#+begin_src emacs-lisp :tangle ./conf/dotnet.el
+
+  (add-to-list 'auto-mode-alist '("\\.fsproj\\'" . xml-mode))
+  (add-to-list 'auto-mode-alist '("\\.axaml\\'" . xml-mode))
+  (add-to-list 'auto-mode-alist '("\\.xaml\\'" . xml-mode))
+  (add-to-list 'auto-mode-alist '("\\.csproj\\'" . xml-mode))
+
+  (if (< emacs-major-version 29)
+      (use-package csharp-mode
+        :defer t
+        :after dotnet))
+
+  (use-package fsharp-mode
+    :defer t
+    :after dotnet)
+
+  (use-package dotnet
+    :hook (fsharp-mode . dotnet-mode)
+    :hook (csharp-mode . dotnet-mode)
+    :hook (xml-mode . dotnet-mode)
+    :hook (dotnet-mode . lsp-deferred)
+    :bind (:map dotnet-mode-map ("<f5>" . dotnet-run)))
+
+#+end_src
+
+*** elixir.el
+
+#+begin_src emacs-lisp :tangle ./conf/elixir.el
+
+  (use-package elixir-mode
+    :hook (elixir-mode . lsp-deferred)
+    :hook (elixir-mode . yas-minor-mode))
+
+  (use-package mix
+    :defer t)
+
+  (use-package erlang
+    :defer t)
+  (use-package edts
+    :defer t)
+
+#+end_src
+
+*** go.el
+
+#+begin_src emacs-lisp :tangle ./conf/go.el
+
+  (use-package go-mode
+    :defer t)
+
+#+end_src
+
+*** graphviz.el
+
+#+begin_src emacs-lisp :tangle ./conf/graphviz.el
+
+  (use-package graphviz-dot-mode
+    :defer t
+    :config
+    (setq graphviz-dot-indent-width 4))
+
+#+end_src
+
+*** haskell.el
+
+#+begin_src emacs-lisp :tangle ./conf/haskell.el
+
+  (use-package haskell-mode
+    :defer t)
+
+#+end_src
+
+*** java.el
+
+#+begin_src emacs-lisp :tangle ./conf/java.el
+
+  (use-package javap-mode
+    :defer t)
+  (use-package kotlin-mode
+    :defer t) ;; for gradle kotlin script files
+  (use-package scala-mode
+    :defer t)
+
+  (use-package lsp-java
+    :hook (java-mode . lsp)
+    :hook (scala-mode . lsp)
+    :hook (kotlin-mode . lsp))
+
+  (add-to-list 'auto-mode-alist '("\\.kts\\'" . kotlin-mode))
+
+#+end_src
+
+*** clojure.el
+
+#+begin_src emacs-lisp :tangle ./conf/clojure.el
+
+  (use-package clojure-mode
+    :defer t)
+  (use-package cider
+    :defer t)
+
+  (when (eq system-type 'gnu/linux)
+    (setq exec-path (append exec-path '("~/bin/"))))
+
+#+end_src
+
+*** jvm.el
+
+#+begin_src emacs-lisp :tangle ./conf/jvm.el
+
+  (use-package clojure-mode
+    :defer t)
+
+  (use-package cider
+    :defer t)
+
+  (use-package javap-mode
+    :defer t)
+
+  (use-package kotlin-mode
+    :defer t) ;; for gradle kotlin script files
+
+  (use-package scala-mode
+    :defer t)
+
+  (use-package groovy-mode
+    :defer t)
+
+  (use-package lsp-java
+    :hook (java-mode . lsp)
+    :hook (kotlin-mode . lsp)
+    :hook (scala-mode . lsp))
+
+  (add-to-list 'auto-mode-alist '("\\.kts\\'" . kotlin-mode))
+
+  (when (eq system-type 'gnu/linux)
+    (setq exec-path (append exec-path '("~/bin/"))))
+
+#+end_src
+
+*** lua.el
+
+#+begin_src emacs-lisp :tangle ./conf/lua.el
+
+  (use-package lua-mode
+    :defer t)
+
+#+end_src
+
+*** nix.el
+
+#+begin_src emacs-lisp :tangle ./conf/nix.el
+
+  (use-package nix-mode
+    :defer t)
+  (use-package nix-buffer
+    :defer t)
+
+#+end_src
+
+*** ocaml.el
+
+#+begin_src emacs-lisp :tangle ./conf/ocaml.el
+
+
+  (add-to-list 'load-path "C:\Users\thomas\AppData\Local\opam\playground\share/emacs/site-lisp")
+  (require 'ocp-indent)
+
+  (let ((opam-share (ignore-errors (car (process-lines "opam" "var" "share")))))
+    (when (and opam-share (file-directory-p opam-share))
+      ;; Register Merlin
+      (add-to-list 'load-path (expand-file-name "emacs/site-lisp" opam-share))
+      (autoload 'merlin-mode "merlin" nil t nil)
+      ;; Automatically start it in OCaml buffers
+      (add-hook 'tuareg-mode-hook 'merlin-mode t)
+      (add-hook 'caml-mode-hook 'merlin-mode t)
+      ;; Use opam switch to lookup ocamlmerlin binary
+      (setq merlin-command 'opam)))
+
+  (use-package tuareg-mode
+    :defer t)
+
+#+end_src
+
+*** php.el
+
+#+begin_src emacs-lisp :tangle ./conf/php.el
+
+  (use-package php-mode
+    :defer t)
+
+#+end_src
+
+*** powershell.el
+
+#+begin_src emacs-lisp :tangle ./conf/powershell.el
+
+  (use-package powershell
+    :defer t)
+
+#+end_src
+
+*** python.el
+
+#+begin_src emacs-lisp :tangle ./conf/python.el
+
+  (use-package pyenv-mode
+    :defer t)
+  (use-package kivy-mode
+    :defer t)
+
+#+end_src
+
+*** racket.el
+
+#+begin_src emacs-lisp :tangle ./conf/racket.el
+
+  (use-package racket-mode
+    :defer t)
+  (use-package geiser
+    :defer t)
+  (use-package geiser-racket
+    :defer t)
+
+#+end_src
+
+*** rust.el
+
+#+begin_src emacs-lisp :tangle ./conf/rust.el
+
+  (use-package rust-mode
+    :hook (rust-mode . lsp-deferred))
+
+  (use-package toml-mode
+    :defer t)
+  (add-to-list 'auto-mode-alist '("\\.toml\\'" . toml-mode))
+
+  (use-package cargo
+    :defer t)
+
+  (use-package cargo-mode
+    :hook (rust-mode . cargo-minor-mode))
+
+#+end_src
+
+*** typescript.el
+
+#+begin_src emacs-lisp :tangle ./conf/typescript.el
+
+  (use-package typescript-mode
+    :mode "\\.ts\\'"
+    :hook (typescript-mode . lsp-deferred)
+    :config
+    (setq typescript-indent-level 2))
+
+#+end_src
+
+*** yaml.el
+
+#+begin_src emacs-lisp :tangle ./conf/yaml.el
+
+  (use-package yaml-mode
+    :defer t)
+  (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
+  (add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-mode))
+
+#+end_src
+
+*** zig.el
+
+#+begin_src emacs-lisp :tangle ./conf/zig.el
+
+  (use-package zig-mode
+    :defer t)
 
 #+end_src
 

@@ -97,6 +97,14 @@ In this file i define some things that both my init file and the bootstrap file 
 
 #+end_src
 
+*** Remove text from **scratch** buffer
+
+#+begin_src emacs-lisp
+
+  (setq initial-scratch-message "")
+
+#+end_src
+
 *** More realestate by removing scrollbars and toolbars
 
 #+begin_src emacs-lisp
@@ -115,14 +123,6 @@ In this file i define some things that both my init file and the bootstrap file 
 #+begin_src emacs-lisp
 
   (setq visible-bell t) ;; kill it with fire also!!!
-
-#+end_src
-
-*** Completion
-
-#+begin_src emacs-lisp
-
-  (setq ido-mode t)
 
 #+end_src
 
@@ -181,6 +181,36 @@ I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://f
 
 #+end_src
 
+*** Compatibility
+**** Freebsd
+***** Fix for Dired
+
+In order for Dired to function properly you need to install the *GNU* version of *ls*:
+
+#+begin_src shell :tangle no
+
+  pkg install coreutils
+
+#+end_src
+
+then you need to make sure Emacs can find the binary:
+
+#+begin_src emacs-lisp
+
+  (cond ((eq system-type 'berkeley-unix)
+         (setq insert-directory-program "/usr/local/bin/gls")))
+
+#+end_src
+
+**** Path
+
+#+begin_src emacs-lisp
+
+  (cond ((eq system-type 'windows-nt)
+         (setq exec-path (append exec-path '("C:/Program Files/Elixir/bin")))))
+
+#+end_src
+
 ** Packagemanagement
 *** Straight.el
 
@@ -203,7 +233,57 @@ I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://f
   (setq straight-use-package-by-default t)
 
 #+end_src
+
 *** Packages
+**** Diminish
+
+#+begin_src emacs-lisp
+
+  (use-package diminish
+    :init (progn
+            (diminish 'undo-tree-mode)
+            (diminish 'eldoc-mode)
+            (diminish 'auto-revert-mode)
+            (diminish 'flycheck-mode)
+            (diminish 'company-mode)
+            (diminish 'dotnet-mode)
+            (diminish 'counsel-mode)
+            (diminish 'list-interaction-mode)))
+
+#+end_src
+
+**** Completion
+
+#+begin_src emacs-lisp
+
+  (use-package vertico
+    :bind (:map vertico-map
+                ("C-j" . vertico-next)
+                ("C-k" . vertico-previous)
+                ("C-f" . vertico-exit)
+                :map minibuffer-local-map
+                ("M-h" . backward-kill-word))
+    :custom
+    (vertico-cycle t)
+    :init
+    (vertico-mode))
+
+  (use-package savehist
+    :init
+    (savehist-mode))
+
+  (use-package marginalia
+    :after vertico
+    :custom
+    (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
+    :init
+    (marginalia-mode))
+
+  (use-package orderless
+    :ensure t
+    :custom (completion-styles '(orderless)))
+
+#+end_src
 **** Org
 
 #+begin_src emacs-lisp
@@ -212,7 +292,7 @@ I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://f
 
 #+end_src
 
-**** Org Structure Templates
+***** Org Structure Templates
 
 #+begin_src emacs-lisp
 
@@ -231,7 +311,7 @@ I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://f
 
 #+end_src
 
-**** Org Bullets
+***** Org Bullets
 
 [[https://github.com/sabof/org-bullets][org-bullets]] replaces the heading stars in =org-mode= buffers with nicer looking characters that you can control.  Another option for this is [[https://github.com/integral-dw/org-superstar-mode][org-superstar-mode]] which we may cover in a later video.
 
@@ -244,7 +324,7 @@ I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://f
 
 #+end_src
 
-**** Center Org Buffers
+***** Center Org Buffers
 
 We use [[https://github.com/jOOSTKREMERS/visual-fill-column][visual-fill-column]] to center =org-mode= buffers for a more pleasing writing experience as it centers the contents of the buffer horizontally to seem more like you are editing a document.  This is really a matter of personal preference so you can remove the block below if you don't like the behavior.
 
@@ -270,7 +350,7 @@ We use [[https://github.com/jOOSTKREMERS/visual-fill-column][visual-fill-column]
 
 #+end_src
 
-**** Org Export
+***** Org Export
 
 #+begin_src emacs-lisp
 
@@ -285,7 +365,45 @@ We use [[https://github.com/jOOSTKREMERS/visual-fill-column][visual-fill-column]
 
 #+end_src
 
-*** Which-key
+***** Emphasis Marker
+
+In Org you can surround text with special characters to make them *bold*, /italic/ and so on.
+The characters are
+
+| Character | Example  | Meaning        |
+|-----------+----------+----------------|
+| "*"       | *Foobar* | bold           |
+| "/"       | /Foobar/ | italic         |
+| "="       | =Foobar= | verbatim       |
+| "~"       | ~Foobar~ | code           |
+| "_"       | _Foobar_ | underlined     |
+| "+"       | Foobar+ | strike-through |
+
+To make Org files look prettier i do not show those characters by default, this however
+can make editing text a bit difficult, so here i define some functions to toggle this feature
+on an of.
+
+#+begin_src emacs-lisp
+
+  (defun my/org-emphasis-markers-status ()
+    "Get the status of org-hide-emphasis-markers."
+    (interactive)
+    (message "org-hide-emphasis-markers %s"
+             (if org-hide-emphasis-markers "ON" "OFF")))
+
+  (defun my/toggle-org-hide-emphasis-markers ()
+    "Toggle emphasis markers."
+    (interactive)
+    (setq org-hide-emphasis-markers
+          (not org-hide-emphasis-markers))
+    (org-mode-restart)
+    (my/org-emphasis-markers-status))
+
+  (global-set-key [f9] 'my/toggle-org-hide-emphasis-markers)
+
+#+end_src
+
+**** Which-key
 
 #+begin_src emacs-lisp
 
@@ -294,7 +412,7 @@ We use [[https://github.com/jOOSTKREMERS/visual-fill-column][visual-fill-column]
 
 #+end_src
 
-*** Evil
+**** Evil
 #+begin_src emacs-lisp
 
   (setq evil-want-keybinding nil) ;; this needs to be set to nil befor evil is loaded
@@ -360,7 +478,7 @@ We use [[https://github.com/jOOSTKREMERS/visual-fill-column][visual-fill-column]
 
 #+end_src
 
-**** Evil Escape
+***** Evil Escape
 
 In order to easly go back to normal mode we use "jk".
 
@@ -375,7 +493,7 @@ In order to easly go back to normal mode we use "jk".
 
 #+end_src
 
-**** Evil Leader
+***** Evil Leader
 
 #+begin_src emacs-lisp
 
@@ -389,7 +507,7 @@ In order to easly go back to normal mode we use "jk".
 
 #+end_src
 
-**** Evil Collection
+***** Evil Collection
 
 #+begin_src emacs-lisp
 
@@ -400,7 +518,7 @@ In order to easly go back to normal mode we use "jk".
 
 #+end_src
 
-**** Evil Nerd Commenter
+***** Evil Nerd Commenter
 
 Emacs' built in commenting functionality =comment-dwim= (usually bound to =M-;=) doesn't always comment things in the way you might expect so we use [[https://github.com/redguardtoo/evil-nerd-commenter][evil-nerd-commenter]] to provide a more familiar behavior.  I've bound it to =M-/= since other editors sometimes use this binding but you could also replace Emacs' =M-;= binding with this command.
 
@@ -411,7 +529,7 @@ Emacs' built in commenting functionality =comment-dwim= (usually bound to =M-;=)
 
 #+end_src
 
-*** Colorscheme
+**** Colorscheme
 
 #+begin_src emacs-lisp
 
@@ -422,8 +540,8 @@ Emacs' built in commenting functionality =comment-dwim= (usually bound to =M-;=)
 
 #+end_src
 
-*** Window/Frame management
-**** Window Numbering
+**** Window/Frame management
+***** Window Numbering
 
 Every Window will be asigned a number and can be selected by pressing M-{1-9}
 
@@ -434,7 +552,7 @@ Every Window will be asigned a number and can be selected by pressing M-{1-9}
 
 #+end_src
 
-**** Move Border
+***** Move Border
 
 #+begin_src emacs-lisp
 
@@ -452,9 +570,7 @@ Every Window will be asigned a number and can be selected by pressing M-{1-9}
 
 #+end_src
 
-*** Programming
-**** Projectmanagement
-***** Projectile
+**** Projectile
 
 [[https://projectile.mx/][Projectile]] is a project management library for Emacs which makes it a lot easier to navigate around code projects for various languages.  Many packages integrate with Projectile so it's a good idea to have it installed even if you don't use its commands directly.
 
@@ -478,7 +594,7 @@ Every Window will be asigned a number and can be selected by pressing M-{1-9}
 
 #+end_src
 
-***** Magit
+**** Magit
 
 [[https://magit.vc/][Magit]] is the best Git interface I've ever used.  Common Git operations are easy to execute quickly using Magit's command panel system.
 
@@ -500,7 +616,7 @@ Every Window will be asigned a number and can be selected by pressing M-{1-9}
 
 #+end_src
 
-***** Harpoon
+**** Harpoon
 
 #+begin_src emacs-lisp
 
@@ -508,7 +624,7 @@ Every Window will be asigned a number and can be selected by pressing M-{1-9}
 
 #+end_src
 
-****** Harpoon keybindings
+***** Harpoon keybindings
 
 #+begin_src emacs-lisp :tangle no
   ;; On vanilla (You can use another prefix instead C-c h)
@@ -674,6 +790,53 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
   (use-package yasnippet-snippets)
 #+end_src
 
+**** All The Icons
+
+*NOTE* If you install all-the-icons for the first time run all-the-incons-install-fonts
+
+#+begin_src emacs-lisp
+
+  (use-package all-the-icons)
+
+#+end_src
+
+** Diminish
+
+#+begin_src emacs-lisp
+
+  (use-package diminish
+    :init (progn
+            (diminish 'undo-tree-mode)
+            (diminish 'eldoc-mode)
+            (diminish 'auto-revert-mode)
+            (diminish 'flycheck-mode)
+            (diminish 'company-mode)
+            (diminish 'dotnet-mode)
+            (diminish 'counsel-mode)
+            (diminish 'list-interaction-mode)))
+
+#+end_src
+
+** Custom set variables
+
+#+begin_src emacs-lisp
+
+  (setq custom-file (concat *emacsd-directory* "custom-set-variables.el"))
+
+  (unless (file-exists-p custom-file)
+    (write-region "" nil custom-file))
+
+  (custom-set-variables
+   ;; custom-set-variables was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   '(warning-suppress-types '((use-package) (comp))))
+
+  (load-file custom-file)
+
+#+end_src
+
 ** Other Stuff
 
 The stuff here is all the stuff i don't want to be part of the initial config.
@@ -715,9 +878,9 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
 
 #+end_src
 
-*** elixir.el
+*** beam.el
 
-#+begin_src emacs-lisp :tangle ./conf/elixir.el
+#+begin_src emacs-lisp 
 
   (use-package elixir-mode
     :hook (elixir-mode . lsp-deferred)
@@ -728,6 +891,7 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
 
   (use-package erlang
     :defer t)
+
   (use-package edts
     :defer t)
 

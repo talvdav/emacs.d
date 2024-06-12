@@ -248,7 +248,9 @@ then you need to make sure Emacs can find the binary:
             (diminish 'company-mode)
             (diminish 'dotnet-mode)
             (diminish 'counsel-mode)
-            (diminish 'list-interaction-mode)))
+            (diminish 'list-interaction-mode)
+            (diminish 'evil-collection-unimpaired-mode)
+            (diminish 'which-key-mode)))
 
 #+end_src
 

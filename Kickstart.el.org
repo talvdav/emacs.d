@@ -286,6 +286,7 @@ then you need to make sure Emacs can find the binary:
     :custom (completion-styles '(orderless)))
 
 #+end_src
+
 **** Org
 
 #+begin_src emacs-lisp
@@ -882,7 +883,7 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
 
 *** beam.el
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp :tangle ./conf/beam.el
 
   (use-package elixir-mode
     :hook (elixir-mode . lsp-deferred)
@@ -1136,6 +1137,7 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
 * End
 #+begin_src emacs-lisp
   (cd "~")
+  (load-file ".myinit.el")
   (provide 'init)
   ;;; init.el ends here
 

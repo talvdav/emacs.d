@@ -7,6 +7,7 @@
   ;;; myinitel --- My Emacs config.
   ;;; Commentary:
   ;; My Emacs config inspired by David Wilsons emacs-from-scratch youtube series
+  ;; Kickstart version
 
   ;;; Code:
 
@@ -30,38 +31,39 @@ In this file i define some things that both my init file and the bootstrap file 
 
 #+begin_src emacs-lisp
 
-  (defvar *emacsd-directory* user-emacs-directory)
-  (defvar *conf-directory* "~/.emacs.d/conf")
-  (setq user-emacs-directory  "~/.emacs.d/emacs/")
+    (defvar *emacsd-directory* user-emacs-directory)
+    (defvar *conf-directory* "~/.emacs.d/conf")
+    (setq user-emacs-directory  "~/.emacs.d/emacs/")
 
-  (setq backup-directory-alist '(("." . "~/.emacs-backups"))
-        backup-by-copying      t  ; Don't de-link hard links
-        version-control        t  ; Use version numbers on backups
-        delete-old-versions    nil  ; Automatically delete excess backups:
-        kept-new-versions      5  ; how many of the newest versions to keep
-        kept-old-versions      5) ; and how many of the old
+    (setq backup-directory-alist '(("." . "~/.emacs-backups"))
+          backup-by-copying      t  ; Don't de-link hard links
+          version-control        t  ; Use version numbers on backups
+          delete-old-versions    nil  ; Automatically delete excess backups:
+          kept-new-versions      5  ; how many of the newest versions to keep
+          kept-old-versions      5) ; and how many of the old
 
-  (defvar temp-directory "~/.emacs-backups/autosave/")
-  (make-directory temp-directory t)
+    (defvar temp-directory "~/.emacs-backups/autosave/")
+    (make-directory temp-directory t)
 
-  (setq auto-save-default nil)
-  (setq auto-save-directory temp-directory
-        auto-save-hash-directory (concat temp-directory "/autosave-hash")
-        auto-save-directory-fallback "~/emacs-autosave"
-        auto-save-list-file-prefix (concat temp-directory "/autosave-")
-        auto-save-hash-p nil
-        auto-save-timeout 100
-        auto-save-interval 300)
-  (make-directory auto-save-directory t)
+    (setq auto-save-default nil)
+    (setq auto-save-directory temp-directory
+          auto-save-hash-directory (concat temp-directory "/autosave-hash")
+          auto-save-directory-fallback "~/emacs-autosave"
+          auto-save-list-file-prefix (concat temp-directory "/autosave-")
+          auto-save-hash-p nil
+          auto-save-timeout 100
+          auto-save-interval 300)
+    (make-directory auto-save-directory t)
 
-  (setq create-lockfiles nil)
+    (setq create-lockfiles nil)
 
-  (setq display-line-numbers-type 'relative)
-
-  (setq-default indent-tabs-mode nil)
-  (setq tab-width 4)
-  (defvaralias 'c-basic-offset 'tab-width)
-  (defvaralias 'cperl-indent-level 'tab-width)
+    (setq display-line-numbers-type 'relative)
+    (global-display-line-numbers-mode)
+  
+    (setq-default indent-tabs-mode nil)
+    (setq tab-width 4)
+    (defvaralias 'c-basic-offset 'tab-width)
+    (defvaralias 'cperl-indent-level 'tab-width)
 
 #+end_src
 
@@ -206,8 +208,8 @@ then you need to make sure Emacs can find the binary:
 
 #+begin_src emacs-lisp
 
-  (cond ((eq system-type 'windows-nt)
-         (setq exec-path (append exec-path '("C:/Program Files/Elixir/bin")))))
+    (cond ((eq system-type 'windows-nt)
+           (setq exec-path (append exec-path '("C:/Program Files/Elixir/bin" "~/.zvm/bin")))))
 
 #+end_src
 
@@ -477,7 +479,7 @@ on an of.
 
     (evil-define-key '(normal insert) doc-view-mode-map (kbd "M-j") 'doc-view-enlarge)
     (evil-define-key '(normal insert) doc-view-mode-map (kbd "M-k") 'doc-view-shrink)
-    (evil-global-set-key 'normal (kbd "K") 'lsp-ui-doc-show))
+    (evil-global-set-key 'normal (kbd "K") 'lsp-ui-doc-glance))
 
 #+end_src
 
@@ -820,26 +822,6 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
 
 #+end_src
 
-** Custom set variables
-
-#+begin_src emacs-lisp
-
-  (setq custom-file (concat *emacsd-directory* "custom-set-variables.el"))
-
-  (unless (file-exists-p custom-file)
-    (write-region "" nil custom-file))
-
-  (custom-set-variables
-   ;; custom-set-variables was added by Custom.
-   ;; If you edit it by hand, you could mess it up, so be careful.
-   ;; Your init file should contain only one such instance.
-   ;; If there is more than one, they won't work right.
-   '(warning-suppress-types '((use-package) (comp))))
-
-  (load-file custom-file)
-
-#+end_src
-
 ** Other Stuff
 
 The stuff here is all the stuff i don't want to be part of the initial config.
@@ -1131,6 +1113,34 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
 
   (use-package zig-mode
     :defer t)
+
+#+end_src
+
+** Custom set variables
+
+#+begin_src emacs-lisp
+
+  (setq custom-file (concat *emacsd-directory* "custom-set-variables.el"))
+
+  (unless (file-exists-p custom-file)
+    (write-region "" nil custom-file))
+
+  (cond ((eq system-type 'windows-nt)
+         (setq exec-path (append exec-path '("C:/Program Files/Elixir/bin" "~/.zvm/bin")))))
+
+  (if (eq system-type 'windows-nt)
+      (setq zig-exe-path (concat (getenv "userprofile") "\\.zvm\\bin\\zig.exe"))
+    (setq zig-exe-path "~/.zvm/bin/zig"))
+
+  (custom-set-variables
+   ;; custom-set-variables was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   '(zig-zig-bin zig-exe-path)
+   '(warning-suppress-types '((use-package) (comp))))
+
+  (load-file custom-file)
 
 #+end_src
 

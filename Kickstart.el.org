@@ -502,14 +502,29 @@ In order to easly go back to normal mode we use "jk".
 
 #+begin_src emacs-lisp
 
+  ;(use-package evil-leader ;; After editing the key bindings reload evil-leader and evil after that!
+  ;  :init (global-evil-leader-mode)
+  ;  :config (define-key evil-normal-state-map (kbd "SPC") nil)
+  ;  (evil-leader/set-leader "<SPC>")
+  ;  (evil-leader/set-key
+  ;    "b" 'switch-to-buffer
+  ;    "n" 'evil-buffer-new))
+
   (use-package evil-leader ;; After editing the key bindings reload evil-leader and evil after that!
     :init (global-evil-leader-mode)
     :config (define-key evil-normal-state-map (kbd "SPC") nil)
     (evil-leader/set-leader "<SPC>")
     (evil-leader/set-key
       "b" 'switch-to-buffer
-      "n" 'evil-buffer-new))
-
+      "n" 'evil-buffer-new
+      "r" 'reindent-buffer
+      "R" 'hydra-resize-frames/body
+      "t" 'hydra-toggle/body
+      "o" 'hydra-org-mode/body
+      "s" 'hydra-text-scale/body
+      "i" 'hydra-insert-date-and-time-at-point/body
+      "e" 'hydra-emacs-actions/body
+      "h" 'harpoon-quick-menu-hydra))
 #+end_src
 
 ***** Evil Collection
@@ -802,6 +817,88 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
 #+begin_src emacs-lisp
 
   (use-package all-the-icons)
+
+#+end_src
+
+**** Hydra
+
+#+begin_src emacs-lisp
+
+  (use-package hydra
+    :defer t)
+
+#+end_src
+
+***** Hydras
+****** Emacs Actions
+
+#+begin_src emacs-lisp
+  (defhydra hydra-emacs-actions (:timeout 5)
+    "actions"
+    ("g" lsp-ui-doc-show "display hover information" :exit t))
+#+end_src
+
+***** Toggle stuff
+
+#+begin_src emacs-lisp
+
+  (defhydra hydra-toggle (:timeout 5)
+    "toggle"
+    ("t" toggle-truncate-lines "truncate lines" :exit t)
+    ("l" display-line-numbers-mode "line numbers" :exit t)
+    ("c" visual-fill-column-mode "center text in buffers" :exit t)
+    ("d" display-fill-column-indicator-mode "column indicator" :exit t)
+    ("e" my/toggle-org-hide-emphasis-markers "emphasis-markers" :exit t))
+
+#+end_src
+
+***** Text Scaling
+
+This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to design a transient key binding for quickly adjusting the scale of the text on screen.  We define a hydra that is bound to =C-s t s= and, once activated, =j= and =k= increase and decrease the text scale.  You can press any other key (or =f= specifically) to exit the transient key map.
+
+#+begin_src emacs-lisp
+
+  (defhydra hydra-text-scale (:timeout 5)
+    "scale text"
+    ("j" text-scale-increase "in")
+    ("k" text-scale-decrease "out")
+    ("f" nil "finished" :exit t))
+
+#+end_src
+
+***** Insert date time at point
+
+#+begin_src emacs-lisp
+
+  (defhydra hydra-insert-date-and-time-at-point ()
+    "insert date and time at point"
+    ("n" now "insert date and time" :exit t)
+    ("t" today "insert date time long" :exit t))
+
+#+end_src
+
+***** Org-mode Stuff
+
+#+begin_src emacs-lisp
+
+  (defhydra hydra-org-mode ()
+    "org mode"
+    ("t" org-babel-tangle "tangle current org file" :exit t)
+    ("e" org-export-dispatch "export current org buffer" :exit t))
+
+#+end_src
+
+***** Resize Frames
+
+#+begin_src emacs-lisp
+
+  (defhydra hydra-resize-frames ()
+    "resize frames"
+    ("j" move-border-down  "move border down")
+    ("k" move-border-up    "move border up")
+    ("h" move-border-left  "move border left")
+    ("l" move-border-right "move border right")
+    ("f" nil "finished" :exit t))
 
 #+end_src
 

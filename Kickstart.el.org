@@ -13,17 +13,6 @@
 
 #+end_src
 
-** Convenience Functions and Aliases
-*** Aliases
-
-#+begin_src emacs-lisp
-
-  (defalias 'tangle 'org-babel-tangle "tangle the current file")
-
-#+end_src
-
-Functions
-
 ** Config
 *** Global Variables
 
@@ -99,6 +88,11 @@ In this file i define some things that both my init file and the bootstrap file 
 
 #+end_src
 
+*** prefix-with-userprofile
+#+begin_src emacs-lisp
+(defun prefix-with-userprofile (path)
+  (subst-char-in-string ?\\ ?/ (concat (concat (getenv "userprofile") "/") path)))
+#+end_src
 *** Remove text from **scratch** buffer
 
 #+begin_src emacs-lisp
@@ -183,6 +177,16 @@ I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://f
 
 #+end_src
 
+*** Aliases
+
+#+begin_src emacs-lisp
+
+  (defalias 'tangle 'org-babel-tangle "tangle the current file")
+
+#+end_src
+
+Functions
+
 *** Compatibility
 **** Freebsd
 ***** Fix for Dired
@@ -209,7 +213,11 @@ then you need to make sure Emacs can find the binary:
 #+begin_src emacs-lisp
 
     (cond ((eq system-type 'windows-nt)
-           (setq exec-path (append exec-path '("C:/Program Files/Elixir/bin" "~/.zvm/bin")))))
+           (progn
+             (setq exec-path (append exec-path (list (prefix-with-userprofile ".zvm/bin"))))
+             (setq exec-path (append exec-path (list (prefix-with-userprofile "go/bin"))))
+             (setq exec-path (append exec-path (list "C:/Programs/Elixir/bin")))
+  )))
 
 #+end_src
 
@@ -1222,12 +1230,9 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
   (unless (file-exists-p custom-file)
     (write-region "" nil custom-file))
 
-  (cond ((eq system-type 'windows-nt)
-         (setq exec-path (append exec-path '("C:/Program Files/Elixir/bin" "~/.zvm/bin")))))
-
   (if (eq system-type 'windows-nt)
-      (setq zig-exe-path (concat (getenv "userprofile") "\\.zvm\\bin\\zig.exe"))
-    (setq zig-exe-path "~/.zvm/bin/zig"))
+      (setq zig-exe-path (prefix-with-userprofile ".zvm/bin/zig.exe"))
+    (setq zig-exe-path (prefix-with-userprofile ".zvm/bin/zig")))
 
   (custom-set-variables
    ;; custom-set-variables was added by Custom.

@@ -383,14 +383,14 @@ We use [[https://github.com/jOOSTKREMERS/visual-fill-column][visual-fill-column]
 In Org you can surround text with special characters to make them *bold*, /italic/ and so on.
 The characters are
 
-| Character | Example  | Meaning        |
-|-----------+----------+----------------|
-| "*"       | *Foobar* | bold           |
-| "/"       | /Foobar/ | italic         |
-| "="       | =Foobar= | verbatim       |
-| "~"       | ~Foobar~ | code           |
-| "_"       | _Foobar_ | underlined     |
-| "+"       | Foobar+ | strike-through |
+| Character | Example | Meaning        |
+|-----------+---------+----------------|
+| "*"       | *Foobar*  | bold           |
+| "/"       | /Foobar/  | italic         |
+| "="       | =Foobar=  | verbatim       |
+| "~"       | ~Foobar~  | code           |
+| "_"       | _Foobar_  | underlined     |
+| "+"       | +Foobar+  | strike-through |
 
 To make Org files look prettier i do not show those characters by default, this however
 can make editing text a bit difficult, so here i define some functions to toggle this feature
@@ -846,7 +846,7 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
     ("g" lsp-ui-doc-show "display hover information" :exit t))
 #+end_src
 
-***** Toggle stuff
+****** Toggle stuff
 
 #+begin_src emacs-lisp
 
@@ -860,7 +860,7 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
 
 #+end_src
 
-***** Text Scaling
+****** Text Scaling
 
 This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to design a transient key binding for quickly adjusting the scale of the text on screen.  We define a hydra that is bound to =C-s t s= and, once activated, =j= and =k= increase and decrease the text scale.  You can press any other key (or =f= specifically) to exit the transient key map.
 
@@ -874,7 +874,7 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
 
 #+end_src
 
-***** Insert date time at point
+****** Insert date time at point
 
 #+begin_src emacs-lisp
 
@@ -885,7 +885,7 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
 
 #+end_src
 
-***** Org-mode Stuff
+****** Org-mode Stuff
 
 #+begin_src emacs-lisp
 
@@ -896,7 +896,7 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
 
 #+end_src
 
-***** Resize Frames
+****** Resize Frames
 
 #+begin_src emacs-lisp
 

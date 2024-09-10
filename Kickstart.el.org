@@ -13,6 +13,9 @@
 
 #+end_src
 
+** TODOS
+*** TODO fix snippets
+*** TODO check if ~/.myinit.el exist before loading
 ** Config
 *** Global Variables
 
@@ -254,19 +257,7 @@ then you need to make sure Emacs can find the binary:
 
 #+begin_src emacs-lisp
 
-  (use-package diminish
-    :init (progn
-            (diminish 'undo-tree-mode)
-            (diminish 'eldoc-mode)
-            (diminish 'auto-revert-mode)
-            (diminish 'flycheck-mode)
-            (diminish 'company-mode)
-            (diminish 'dotnet-mode)
-            (diminish 'counsel-mode)
-            (diminish 'list-interaction-mode)
-            (diminish 'evil-collection-unimpaired-mode)
-            (diminish 'which-key-mode)))
-
+  (use-package diminish)
 #+end_src
 
 **** Completion
@@ -379,6 +370,7 @@ We use [[https://github.com/jOOSTKREMERS/visual-fill-column][visual-fill-column]
     :config (require 'ox-rst))
 
   (use-package ox-pandoc
+    :if (executable-find "pandoc")
     :config (require 'ox-pandoc))
 
 #+end_src
@@ -426,7 +418,8 @@ on an of.
 #+begin_src emacs-lisp
 
   (use-package which-key
-    :init (which-key-mode))
+    :diminish
+    :config (which-key-mode))
 
 #+end_src
 
@@ -546,6 +539,7 @@ In order to easly go back to normal mode we use "jk".
 
   (use-package evil-collection
     :after evil
+    :diminish
     :config
     (evil-collection-init))
 
@@ -919,16 +913,16 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
 
 #+begin_src emacs-lisp
 
-  (use-package diminish
-    :init (progn
-            (diminish 'undo-tree-mode)
-            (diminish 'eldoc-mode)
-            (diminish 'auto-revert-mode)
-            (diminish 'flycheck-mode)
-            (diminish 'company-mode)
-            (diminish 'dotnet-mode)
-            (diminish 'counsel-mode)
-            (diminish 'list-interaction-mode)))
+  (diminish 'undo-tree-mode)
+  (diminish 'eldoc-mode)
+  (diminish 'auto-revert-mode)
+  (diminish 'flycheck-mode)
+  (diminish 'company-mode)
+  (diminish 'dotnet-mode)
+  (diminish 'counsel-mode)
+  (diminish 'list-interaction-mode)
+  (diminish 'evil-collection-unimpaired-mode)
+  (diminish 'which-key-mode)
 
 #+end_src
 

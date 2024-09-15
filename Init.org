@@ -260,6 +260,7 @@ then you need to make sure Emacs can find the binary:
 #+end_src
 
 *** Packages
+
 **** Diminish
 
 #+begin_src emacs-lisp
@@ -551,6 +552,10 @@ In order to easly go back to normal mode we use "jk".
     :diminish
     :config
     (evil-collection-init))
+
+  (evil-collection-define-key 'normal 'dired-mode-map
+    "h" 'dired-up-directory
+    "l" 'dired-find-file)
 
 #+end_src
 

@@ -105,6 +105,8 @@
 
   (column-number-mode t)
 
+  (setq dired-listing-switches "-agho --group-directories-first")
+
 #+end_src
 
 *** Remove text from **scratch** buffer

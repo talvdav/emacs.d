@@ -816,7 +816,7 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
 
 **** Yasnippet
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 
   (use-package yasnippet)
   (use-package yasnippet-snippets)

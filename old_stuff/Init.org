@@ -1,10 +1,14 @@
+This Configuration is heaviely inspired by the Emacs from Scratch series by David Wilson from the the Config used in the Videos: [[https://github.com/daviwil/emacs-from-scratch][emacs-from-scratch]]
+
+Youtube Channel =System Crafters=. [[https://www.youtube.com/playlist?list=PLEoMzSkcN8oPH1au7H6B7bBJ4ZO7BXjS][Playlist]]
+
 #+PROPERTY: header-args:emacs-lisp :tangle ./init.el :mkdirp yes
 
-* Beginning
+* Emacs Config
 
 #+begin_src emacs-lisp
 
-  ;;; Init.org --- My Emacs config.
+  ;;; myinitel --- My Emacs config.
   ;;; Commentary:
   ;; My Emacs config inspired by David Wilsons emacs-from-scratch youtube series
 
@@ -12,11 +16,9 @@
 
 #+end_src
 
-** TODOS
-*** TODO fix snippets
-*** TODO check if ~/.myinit.el exist before loading
-** Config
-*** Global Variables Settings
+** Global Variables
+
+In this file i define some things that both my init file and the bootstrap file need.
 
 #+begin_src emacs-lisp
 
@@ -47,15 +49,17 @@
   (setq create-lockfiles nil)
 
   (setq display-line-numbers-type 'relative)
-  (global-display-line-numbers-mode)
 
   (setq-default indent-tabs-mode nil)
   (setq tab-width 4)
   (defvaralias 'c-basic-offset 'tab-width)
   (defvaralias 'cperl-indent-level 'tab-width)
 
+#+end_src
 
-  (blink-cursor-mode 0)       ; kill it with fire!
+*** Encodings
+
+#+begin_src emacs-lisp
 
   ;; Make Emacs FUCKING USE SANE ENCODINGS:
   (setq locale-coding-system 'utf-8-unix)
@@ -77,116 +81,9 @@
 
 #+end_src
 
-*** prefix-with-userprofile
-
-#+begin_src emacs-lisp
-
-  (defun prefix-with-userprofile (path)
-    (subst-char-in-string ?\\ ?/ (concat (concat (getenv "userprofile") "/") path)))
-
-#+end_src
-
-*** Remove text from **scratch** buffer
-
-#+begin_src emacs-lisp
-
-  (setq initial-scratch-message "")
-
-#+end_src
-
-*** More realestate by removing scrollbars and toolbars
-
-#+begin_src emacs-lisp
-
-  (scroll-bar-mode -1)        ; Disable visible scrollbar
-  (tool-bar-mode -1)          ; Disable the toolbar
-  (tooltip-mode -1)           ; Disable tooltips
-  (set-fringe-mode 10)        ; Give some breathing room
-  (menu-bar-mode -1)          ; Disable the menu bar
-  (show-paren-mode 1)
-
-#+end_src
-
-*** Blink instead of beep
-
-#+begin_src emacs-lisp
-
-  (setq visible-bell t) ;; kill it with fire also!!!
-
-#+end_src
-
-*** Better scrolling
-
-#+begin_src emacs-lisp
-
-  ;; better scrolling experience
-  (setq scroll-margin 0)
-  (setq scroll-conservatively 10000)
-  (setq scroll-preserve-screen-position t)
-  (setq auto-window-vscroll nil)
-
-#+end_src
-
-*** Inhibit startup message
-
-#+begin_src emacs-lisp
-
-  (setq inhibit-startup-message t)
-
-#+end_src
-
-*** yes-or-no-p
-
-use =y= and =n= instead of typing out =yes= or =no=
-
-#+begin_src emacs-lisp
-
-  (fset 'yes-or-no-p 'y-or-n-p)
-
-#+end_src
-
-#+begin_src emacs-lisp
-
-  (setq confirm-kill-emacs 'yes-or-no-p)
-
-#+end_src
-
-*** Font Configuration
-
-I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://fonts.google.com/specimen/Cantarell][Cantarell]] fonts for this configuration which will more than likely need to be installed on your machine.  Both can usually be found in the various Linux distro package managers.
-
-#+begin_src emacs-lisp
-
-  (defvar efs/default-font-size 110)
-  (defvar efs/default-variable-font-size 110)
-
-  (when (member "Fira Code" (font-family-list))
-    (progn
-      (set-face-attribute 'default nil :font "Fira Code" :height efs/default-font-size)
-
-      ;; Set the fixed pitch face
-      (set-face-attribute 'fixed-pitch nil :font "Fira Code" :height efs/default-font-size)))
-
-  (when (member "Cantarell" (font-family-list))
-    (progn
-      ;; Set the variable pitch face
-      (set-face-attribute 'variable-pitch nil :font "Cantarell" :height efs/default-variable-font-size :weight 'regular)))
-
-#+end_src
-
-*** Aliases
-
-#+begin_src emacs-lisp
-
-  (defalias 'tangle 'org-babel-tangle "tangle the current file")
-
-#+end_src
-
-Functions
-
-*** Compatibility
-**** Freebsd
-***** Fix for Dired
+** Compatibility
+*** Freebsd
+**** Fix for Dired
 
 In order for Dired to function properly you need to install the *GNU* version of *ls*:
 
@@ -205,19 +102,49 @@ then you need to make sure Emacs can find the binary:
 
 #+end_src
 
-**** Path
+*** Python
+The name for the default python interpreter differs between windows and between linux distributions
+so i try to find out what it is called on the current system and set the python-shell-interpreter accordingly.
+#+begin_src emacs-lisp
+
+  (setq pyexe (executable-find "python"))
+  (setq py3exe (executable-find "python3"))
+
+  (defun python-exe ()
+    (if pyexe
+        (if (= 0 (call-process pyexe nil nil nil "--version"))
+            :t
+          nil)
+      nil))
+
+  (defun python3-exe ()
+    (if py3exe
+        (if (= 0 (call-process py3exe nil nil nil "--version"))
+            true
+          nil)
+      nil))
+
+  (defun python-or-python3 ()
+    (if (python3-exe)
+        py3exe
+      (if (python-exe)
+          pyexe
+        "")))
+
+  (python-or-python3)
+#+end_src
+
+** Packages
+*** Archives
 
 #+begin_src emacs-lisp
 
-    (cond ((eq system-type 'windows-nt)
-           (progn
-             (setq exec-path (append exec-path (list (prefix-with-userprofile ".zvm/bin"))))
-             (setq exec-path (append exec-path (list (prefix-with-userprofile "go/bin"))))
-             (setq exec-path (append exec-path (list "C:/Programs/Elixir/bin"))))))
+  (setq package-archives '(("melpa" . "https://melpa.org/packages/")
+                           ("org" . "https://orgmode.org/elpa/")
+                           ("elpa" . "https://elpa.gnu.org/packages/")))
 
 #+end_src
 
-** Packagemanagement
 *** Straight.el
 
 #+begin_src emacs-lisp
@@ -240,49 +167,7 @@ then you need to make sure Emacs can find the binary:
 
 #+end_src
 
-*** Packages
-**** Diminish
-
-#+begin_src emacs-lisp
-
-  (use-package diminish)
-
-#+end_src
-
-**** Completion
-
-#+begin_src emacs-lisp
-
-  (use-package vertico
-    :bind (:map vertico-map
-                ("C-j" . vertico-next)
-                ("C-k" . vertico-previous)
-                ("C-f" . vertico-exit)
-                :map minibuffer-local-map
-                ("M-h" . backward-kill-word))
-    :custom
-    (vertico-cycle t)
-    :init
-    (vertico-mode))
-
-  (use-package savehist
-    :init
-    (savehist-mode))
-
-  (use-package marginalia
-    :after vertico
-    :custom
-    (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
-    :init
-    (marginalia-mode))
-
-  (use-package orderless
-    :ensure t
-    :custom (completion-styles '(orderless)))
-
-#+end_src
-
-**** Org
+** Org
 
 #+begin_src emacs-lisp
 
@@ -290,7 +175,7 @@ then you need to make sure Emacs can find the binary:
 
 #+end_src
 
-***** Org Structure Templates
+*** Org Structure Templates
 
 #+begin_src emacs-lisp
 
@@ -309,7 +194,7 @@ then you need to make sure Emacs can find the binary:
 
 #+end_src
 
-***** Org Bullets
+*** Org Bullets
 
 [[https://github.com/sabof/org-bullets][org-bullets]] replaces the heading stars in =org-mode= buffers with nicer looking characters that you can control.  Another option for this is [[https://github.com/integral-dw/org-superstar-mode][org-superstar-mode]] which we may cover in a later video.
 
@@ -322,7 +207,7 @@ then you need to make sure Emacs can find the binary:
 
 #+end_src
 
-***** Center Org Buffers
+*** Center Org Buffers
 
 We use [[https://github.com/jOOSTKREMERS/visual-fill-column][visual-fill-column]] to center =org-mode= buffers for a more pleasing writing experience as it centers the contents of the buffer horizontally to seem more like you are editing a document.  This is really a matter of personal preference so you can remove the block below if you don't like the behavior.
 
@@ -348,7 +233,7 @@ We use [[https://github.com/jOOSTKREMERS/visual-fill-column][visual-fill-column]
 
 #+end_src
 
-***** Org Export
+*** Org Export
 
 #+begin_src emacs-lisp
 
@@ -359,46 +244,68 @@ We use [[https://github.com/jOOSTKREMERS/visual-fill-column][visual-fill-column]
     :config (require 'ox-rst))
 
   (use-package ox-pandoc
-    :if (executable-find "pandoc")
     :config (require 'ox-pandoc))
 
 #+end_src
 
-***** Emphasis Marker
-
-In Org you can surround text with special characters to make them *bold*, /italic/ and so on.
-The characters are
-
-| Character | Example | Meaning        |
-|-----------+---------+----------------|
-| "*"       | *Foobar*  | bold           |
-| "/"       | /Foobar/  | italic         |
-| "="       | =Foobar=  | verbatim       |
-| "~"       | ~Foobar~  | code           |
-| "_"       | _Foobar_  | underlined     |
-| "+"       | +Foobar+  | strike-through |
-
-To make Org files look prettier i do not show those characters by default, this however
-can make editing text a bit difficult, so here i define some functions to toggle this feature
-on an of.
+** Tangle Emacs Configuration
 
 #+begin_src emacs-lisp
 
-  (defun my/org-emphasis-markers-status ()
-    "Get the status of org-hide-emphasis-markers."
-    (interactive)
-    (message "org-hide-emphasis-markers %s"
-             (if org-hide-emphasis-markers "ON" "OFF")))
+  (defun efs/org-babel-tangle-config ()
+    "Function from emacs from scratch."
+    (when (string-equal (file-name-directory (buffer-file-name))
+                        (expand-file-name *emacsd-directory*))
+      ;; Dynamic scoping to the rescue
+      (let ((org-confirm-babel-evaluate nil))
+        (org-babel-tangle))))
 
-  (defun my/toggle-org-hide-emphasis-markers ()
-    "Toggle emphasis markers."
-    (interactive)
-    (setq org-hide-emphasis-markers
-          (not org-hide-emphasis-markers))
-    (org-mode-restart)
-    (my/org-emphasis-markers-status))
 
-  (global-set-key [f9] 'my/toggle-org-hide-emphasis-markers)
+  ;(add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'efs/org-babel-tangle-config)))
+
+  (with-eval-after-load 'org
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((emacs-lisp . t)
+       (python . t)))
+
+    (push '("conf-unix" . conf-unix) org-src-lang-modes))
+
+#+end_src
+
+** My init.el
+
+In Vim you have $MYINITRC set to your config file for easy access, lets to something similar!
+#+begin_src emacs-lisp
+
+  (defun myinitorg ()
+    "Easy access to the main configuration file."
+    (interactive)
+    (find-file "~/.emacs.d/Init.org"))
+
+  (defun myinitel ()
+    "Easy access to the secondary configuration file."
+    (interactive)
+    (find-file "~/.myinit.el"))
+
+  (defun conf-reload ()
+    (interactive)
+    (progn
+      (org-babel-tangle)
+      (load-file "~/.emacs.d/init.el")))
+
+#+end_src
+
+** Evil
+
+Vim keybindings are the next best thing to thinking your text into existens.
+
+Befor Evil is loaded these variables have to be set!
+
+#+begin_src emacs-lisp
+
+  (defvar evil-want-keybinding nil)
+  (defvar evil-want-integration t)
 
 #+end_src
 
@@ -407,22 +314,16 @@ on an of.
 #+begin_src emacs-lisp
 
   (use-package which-key
-    :diminish
-    :config (which-key-mode))
+    :init (which-key-mode))
 
 #+end_src
 
-**** Evil
-
 #+begin_src emacs-lisp
-
-  (setq evil-want-keybinding nil) ;; this needs to be set to nil befor evil is loaded
 
   (use-package evil
     :init
     (setq evil-want-C-u-scroll t)
     (setq evil-want-C-i-jump nil)
-    (setq evil-want-integration t)
     :after evil-leader
     :config
     (evil-mode 1)
@@ -475,11 +376,11 @@ on an of.
 
     (evil-define-key '(normal insert) doc-view-mode-map (kbd "M-j") 'doc-view-enlarge)
     (evil-define-key '(normal insert) doc-view-mode-map (kbd "M-k") 'doc-view-shrink)
-    (evil-global-set-key 'normal (kbd "K") 'lsp-ui-doc-glance))
+    (evil-global-set-key 'normal (kbd "K") 'lsp-ui-doc-show))
 
 #+end_src
 
-***** Evil Escape
+**** Evil Escape
 
 In order to easly go back to normal mode we use "jk".
 
@@ -494,17 +395,9 @@ In order to easly go back to normal mode we use "jk".
 
 #+end_src
 
-***** Evil Leader
+**** Evil Leader
 
 #+begin_src emacs-lisp
-
-  ;(use-package evil-leader ;; After editing the key bindings reload evil-leader and evil after that!
-  ;  :init (global-evil-leader-mode)
-  ;  :config (define-key evil-normal-state-map (kbd "SPC") nil)
-  ;  (evil-leader/set-leader "<SPC>")
-  ;  (evil-leader/set-key
-  ;    "b" 'switch-to-buffer
-  ;    "n" 'evil-buffer-new))
 
   (use-package evil-leader ;; After editing the key bindings reload evil-leader and evil after that!
     :init (global-evil-leader-mode)
@@ -521,21 +414,21 @@ In order to easly go back to normal mode we use "jk".
       "i" 'hydra-insert-date-and-time-at-point/body
       "e" 'hydra-emacs-actions/body
       "h" 'harpoon-quick-menu-hydra))
+
 #+end_src
 
-***** Evil Collection
+**** Evil Collection
 
 #+begin_src emacs-lisp
 
   (use-package evil-collection
     :after evil
-    :diminish
     :config
     (evil-collection-init))
 
 #+end_src
 
-***** Evil Nerd Commenter
+**** Evil Nerd Commenter
 
 Emacs' built in commenting functionality =comment-dwim= (usually bound to =M-;=) doesn't always comment things in the way you might expect so we use [[https://github.com/redguardtoo/evil-nerd-commenter][evil-nerd-commenter]] to provide a more familiar behavior.  I've bound it to =M-/= since other editors sometimes use this binding but you could also replace Emacs' =M-;= binding with this command.
 
@@ -546,19 +439,14 @@ Emacs' built in commenting functionality =comment-dwim= (usually bound to =M-;=)
 
 #+end_src
 
-**** Colorscheme
-
 #+begin_src emacs-lisp
 
-  (use-package catppuccin-theme
-    :config (setq catppuccin-flavor 'macchiato))
-
-  (load-theme 'catppuccin :no-confirm)
+  (blink-cursor-mode 0)       ; kill it with fire!
 
 #+end_src
 
-**** Window/Frame management
-***** Window Numbering
+** Window/Frame management
+*** Window Numbering
 
 Every Window will be asigned a number and can be selected by pressing M-{1-9}
 
@@ -569,7 +457,7 @@ Every Window will be asigned a number and can be selected by pressing M-{1-9}
 
 #+end_src
 
-***** Move Border
+*** Move Border
 
 #+begin_src emacs-lisp
 
@@ -587,6 +475,103 @@ Every Window will be asigned a number and can be selected by pressing M-{1-9}
 
 #+end_src
 
+** Nix OS
+
+#+begin_src emacs-lisp
+
+  (use-package nix-mode)
+
+#+end_src
+
+** Modeline
+
+#+begin_src emacs-lisp
+  (setq column-number-mode t)
+#+end_src
+
+*** Diminish
+
+#+begin_src emacs-lisp
+
+  (use-package diminish
+    :init (progn
+            (diminish 'undo-tree-mode)
+            (diminish 'eldoc-mode)
+            (diminish 'auto-revert-mode)
+            (diminish 'flycheck-mode)
+            (diminish 'company-mode)
+            (diminish 'dotnet-mode)
+            (diminish 'counsel-mode)
+            (diminish 'list-interaction-mode)))
+
+#+end_src
+
+** Editor
+*** Settings
+#+begin_src emacs-lisp
+
+  (global-hl-line-mode t)
+
+#+end_src
+
+*** Line Numbers
+
+#+begin_src emacs-lisp
+
+  (setq display-line-numbers-typer 'relative)
+
+#+end_src
+
+*** Font Configuration
+
+I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://fonts.google.com/specimen/Cantarell][Cantarell]] fonts for this configuration which will more than likely need to be installed on your machine.  Both can usually be found in the various Linux distro package managers or downloaded from the links above.
+
+#+begin_src emacs-lisp
+
+  (defvar efs/default-font-size 110)
+  (defvar efs/default-variable-font-size 110)
+
+  (set-face-attribute 'default nil :font "Fira Code" :height efs/default-font-size)
+
+  ;; Set the fixed pitch face
+  (set-face-attribute 'fixed-pitch nil :font "Fira Code" :height efs/default-font-size)
+
+  ;; Set the variable pitch face
+  (set-face-attribute 'variable-pitch nil :font "Cantarell" :height efs/default-variable-font-size :weight 'regular)
+
+#+end_src
+
+*** blink instead of beep
+
+#+begin_src emacs-lisp
+
+  (setq visible-bell t) ;; kill it with fire also!!!
+
+#+end_src
+
+*** More realestate by removing scrollbars and toolbars
+
+#+begin_src emacs-lisp
+
+  (scroll-bar-mode -1)        ; Disable visible scrollbar
+  (tool-bar-mode -1)          ; Disable the toolbar
+  (tooltip-mode -1)           ; Disable tooltips
+  (set-fringe-mode 10)        ; Give some breathing room
+  (menu-bar-mode -1)          ; Disable the menu bar
+  (show-paren-mode 1)
+
+#+end_src
+
+** IDE Features
+*** Autocomplete
+
+#+begin_src emacs-lisp
+
+  (use-package auto-complete)
+
+#+end_src
+
+*** Project Management
 **** Projectile
 
 [[https://projectile.mx/][Projectile]] is a project management library for Emacs which makes it a lot easier to navigate around code projects for various languages.  Many packages integrate with Projectile so it's a good idea to have it installed even if you don't use its commands directly.
@@ -625,18 +610,11 @@ Every Window will be asigned a number and can be selected by pressing M-{1-9}
     :custom
     (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
 
-#+end_src
-
-***** Forge
-
-don't know what it dose...
-
-#+begin_src emacs-lisp
   ;; NOTE: Make sure to configure a GitHub token before using this package!
   ;; - https://magit.vc/manual/forge/Token-Creation.html#Token-Creation
   ;; - https://magit.vc/manual/ghub/Getting-Started.html#Getting-Started
-  ;; (use-package forge
-  ;;   :after magit)
+  (use-package forge
+    :after magit)
 
 #+end_src
 
@@ -650,9 +628,7 @@ don't know what it dose...
 
 ***** Harpoon keybindings
 
-******  Vanilla Emacs
-
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp :tangle no
   ;; On vanilla (You can use another prefix instead C-c h)
 
   ;; You can use this hydra menu that have all the commands
@@ -673,11 +649,6 @@ don't know what it dose...
   (global-set-key (kbd "C-c h 8") 'harpoon-go-to-8)
   (global-set-key (kbd "C-c h 9") 'harpoon-go-to-9)
 
-#+end_src
-
-****** Doom Emacs
-
-#+begin_src emacs-lisp :tangle no
   ;; On doom emacs
 
   ;; You can use this hydra menu that have all the commands
@@ -699,8 +670,7 @@ don't know what it dose...
 
 #+end_src
 
-**** LSP
-***** lsp-mode
+*** lsp-mode
 
 We use the excellent [[https://emacs-lsp.github.io/lsp-mode/][lsp-mode]] to enable IDE-like functionality for many different programming languages via "language servers" that speak the [[https://microsoft.github.io/language-server-protocol/][Language Server Protocol]].  Before trying to set up =lsp-mode= for a particular language, check out the [[https://emacs-lsp.github.io/lsp-mode/page/languages/][documentation for your language]] so that you can learn which language servers are available and how to install them.
 The =lsp-keymap-prefix= setting enables you to define a prefix for where =lsp-mode='s default keybindings will be added.  I *highly recommend* using the prefix to find out what you can do with =lsp-mode= in a buffer.
@@ -723,7 +693,7 @@ The =which-key= integration adds helpful descriptions of the various keys so you
 
 #+end_src
 
-***** lsp-ui
+*** lsp-ui
 
 [[https://emacs-lsp.github.io/lsp-ui/][lsp-ui]] is a set of UI enhancements built on top of =lsp-mode= which make Emacs feel even more like an IDE.  Check out the screenshots on the =lsp-ui= homepage (linked at the beginning of this paragraph) to see examples of what it can do.
 
@@ -736,7 +706,7 @@ The =which-key= integration adds helpful descriptions of the various keys so you
 
 #+end_src
 
-***** lsp-treemacs
+*** lsp-treemacs
 
 [[https://github.com/emacs-lsp/lsp-treemacs][lsp-treemacs]] provides nice tree views for different aspects of your code like symbols in a file, references of a symbol, or diagnostic messages (errors and warnings) that are found in your code.
 
@@ -755,7 +725,7 @@ Try these commands with =M-x=:
 
   #+end_src
 
-**** Debugging with dap-mode
+*** Debugging with dap-mode
 
 [[https://emacs-lsp.github.io/dap-mode/][dap-mode]] is an excellent package for bringing rich debugging capabilities to Emacs via the [[https://microsoft.github.io/debug-adapter-protocol/][Debug Adapter Protocol]].  You should check out the [[https://emacs-lsp.github.io/dap-mode/page/configuration/][configuration docs]] to learn how to configure the debugger for your language.  Also make sure to check out the documentation for the debug adapter to see what configuration parameters are available to use for your debug templates!
 
@@ -782,7 +752,7 @@ Try these commands with =M-x=:
 
 #+end_src
 
-**** Company
+*** Company
 
 [[http://company-mode.github.io/][Company Mode]] provides a nicer in-buffer completion interface than =completion-at-point= which is more reminiscent of what you would expect from an IDE.  We add a simple configuration to make the keybindings a little more useful (=TAB= now completes the selection and initiates completion at the current location if needed).
 
@@ -805,7 +775,7 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
     :hook (company-mode . company-box-mode))
 #+end_src
 
-**** Flycheck
+*** Flycheck
 
 #+begin_src emacs-lisp
 
@@ -814,26 +784,71 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
 
 #+end_src
 
-**** Yasnippet
+*** Yasnippet
 
 #+begin_src emacs-lisp
-
   (use-package yasnippet)
   (use-package yasnippet-snippets)
+#+end_src
+
+** Usefull Functions and Hydras
+*** Funcions
+**** Reindent-buffer
+
+This funktion reindents the whole buffer and removes trailing whitespaces without moving the cursor
+#+begin_src emacs-lisp
+
+  (defun reindent-buffer ()
+    "Reindents the whole buffer."
+    (interactive)
+    (delete-trailing-whitespace)
+    (indent-region (point-min) (point-max) nil)
+    (untabify (point-min) (point-max)))
+
+  (global-set-key [f12] 'reindent-buffer)
 
 #+end_src
 
-**** All The Icons
+**** Org
+***** Emphasis Marker
 
-*NOTE* If you install all-the-icons for the first time run all-the-incons-install-fonts
+In Org you can surround text with special characters to make them *bold*, /italic/ and so on.
+The characters are
+
+| Character | Example  | Meaning        |
+|-----------+----------+----------------|
+| "*"       | *Foobar* | bold           |
+| "/"       | /Foobar/ | italic         |
+| "="       | =Foobar= | verbatim       |
+| "~"       | ~Foobar~ | code           |
+| "_"       | _Foobar_ | underlined     |
+| "+"       | Foobar+ | strike-through |
+
+To make Org files look prettier i do not show those characters by default, this however
+can make editing text a bit difficult, so here i define some functions to toggle this feature
+on an of.
 
 #+begin_src emacs-lisp
 
-  (use-package all-the-icons)
+  (defun my/org-emphasis-markers-status ()
+    "Get the status of org-hide-emphasis-markers."
+    (interactive)
+    (message "org-hide-emphasis-markers %s"
+             (if org-hide-emphasis-markers "ON" "OFF")))
+
+  (defun my/toggle-org-hide-emphasis-markers ()
+    "Toggle emphasis markers."
+    (interactive)
+    (setq org-hide-emphasis-markers
+          (not org-hide-emphasis-markers))
+    (org-mode-restart)
+    (my/org-emphasis-markers-status))
+
+  (global-set-key [f9] 'my/toggle-org-hide-emphasis-markers)
 
 #+end_src
 
-**** Hydra
+*** Hydra
 
 #+begin_src emacs-lisp
 
@@ -842,8 +857,8 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
 
 #+end_src
 
-***** Hydras
-****** Emacs Actions
+**** Hydras
+***** Emacs Actions
 
 #+begin_src emacs-lisp
   (defhydra hydra-emacs-actions (:timeout 5)
@@ -851,7 +866,7 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
     ("g" lsp-ui-doc-show "display hover information" :exit t))
 #+end_src
 
-****** Toggle stuff
+***** Toggle stuff
 
 #+begin_src emacs-lisp
 
@@ -865,7 +880,7 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
 
 #+end_src
 
-****** Text Scaling
+***** Text Scaling
 
 This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to design a transient key binding for quickly adjusting the scale of the text on screen.  We define a hydra that is bound to =C-s t s= and, once activated, =j= and =k= increase and decrease the text scale.  You can press any other key (or =f= specifically) to exit the transient key map.
 
@@ -879,7 +894,7 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
 
 #+end_src
 
-****** Insert date time at point
+***** Insert date time at point
 
 #+begin_src emacs-lisp
 
@@ -890,7 +905,7 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
 
 #+end_src
 
-****** Org-mode Stuff
+***** Org-mode Stuff
 
 #+begin_src emacs-lisp
 
@@ -901,7 +916,7 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
 
 #+end_src
 
-****** Resize Frames
+***** Resize Frames
 
 #+begin_src emacs-lisp
 
@@ -915,20 +930,173 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
 
 #+end_src
 
-** Diminish
+** yes-or-no-p
+
+use =y= and =n= instead ot typing out =yes= or =no=
 
 #+begin_src emacs-lisp
 
-  (diminish 'undo-tree-mode)
-  (diminish 'eldoc-mode)
-  (diminish 'auto-revert-mode)
-  (diminish 'flycheck-mode)
-  (diminish 'company-mode)
-  (diminish 'dotnet-mode)
-  (diminish 'counsel-mode)
-  (diminish 'list-interaction-mode)
-  (diminish 'evil-collection-unimpaired-mode)
-  (diminish 'which-key-mode)
+  (fset 'yes-or-no-p 'y-or-n-p)
+
+#+end_src
+
+#+begin_src emacs-lisp
+
+  (setq confirm-kill-emacs 'yes-or-no-p)
+
+#+end_src
+
+** Keep Folders Clean
+
+We use the [[https://github.com/emacscollective/no-littering/blob/master/no-littering.el][no-littering]] package to keep folders where we edit files and the Emacs configuration folder clean!  It knows about a wide variety of variables for built in Emacs features as well as those from community packages so it can be much easier than finding and setting these variables yourself.
+
+#+begin_src emacs-lisp
+
+  ;; NOTE: If you want to move everything out of the ~/.emacs.d folder
+  ;; reliably, set `user-emacs-directory` before loading no-littering!
+
+  (use-package no-littering)
+
+  ;; no-littering doesn't set this by default so we must place
+  ;; auto save files in the same path as it uses for sessions
+  (setq aut-save-file-name-transforms
+        `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
+
+#+end_src
+
+** Completion
+*** Vertico
+
+#+begin_src emacs-lisp
+
+  (use-package vertico
+    :bind (:map vertico-map
+                ("C-j" . vertico-next)
+                ("C-k" . vertico-previous)
+                ("C-f" . vertico-exit)
+                :map minibuffer-local-map
+                ("M-h" . backward-kill-word))
+    :custom
+    (vertico-cycle t)
+    :init
+    (vertico-mode))
+
+  (use-package savehist
+    :init
+    (savehist-mode))
+
+  (use-package marginalia
+    :after vertico
+    :custom
+    (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
+    :init
+    (marginalia-mode))
+
+  (use-package orderless
+    :ensure t
+    :custom (completion-styles '(orderless)))
+
+#+end_src
+
+** Custom set variables
+
+#+begin_src emacs-lisp
+
+  (setq custom-file (concat *emacsd-directory* "custom-set-variables.el"))
+
+  (unless (file-exists-p custom-file)
+    (write-region "" nil custom-file))
+
+  (custom-set-variables
+   ;; custom-set-variables was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   '(python-shell-interpreter (python-or-python3))
+   '(warning-suppress-types '((use-package) (comp))))
+
+  (load-file custom-file)
+
+#+end_src
+
+** Eye Candy
+*** Set frame transparency
+
+#+begin_src emacs-lisp
+
+  ;; (active-frame . inactive-frame)
+  (defvar efs/frame-transparency '(100 . 98))
+
+  ;; Set frame transparency
+  ;; Make frame transparency overridable
+
+  (set-frame-parameter (selected-frame) 'alpha efs/frame-transparency)
+  (add-to-list 'default-frame-alist `(alpha . ,efs/frame-transparency)) ; do not remove the comma!
+  (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
+  (add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+#+end_src
+
+*** Inhibit startup message
+
+#+begin_src emacs-lisp
+
+  (setq inhibit-startup-message t)
+
+#+end_src
+
+*** Remove text from **scratch** buffer
+
+#+begin_src emacs-lisp
+
+  (setq initial-scratch-message "")
+
+#+end_src
+
+*** All The Icons
+
+*NOTE* If you install all-the-icons for the first time run all-the-incons-install-fonts
+*NOTE* if you used ~bootstrap.el~, this should allready been done.
+
+#+begin_src emacs-lisp
+
+  (use-package all-the-icons)
+
+#+end_src
+
+*** Modeline
+
+#+begin_src emacs-lisp
+
+  (use-package doom-modeline
+    :config (doom-modeline-mode))
+
+#+end_src
+
+*** Color Themes
+**** Install colorschemes
+
+#+begin_src emacs-lisp
+
+  (use-package gruvbox-theme)
+  (use-package moe-theme)
+  (use-package timu-spacegrey-theme)
+
+#+end_src
+
+**** Set the MOD BAR Colour to RED if Emacs server not running
+
+#+begin_src emacs-lisp
+
+  (setq theme 'timu-spacegrey)
+
+  ;;(if (daemonp)
+  ;;    (load-theme theme t)
+  ;;  (progn
+  ;;    (load-theme theme t)
+  ;;    (moe-theme-apply-color 'red)))
+
+  (load-theme theme)
 
 #+end_src
 
@@ -973,9 +1141,9 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
 
 #+end_src
 
-*** beam.el
+*** elixir.el
 
-#+begin_src emacs-lisp :tangle ./conf/beam.el
+#+begin_src emacs-lisp :tangle ./conf/elixir.el
 
   (use-package elixir-mode
     :hook (elixir-mode . lsp-deferred)
@@ -986,7 +1154,6 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
 
   (use-package erlang
     :defer t)
-
   (use-package edts
     :defer t)
 
@@ -1061,26 +1228,21 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
 
   (use-package clojure-mode
     :defer t)
-
   (use-package cider
     :defer t)
 
   (use-package javap-mode
     :defer t)
-
   (use-package kotlin-mode
     :defer t) ;; for gradle kotlin script files
-
   (use-package scala-mode
     :defer t)
-
   (use-package groovy-mode
     :defer t)
 
   (use-package lsp-java
     :hook (java-mode . lsp)
-    :hook (kotlin-mode . lsp)
-    :hook (scala-mode . lsp))
+    :hook (kotlin-mode . lsp))
 
   (add-to-list 'auto-mode-alist '("\\.kts\\'" . kotlin-mode))
 
@@ -1226,35 +1388,19 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
 
 #+end_src
 
-** Custom set variables
+** Finishing up
 
 #+begin_src emacs-lisp
 
-  (setq custom-file (concat *emacsd-directory* "custom-set-variables.el"))
-
-  (unless (file-exists-p custom-file)
-    (write-region "" nil custom-file))
-
-  (if (eq system-type 'windows-nt)
-      (setq zig-exe-path (prefix-with-userprofile ".zvm/bin/zig.exe"))
-    (setq zig-exe-path (prefix-with-userprofile ".zvm/bin/zig")))
-
-  (custom-set-variables
-   ;; custom-set-variables was added by Custom.
-   ;; If you edit it by hand, you could mess it up, so be careful.
-   ;; Your init file should contain only one such instance.
-   ;; If there is more than one, they won't work right.
-   '(zig-zig-bin zig-exe-path)
-   '(warning-suppress-types '((use-package) (comp))))
-
-  (load-file custom-file)
+  (load-file "~/.myinit.el") ; I want to be able to have some things specific to the maschine im working on. So i put some put some stuff into ~/.myinitel.
+  (cd "~")
 
 #+end_src
 
-* End
+* End of File
+
 #+begin_src emacs-lisp
-  (cd "~")
-  (load-file ".myinit.el")
+
   (provide 'init)
   ;;; init.el ends here
 

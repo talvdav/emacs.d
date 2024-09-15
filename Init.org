@@ -15,7 +15,36 @@
 ** TODOS
 *** TODO fix snippets
 *** TODO check if ~/.myinit.el exist before loading
+*** TODO learn how to run function once when a file is opend
+
 ** Config
+
+*** Functions
+
+**** max-line and set-display-line-numbers-width
+
+#+begin_src emacs-lisp
+
+  (defun max-line ()
+    "get the max line number of the current buffer"
+    (count-lines (point-min) (point-max)))
+
+  (defun set-display-line-numbers-width ()
+    "get the display-line-number-width so that the width won't resize during scrolling"
+    (interactive)
+    (setq display-line-numbers-width (string-width (number-to-string (max-line)))))
+
+#+end_src
+
+**** prefix-with-userprofile
+
+#+begin_src emacs-lisp
+
+  (defun prefix-with-userprofile (path)
+    (subst-char-in-string ?\\ ?/ (concat (concat (getenv "userprofile") "/") path)))
+
+#+end_src
+
 *** Global Variables Settings
 
 #+begin_src emacs-lisp
@@ -54,7 +83,6 @@
   (defvaralias 'c-basic-offset 'tab-width)
   (defvaralias 'cperl-indent-level 'tab-width)
 
-
   (blink-cursor-mode 0)       ; kill it with fire!
 
   ;; Make Emacs FUCKING USE SANE ENCODINGS:
@@ -75,14 +103,7 @@
 
   (prefer-coding-system 'utf-8-unix)
 
-#+end_src
-
-*** prefix-with-userprofile
-
-#+begin_src emacs-lisp
-
-  (defun prefix-with-userprofile (path)
-    (subst-char-in-string ?\\ ?/ (concat (concat (getenv "userprofile") "/") path)))
+  (column-number-mode t)
 
 #+end_src
 
@@ -181,8 +202,6 @@ I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://f
   (defalias 'tangle 'org-babel-tangle "tangle the current file")
 
 #+end_src
-
-Functions
 
 *** Compatibility
 **** Freebsd

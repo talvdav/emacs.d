@@ -263,6 +263,28 @@ then you need to make sure Emacs can find the binary:
 
 *** Packages
 
+**** tressit.el
+#+begin_src emacs-lisp
+(setq treesit-language-source-alist
+ '((bash "https://github.com/tree-sitter/tree-sitter-bash")
+   (cmake "https://github.com/uyha/tree-sitter-cmake")
+   (css "https://github.com/tree-sitter/tree-sitter-css")
+   (elisp "https://github.com/Wilfred/tree-sitter-elisp")
+   (go "https://github.com/tree-sitter/tree-sitter-go")
+   (gomod "https://github.com/camdencheek/tree-sitter-go-mod")
+   (dockerfile "https://github.com/camdencheek/tree-sitter-dockerfile")
+   (html "https://github.com/tree-sitter/tree-sitter-html")
+   (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
+   (json "https://github.com/tree-sitter/tree-sitter-json")
+   (make "https://github.com/alemuller/tree-sitter-make")
+   (markdown "https://github.com/ikatyang/tree-sitter-markdown")
+   (python "https://github.com/tree-sitter/tree-sitter-python")
+   (toml "https://github.com/tree-sitter/tree-sitter-toml")
+   (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
+   (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
+   (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
+
+#+end_src
 **** Diminish
 
 #+begin_src emacs-lisp
@@ -481,6 +503,9 @@ on an of.
     ;; Cycles through Todo Done etc.
     (evil-define-key '(normal) org-mode-map (kbd "L") 'org-shiftright)
     (evil-define-key '(normal) org-mode-map (kbd "H") 'org-shiftleft)
+
+    (evil-define-key '(insert) org-mode-map (kbd "C-L") 'org-shiftright)
+    (evil-define-key '(insert) org-mode-map (kbd "C-H") 'org-shiftleft)
 
     (evil-define-key '(normal insert) org-mode-map (kbd "<tab>") 'org-cycle)
     ;; DocView
@@ -1278,6 +1303,7 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
 #+end_src
 
 * End
+
 #+begin_src emacs-lisp
   (cd "~")
   (load-file ".myinit.el")

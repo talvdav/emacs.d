@@ -19,7 +19,6 @@
 ** Config
 
 *** Functions
-
 **** max-line and set-display-line-numbers-width
 
 #+begin_src emacs-lisp
@@ -41,6 +40,28 @@
 
   (defun prefix-with-userprofile (path)
     (subst-char-in-string ?\\ ?/ (concat (concat (getenv "userprofile") "/") path)))
+
+#+end_src
+
+**** is-platform
+
+#+begin_src emacs-lisp
+
+  (defun is-windows ()
+    "true if system is windows"
+    (eq system-type 'windows-nt))
+
+  (defun is-linux ()
+    "true if system is linux"
+    (eq system-type 'gnu/linux))
+
+  (defun is-osx ()
+    "true if system is mac osx"
+    (eq system-type 'darwin))
+
+  (defun is-freebsd ()
+    "true if system is mac osx"
+    (eq system-type 'berkeley-unix))
 
 #+end_src
 
@@ -1287,6 +1308,19 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
 
   (use-package zig-mode
     :defer t)
+
+#+end_src
+
+*** dart.el
+
+#+begin_src emacs-lisp :tangle ./conf/dart.el
+
+  (load-file "~/.emacs.d/conf/yaml.el")
+
+  (use-package dart-mode
+  :defer t)
+  (use-package lsp-dart
+  :defer t)
 
 #+end_src
 

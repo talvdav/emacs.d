@@ -238,6 +238,17 @@ then you need to make sure Emacs can find the binary:
 
 #+end_src
 
+*** Recentf
+
+#+begin_src emacs-lisp
+
+  (recentf-mode 1)
+  (setq recentf-max-menu-items 25)
+  (setq recentf-max-saved-items 25)
+  (global-set-key "\C-x\ r" 'recentf-open-files)
+
+#+end_src
+
 ** Packagemanagement
 *** Straight.el
 
@@ -559,6 +570,7 @@ In order to easly go back to normal mode we use "jk".
     (evil-leader/set-leader "<SPC>")
     (evil-leader/set-key
       "b" 'switch-to-buffer
+      "f" 'recentf-open-files
       "n" 'evil-buffer-new
       "r" 'reindent-buffer
       "R" 'hydra-resize-frames/body

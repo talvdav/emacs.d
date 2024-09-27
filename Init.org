@@ -14,7 +14,6 @@
 
 ** TODOS
 *** TODO fix snippets
-*** TODO check if ~/.myinit.el exist before loading
 *** TODO learn how to run function once when a file is opend
 
 ** Config
@@ -51,6 +50,8 @@
 
   (defvar *emacsd-directory* user-emacs-directory)
   (defvar *conf-directory* "~/.emacs.d/conf")
+  (defvar *myinitel* ".myinit.el")
+
   (setq user-emacs-directory  "~/.emacs.d/emacs/")
 
   (setq backup-directory-alist '(("." . "~/.emacs-backups"))
@@ -570,7 +571,7 @@ In order to easly go back to normal mode we use "jk".
     (evil-leader/set-leader "<SPC>")
     (evil-leader/set-key
       "b" 'switch-to-buffer
-      "f" 'recentf-open-files
+      "f" 'recentf-open
       "n" 'evil-buffer-new
       "r" 'reindent-buffer
       "R" 'hydra-resize-frames/body
@@ -1318,7 +1319,8 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
 
 #+begin_src emacs-lisp
   (cd "~")
-  (load-file ".myinit.el")
+  (if (file-exists-p *myinitel*)
+      (load-file *myinitel*))
   (provide 'init)
   ;;; init.el ends here
 

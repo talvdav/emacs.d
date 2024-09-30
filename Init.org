@@ -1290,6 +1290,19 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
 
 #+end_src
 
+*** dart.el
+
+#+begin_src emacs-lisp
+
+  (load-file "~/.emacs.d/conf/yaml.el")
+
+  (use-package dart-mode
+    :defer t)
+  (use-package lsp-dart
+    :defer t)
+
+#+end_src
+
 ** Custom set variables
 
 #+begin_src emacs-lisp

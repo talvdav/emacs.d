@@ -3,7 +3,6 @@
 * Beginning
 
 #+begin_src emacs-lisp
-
   ;;; Init.org --- My Emacs config.
   ;;; Commentary:
   ;; My Emacs config inspired by David Wilsons emacs-from-scratch youtube series
@@ -12,11 +11,21 @@
 
 #+end_src
 
-** TODOS
-*** TODO fix snippets
-*** TODO learn how to run function once when a file is opend
-
 ** Config
+
+*** Tangle config on save
+
+#+begin_src emacs-lisp
+
+  (defun org-babel-tangle-config ()
+    (when (string-equal  (concat  (file-name-directory  (buffer-file-name)) "emacs/")
+                         (expand-file-name user-emacs-directory))
+      (let ((org-confirm-babel-evaluate nil))
+        (org-babel-tangle))))
+
+  (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'org-babel-tangle-config)))
+
+#+end_src
 
 *** Functions
 **** max-line and set-display-line-numbers-width
@@ -34,14 +43,16 @@
 
 #+end_src
 
-**** prefix-with-userprofile
+**** prefix-with-userprofile and prefix-with-home
 
 #+begin_src emacs-lisp
 
   (defun prefix-with-userprofile (path)
+    "prefix the given path with the path to the userprofile on windows"
     (subst-char-in-string ?\\ ?/ (concat (concat (getenv "userprofile") "/") path)))
 
   (defun prefix-with-home (path)
+    "prefix the given path with the path to the home directory of the current user"
     (concat (concat (getenv "HOME" ) "/") path))
 
 #+end_src
@@ -921,6 +932,16 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
 #+begin_src emacs-lisp
 
   (use-package all-the-icons)
+
+#+end_src
+
+**** Doom Mode Line
+
+#+begin_src emacs-lisp
+
+      (use-package doom-modeline
+        :init (doom-modeline-mode 1)
+        :custom ((doom-modeline-height 15))) 
 
 #+end_src
 

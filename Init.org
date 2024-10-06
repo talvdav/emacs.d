@@ -599,13 +599,13 @@ In order to easly go back to normal mode we use "jk".
 
 #+begin_src emacs-lisp
 
-  ;(use-package evil-leader ;; After editing the key bindings reload evil-leader and evil after that!
-  ;  :init (global-evil-leader-mode)
-  ;  :config (define-key evil-normal-state-map (kbd "SPC") nil)
-  ;  (evil-leader/set-leader "<SPC>")
-  ;  (evil-leader/set-key
-  ;    "b" 'switch-to-buffer
-  ;    "n" 'evil-buffer-new))
+                                          ;(use-package evil-leader ;; After editing the key bindings reload evil-leader and evil after that!
+                                          ;  :init (global-evil-leader-mode)
+                                          ;  :config (define-key evil-normal-state-map (kbd "SPC") nil)
+                                          ;  (evil-leader/set-leader "<SPC>")
+                                          ;  (evil-leader/set-key
+                                          ;    "b" 'switch-to-buffer
+                                          ;    "n" 'evil-buffer-new))
 
   (use-package evil-leader ;; After editing the key bindings reload evil-leader and evil after that!
     :init (global-evil-leader-mode)
@@ -622,7 +622,10 @@ In order to easly go back to normal mode we use "jk".
       "s" 'hydra-text-scale/body
       "i" 'hydra-insert-date-and-time-at-point/body
       "e" 'hydra-emacs-actions/body
-      "h" 'harpoon-quick-menu-hydra))
+      "h" 'harpoon-quick-menu-hydra
+      "j" 'lsp-ui-doc-focus-frame
+      "k" 'lsp-ui-foc-unfocus-frame))
+  
 #+end_src
 
 ***** Evil Collection

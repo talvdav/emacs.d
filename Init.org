@@ -41,6 +41,9 @@
   (defun prefix-with-userprofile (path)
     (subst-char-in-string ?\\ ?/ (concat (concat (getenv "userprofile") "/") path)))
 
+  (defun prefix-with-home (path)
+    (concat (concat (getenv "HOME" ) "/") path))
+
 #+end_src
 
 **** is-platform
@@ -252,11 +255,11 @@ then you need to make sure Emacs can find the binary:
 
 #+begin_src emacs-lisp
 
-    (cond ((eq system-type 'windows-nt)
-           (progn
-             (setq exec-path (append exec-path (list (prefix-with-userprofile ".zvm/bin"))))
-             (setq exec-path (append exec-path (list (prefix-with-userprofile "go/bin"))))
-             (setq exec-path (append exec-path (list "C:/Programs/Elixir/bin"))))))
+  (cond ((eq system-type 'windows-nt)
+         (progn
+           (setq exec-path (append exec-path (list (prefix-with-userprofile ".zvm/bin"))))
+           (setq exec-path (append exec-path (list (prefix-with-userprofile "go/bin"))))
+           (setq exec-path (append exec-path (list "C:/Programs/Elixir/bin"))))))
 
 #+end_src
 
@@ -1314,16 +1317,26 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
 
 #+end_src
 
-*** dart.el
+*** flutter_and_dart.el
 
-#+begin_src emacs-lisp :tangle ./conf/dart.el
+#+begin_src emacs-lisp :tangle ./conf/flutter_and_dart.el
 
-  (load-file "~/.emacs.d/conf/yaml.el")
+  (if (is-linux)
+      (progn
+        (setq exec-path (append exec-path (list (prefix-with-home "bin/flutter/bin") (prefix-with-home "/home/thomas/bin/flutter/bin/cache/dart-sdk/bin"))))
+        (setq lsp-dart-flutter-sdk-dir (prefix-with-home "bin/flutter"))
+        (setq lsp-dart-sdk-dir (prefix-with-home "bin/flutter/bin/cache/dart-sdk"))))
 
-  (use-package dart-mode
-  :defer t)
-  (use-package lsp-dart
-  :defer t)
+      (load-file "~/.emacs.d/conf/yaml.el")
+
+      (use-package flutter
+        :defer t)
+
+      (use-package dart-mode
+        :defer t)
+
+      (use-package lsp-dart
+        :defer t)
 
 #+end_src
 

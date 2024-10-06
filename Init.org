@@ -143,6 +143,13 @@
 
   (setq dired-listing-switches "-agho --group-directories-first")
 
+                                          ;(when window-system (set-frame-size (selected-frame) 180 50))
+
+  (add-to-list 'default-frame-alist '(height . 50))
+  (add-to-list 'default-frame-alist '(width . 180))
+
+  (set-frame-position (selected-frame) 100 50)
+
 #+end_src
 
 *** Remove text from **scratch** buffer

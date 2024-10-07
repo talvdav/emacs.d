@@ -388,6 +388,20 @@ then you need to make sure Emacs can find the binary:
 
 #+end_src
 
+***** Org Babel
+#+begin_src emacs-lisp
+
+  (with-eval-after-load 'org
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((emacs-lisp . t)
+       (python . t)
+       (lua . t))))
+
+    ;(push '("conf-unix" . conf-unix) org-src-lang-modes))
+
+#+end_src
+
 ***** Org Structure Templates
 
 #+begin_src emacs-lisp
@@ -397,6 +411,7 @@ then you need to make sure Emacs can find the binary:
     (require 'org-tempo)
 
     (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
+    (add-to-list 'org-structure-template-alist '("ps" . "src powershell"))
     (add-to-list 'org-structure-template-alist '("rs" . "src rust"))
     (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
     (add-to-list 'org-structure-template-alist '("py" . "src python"))

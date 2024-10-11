@@ -1,0 +1,190 @@
+#+PROPERTY: header-args:emacs-lisp :tangle ./init.el :mkdirp yes
+
+* Beginning
+
+#+begin_src emacs-lisp
+
+  ;;; Kickstart.el.org --- My Emacs config.
+  ;;; Commentary:
+  ;; My Emacs config inspired by David Wilsons emacs-from-scratch youtube series
+  ;; Kickstart version
+
+  ;;; Code:
+
+#+end_src
+
+** Global Settings
+
+#+begin_src emacs-lisp
+
+  (defvar *emacsd-directory* user-emacs-directory)
+  (setq user-emacs-directory  "~/.emacs.d/emacs/")
+
+  (setq backup-directory-alist '(("." . "~/.emacs-backups"))
+        backup-by-copying      t  ; Don't de-link hard links
+        version-control        t  ; Use version numbers on backups
+        delete-old-versions    nil  ; Automatically delete excess backups:
+        kept-new-versions      5  ; how many of the newest versions to keep
+        kept-old-versions      5) ; and how many of the old
+
+  (defvar temp-directory "~/.emacs-backups/autosave/")
+  (make-directory temp-directory t)
+
+  (setq auto-save-default nil)
+  (setq auto-save-directory temp-directory
+        auto-save-hash-directory (concat temp-directory "/autosave-hash")
+        auto-save-directory-fallback "~/emacs-autosave"
+        auto-save-list-file-prefix (concat temp-directory "/autosave-")
+        auto-save-hash-p nil
+        auto-save-timeout 100
+        auto-save-interval 300)
+  (make-directory auto-save-directory t)
+
+  (setq create-lockfiles nil)
+
+  (setq display-line-numbers-type 'relative)
+  (global-display-line-numbers-mode)
+
+  (setq-default indent-tabs-mode nil)
+  (setq tab-width 4)
+  (defvaralias 'c-basic-offset 'tab-width)
+  (defvaralias 'cperl-indent-level 'tab-width)
+
+  ;; Make Emacs FUCKING USE SANE ENCODINGS:
+  (setq locale-coding-system 'utf-8-unix)
+  (set-default-coding-systems 'utf-8-unix)
+  (set-terminal-coding-system 'utf-8-unix)
+  (unless (eq system-type 'windows-nt)
+
+    ;; better scrolling experience
+    (setq scroll-margin 0
+          scroll-conservatively 10000
+          scroll-preserve-screen-position t
+          auto-window-vscroll nil)
+
+    ;; on Win32, cooperation between Emacs and other Unicode applications is weird.
+    ;; let's avoid that.
+    (set-selection-coding-system 'utf-8-unix))
+
+  (prefer-coding-system 'utf-8-unix)
+
+  (blink-cursor-mode 0)       ; kill it with fire!
+
+  (scroll-bar-mode -1)        ; Disable visible scrollbar
+  (tool-bar-mode -1)          ; Disable the toolbar
+  (tooltip-mode -1)           ; Disable tooltips
+  (set-fringe-mode 10)        ; Give some breathing room
+  (menu-bar-mode -1)          ; Disable the menu bar
+  (show-paren-mode 1)
+
+  (ido-mode t)
+
+#+end_src
+
+** Packagemanagment
+
+#+begin_src emacs-lisp
+  (require 'package)
+
+  (setq package-archives '(("melpa" . "https://melpa.org/packages/")
+                           ("org" . "https://orgmode.org/elpa/")
+                           ("elpa" . "https://elpa.gnu.org/packages/")))
+
+  (package-initialize)
+
+  (unless package-archive-contents
+    (package-refresh-contents))
+
+  ;; Initialize use-package on non-Linux platforms
+  (unless (package-installed-p 'use-package)
+    (package-install 'use-package))
+
+  (require 'use-package)
+  (setq use-package-always-ensure t)
+#+end_src
+
+*** Packages
+
+**** Evil
+
+#+begin_src emacs-lisp
+
+  (setq evil-want-keybinding nil) ;; this needs to be set to nil befor evil is loaded
+
+  (use-package evil
+    :init
+    (setq evil-want-C-u-scroll t)
+    (setq evil-want-C-i-jump nil)
+    (setq evil-want-integration t)
+    :after evil-leader
+    :config
+    (evil-mode 1))
+#+end_src
+
+**** Evil Leader
+
+#+begin_src emacs-lisp
+
+  (use-package evil-leader ;; After editing the key bindings reload evil-leader and evil after that!
+    :init (global-evil-leader-mode)
+    :config (define-key evil-normal-state-map (kbd "SPC") nil)
+    (evil-leader/set-leader "<SPC>")
+    (evil-leader/set-key
+      "b" 'switch-to-buffer
+      "n" 'evil-buffer-new))
+#+end_src
+
+**** Evil Escape
+
+#+begin_src emacs-lisp
+
+  (use-package evil-escape
+    :diminish
+    :after evil
+    :init (setq-default evil-escape-key-sequence "jk")
+    :config (evil-escape-mode 1))
+
+#+end_src
+
+**** Evil Collection
+
+#+begin_src emacs-lisp
+
+  (use-package evil-collection
+    :after evil
+    :diminish
+    :config
+    (evil-collection-init))
+
+#+end_src
+
+*** Colorscheme
+
+#+begin_src emacs-lisp
+
+  (use-package catppuccin-theme
+    :config (setq catppuccin-flavor 'macchiato))
+
+  (load-theme 'catppuccin :no-confirm)
+
+#+end_src
+
+
+
+
+** Custom Set Variables
+#+begin_src emacs-lisp
+
+  (setq custom-file (concat *emacsd-directory* "custom-set-variables.el"))
+
+  (unless (file-exists-p custom-file)
+    (write-region "" nil custom-file))
+
+#+end_src
+
+* End
+
+#+begin_src emacs-lisp
+  ;;; init.el ends here
+
+#+end_src

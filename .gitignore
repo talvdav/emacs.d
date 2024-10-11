@@ -42,3 +42,6 @@ straight/**
 /fonts/
 /conf/
 /secrets/
+
+custom-set-variables.el
+/tree-sitter/

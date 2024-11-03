@@ -55,6 +55,11 @@
     "prefix the given path with the path to the home directory of the current user"
     (concat (concat (getenv "HOME" ) "/") path))
 
+  (defun prefix-with-userprofile-or-home (path)
+    (if (is-windows)
+        (prefix-with-userprofile path)
+      (prefix-with-home path)))
+
 #+end_src
 
 **** is-platform
@@ -273,11 +278,9 @@ then you need to make sure Emacs can find the binary:
 
 #+begin_src emacs-lisp
 
-  (cond ((eq system-type 'windows-nt)
-         (progn
-           (setq exec-path (append exec-path (list (prefix-with-userprofile ".zvm/bin"))))
-           (setq exec-path (append exec-path (list (prefix-with-userprofile "go/bin"))))
-           (setq exec-path (append exec-path (list "C:/Programs/Elixir/bin"))))))
+  (setq exec-path (append exec-path (list (prefix-with-userprofile-or-home ".zvm/bin"))))
+  (setq exec-path (append exec-path (list (prefix-with-userprofile-or-home "go/bin"))))
+  (setq exec-path (append exec-path (list "C:/Programs/Elixir/bin")))
 
 #+end_src
 
@@ -1395,9 +1398,8 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
   (unless (file-exists-p custom-file)
     (write-region "" nil custom-file))
 
-  (if (eq system-type 'windows-nt)
-      (setq zig-exe-path (prefix-with-userprofile ".zvm/bin/zig.exe"))
-    (setq zig-exe-path (prefix-with-userprofile ".zvm/bin/zig")))
+  (setq zig-exe-path (prefix-with-userprofile-or-home ".zvm/bin/zig.exe"))
+  (setq zig-exe-path (prefix-with-userprofile-or-home ".zvm/bin/zig"))
 
   (custom-set-variables
    ;; custom-set-variables was added by Custom.

@@ -217,7 +217,7 @@ In Vim you have $MYINITRC set to your config file for easy access, lets to somet
   (add-to-list 'default-frame-alist '(height . 50))
   (add-to-list 'default-frame-alist '(width . 200))
 
-  (set-frame-position (selected-frame) 40 30) 
+  (set-frame-position (selected-frame) 40 30)
 
 #+end_src
 
@@ -352,10 +352,10 @@ then you need to make sure Emacs can find the binary:
 
 #+begin_src emacs-lisp
 
-  ;(recentf-mode 1)
-  ;(setq recentf-max-menu-items 25)
-  ;(setq recentf-max-saved-items 25)
-  ;(global-set-key "\C-x\ r" 'recentf-open-files)
+                                          ;(recentf-mode 1)
+                                          ;(setq recentf-max-menu-items 25)
+                                          ;(setq recentf-max-saved-items 25)
+                                          ;(global-set-key "\C-x\ r" 'recentf-open-files)
 
 #+end_src
 
@@ -386,24 +386,24 @@ then you need to make sure Emacs can find the binary:
 **** tressit.el
 
 #+begin_src emacs-lisp
-(setq treesit-language-source-alist
- '((bash "https://github.com/tree-sitter/tree-sitter-bash")
-   (cmake "https://github.com/uyha/tree-sitter-cmake")
-   (css "https://github.com/tree-sitter/tree-sitter-css")
-   (elisp "https://github.com/Wilfred/tree-sitter-elisp")
-   (go "https://github.com/tree-sitter/tree-sitter-go")
-   (gomod "https://github.com/camdencheek/tree-sitter-go-mod")
-   (dockerfile "https://github.com/camdencheek/tree-sitter-dockerfile")
-   (html "https://github.com/tree-sitter/tree-sitter-html")
-   (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
-   (json "https://github.com/tree-sitter/tree-sitter-json")
-   (make "https://github.com/alemuller/tree-sitter-make")
-   (markdown "https://github.com/ikatyang/tree-sitter-markdown")
-   (python "https://github.com/tree-sitter/tree-sitter-python")
-   (toml "https://github.com/tree-sitter/tree-sitter-toml")
-   (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
-   (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
-   (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
+  (setq treesit-language-source-alist
+        '((bash "https://github.com/tree-sitter/tree-sitter-bash")
+          (cmake "https://github.com/uyha/tree-sitter-cmake")
+          (css "https://github.com/tree-sitter/tree-sitter-css")
+          (elisp "https://github.com/Wilfred/tree-sitter-elisp")
+          (go "https://github.com/tree-sitter/tree-sitter-go")
+          (gomod "https://github.com/camdencheek/tree-sitter-go-mod")
+          (dockerfile "https://github.com/camdencheek/tree-sitter-dockerfile")
+          (html "https://github.com/tree-sitter/tree-sitter-html")
+          (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
+          (json "https://github.com/tree-sitter/tree-sitter-json")
+          (make "https://github.com/alemuller/tree-sitter-make")
+          (markdown "https://github.com/ikatyang/tree-sitter-markdown")
+          (python "https://github.com/tree-sitter/tree-sitter-python")
+          (toml "https://github.com/tree-sitter/tree-sitter-toml")
+          (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
+          (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
+          (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
 
 #+end_src
 
@@ -466,7 +466,7 @@ then you need to make sure Emacs can find the binary:
        (python . t)
        (lua . t))))
 
-    ;(push '("conf-unix" . conf-unix) org-src-lang-modes))
+                                          ;(push '("conf-unix" . conf-unix) org-src-lang-modes))
 
 #+end_src
 
@@ -707,8 +707,9 @@ In order to easly go back to normal mode we use "jk".
       "e" 'hydra-emacs-actions/body
       "h" 'harpoon-quick-menu-hydra
       "j" 'lsp-ui-doc-focus-frame
-      "k" 'lsp-ui-doc-unfocus-frame))
-  
+      "k" 'lsp-ui-doc-unfocus-frame
+      "c" 'recompile))
+
 #+end_src
 
 ***** Evil Collection
@@ -785,24 +786,24 @@ Every Window will be asigned a number and can be selected by pressing M-{1-9}
 
 #+begin_src emacs-lisp
 
-  (if (is-linux) ;; 
-        (setq projectile-indexing-method 'native))
+  (if (is-linux) ;;
+      (setq projectile-indexing-method 'native))
 
-      (use-package projectile
-        :diminish projectile-mode
-        :config (projectile-mode)
-        :custom ((projectile-completion-system 'vertico))
-        :bind-keymap
-        ("C-c p" . projectile-command-map)
-        :init
-        ;; NOTE: Set this to the folder where you keep your Git repos!
-        (when (file-directory-p "~/Projects")
-          (setq projectile-project-search-path '("~/Projects")))
-        (setq projectile-switch-project-action #'projectile-dired))
+  (use-package projectile
+    :diminish projectile-mode
+    :config (projectile-mode)
+    :custom ((projectile-completion-system 'vertico))
+    :bind-keymap
+    ("C-c p" . projectile-command-map)
+    :init
+    ;; NOTE: Set this to the folder where you keep your Git repos!
+    (when (file-directory-p "~/Projects")
+      (setq projectile-project-search-path '("~/Projects")))
+    (setq projectile-switch-project-action #'projectile-dired))
 
-      (use-package counsel-projectile
-        :after projectile
-        :config (counsel-projectile-mode))
+  (use-package counsel-projectile
+    :after projectile
+    :config (counsel-projectile-mode))
 
 #+end_src
 
@@ -847,7 +848,7 @@ don't know what it dose...
 
 ******  Vanilla Emacs
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
   ;; On vanilla (You can use another prefix instead C-c h)
 
   ;; You can use this hydra menu that have all the commands
@@ -1032,9 +1033,9 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
 
 #+begin_src emacs-lisp
 
-      (use-package doom-modeline
-        :init (doom-modeline-mode 1)
-        :custom ((doom-modeline-height 15))) 
+  (use-package doom-modeline
+    :init (doom-modeline-mode 1)
+    :custom ((doom-modeline-height 15)))
 
 #+end_src
 
@@ -1124,9 +1125,9 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
 
 #+begin_src emacs-lisp
 
-(straight-use-package
- '(one :type git :host github :repo "tonyaldon/one.el"
-       :build (:not compile)))
+  (straight-use-package
+   '(one :type git :host github :repo "tonyaldon/one.el"
+         :build (:not compile)))
 #+end_src
 
 ** Diminish
@@ -1450,16 +1451,16 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
         (setq lsp-dart-flutter-sdk-dir (prefix-with-home "bin/flutter"))
         (setq lsp-dart-sdk-dir (prefix-with-home "bin/flutter/bin/cache/dart-sdk"))))
 
-      (load-file "~/.emacs.d/conf/yaml.el")
+  (load-file "~/.emacs.d/conf/yaml.el")
 
-      (use-package flutter
-        :defer t)
+  (use-package flutter
+    :defer t)
 
-      (use-package dart-mode
-        :defer t)
+  (use-package dart-mode
+    :defer t)
 
-      (use-package lsp-dart
-        :defer t)
+  (use-package lsp-dart
+    :defer t)
 
 #+end_src
 

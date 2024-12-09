@@ -708,7 +708,8 @@ In order to easly go back to normal mode we use "jk".
       "h" 'harpoon-quick-menu-hydra
       "j" 'lsp-ui-doc-focus-frame
       "k" 'lsp-ui-doc-unfocus-frame
-      "c" 'recompile))
+      "c" 'recompile
+      "k" 'lsp-ui-doc-unfocus-frame))
 
 #+end_src
 
@@ -1437,7 +1438,8 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
 #+begin_src emacs-lisp :tangle ./conf/zig.el
 
   (use-package zig-mode
-    :defer t)
+    :defer t
+    :hook (zig-mode . lsp-deferred))
 
 #+end_src
 

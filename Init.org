@@ -707,6 +707,8 @@ In order to easly go back to normal mode we use "jk".
       "e" 'hydra-emacs-actions/body
       "h" 'harpoon-quick-menu-hydra
       "j" 'lsp-ui-doc-focus-frame
+      "k" 'lsp-ui-doc-unfocus-frame
+      "c" 'recompile
       "k" 'lsp-ui-doc-unfocus-frame))
 
 #+end_src

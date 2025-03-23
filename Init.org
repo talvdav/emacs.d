@@ -1013,7 +1013,7 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
 
 **** Yasnippet
 
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp 
 
   (use-package yasnippet)
   (use-package yasnippet-snippets)

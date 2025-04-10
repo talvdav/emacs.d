@@ -1445,7 +1445,7 @@ All codeblocks are going to be put inside the =~/.emacs.d/conf= folder.
 
 *** flutter_and_dart.el
 
-#+begin_src emacs-lisp :tangle ./conf/flutter_and_dart.el
+#+begin_src emacs-lisp :tangle ./conf/dart.el
 
   (if (is-linux)
       (progn
